@@ -32,3 +32,4 @@
 | -------- | ----------------------------------------------------- |
 | Xilinx demo:QNN-MO-PYNQ | https://github.com/Xilinx/QNN-MO-PYNQ/blob/d43a9e0cab11ddbe06aab1252ea0db2f735090b7/notebooks/tiny-yolo-image.ipynb               |
 | Xilinx demo:Finn | https://xilinx.github.io/finn/          |
+| Xilinx demo:BNN-PYNQ |https://github.com/Xilinx/BNN-PYNQ/tree/master/bnn
