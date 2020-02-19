@@ -32,7 +32,7 @@
 | -------- | ----------------------------------------------------- |
 | Xilinx demo:QNN-MO-PYNQ | https://github.com/Xilinx/QNN-MO-PYNQ/blob/d43a9e0cab11ddbe06aab1252ea0db2f735090b7/notebooks/tiny-yolo-image.ipynb               |
 | Xilinx demo:Finn | https://xilinx.github.io/finn/          |
+| Xilinx demo:Finn-hls|https://github.com/Xilinx/finn-hlslib|
 | Xilinx demo:BNN-PYNQ |https://github.com/Xilinx/BNN-PYNQ/tree/master/bnn|
 | Xilinx demo:Model-zoo |https://github.com/Xilinx/AI-Model-Zoo|
-| Xilinx demo:CHaiDnn|https://github.com/Xilinx/CHaiDNN|
-| Xilinx demo:finn详解｜https://github.com/Xilinx/finn-hlslib｜
+| Xilinx demo:CHaiDnn |https://github.com/Xilinx/CHaiDNN| 
