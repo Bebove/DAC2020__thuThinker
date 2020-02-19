@@ -26,3 +26,9 @@
 ##
 ## 解释
 * Bitstream：Programming an FPGA is the process of loading a Bitstream into the FPGA.
+## links
+
+|      |  info                                              |
+| -------- | ----------------------------------------------------- |
+| Xilinx demo:QNN-MO-PYNQ | https://github.com/Xilinx/QNN-MO-PYNQ/blob/d43a9e0cab11ddbe06aab1252ea0db2f735090b7/notebooks/tiny-yolo-image.ipynb               |
+| Xilinx demo:Finn | https://xilinx.github.io/finn/          |
