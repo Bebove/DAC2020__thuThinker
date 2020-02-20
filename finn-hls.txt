@@ -1,0 +1,26 @@
+文件结构：
+
+
+
+[mac.hpp]
+      ->[utils.hpp]
+      ->mul (DSP/LUT)
+      ->mac (MMV) output datetype=accumulation type
+      
+[mvau.hpp]
+      ->[mac.hpp]
+      ->in: stream
+            ->inputBuf: MatrixW/SIMD(input_col_parallel)(resolving a memory into individual registers)
+            ->input matrix: MatrixW,MatrixH
+      ->out
+            ->accu: (out_parallel_W),(out_parallel_H)(resolving a memory into individual registers)
+      ->weight: weight matrix
+          
+
+
+注记：
+1、#pragma HLS inline:
+HLS会自动的INLINE小的函数，当函数被INLINE的时候，就不会有独立的report和RTL file。所以，INLINE理解为，子函数硬件结构直接融入到上层函数之中，INLINE OFF理解为子函数硬件结构独立存在，用上层函数来调用此子函数。保险起见，我们需要手动加入相应的优化指令，确定为INLINE或者INLINE off
+2、LUT单元:  
+LookUp Table
+
