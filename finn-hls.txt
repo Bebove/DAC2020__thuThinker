@@ -10,11 +10,21 @@
 [mvau.hpp]
       ->[mac.hpp]
       ->in: stream
-            ->inputBuf: MatrixW/SIMD(input_col_parallel)(resolving a memory into individual registers)
+            ->NF:在H上，处理几次可以获得所有输出
+            ->inputBuf: SF=MatrixW/SIMD(input_col_parallel)(resolving a memory into individual registers)(一行分几批处理)
             ->input matrix: MatrixW,MatrixH
       ->out
-            ->accu: (out_parallel_W),(out_parallel_H)(resolving a memory into individual registers)
+            ->accu: (out_parallel_W),(out_parallel_H)(行/列并行输出)(resolving a memory into individual registers)
       ->weight: weight matrix
+      
+      ->reps: number of image
+      ->Total_Fold:  (MatrixW/SIMD)(MatrixH/PE)
+      ->计算循环：总循环次数Total_Fold*图片数量
+            ->每次循环：
+                  ->在inputBuf[sf]中存入in stream的一个数据，数据存在inElem中
+                  ->sf=0时，初始化accu
+                  ->对PE(输出行并行数)进行循环
+                        ->
           
 
 
