@@ -21,6 +21,8 @@ void load_bias(fm_type out_buf[96][82][50],
 		uint9 w_o, uint9 h_o,uint9 ch_o
 		);
 
+void load_img();
+
 void conv3x3(fm_type in_buf[96*82*50],
 		fm_type out_buf[96*82*50],
 		wt_type weight[480*80],
