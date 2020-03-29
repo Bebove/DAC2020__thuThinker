@@ -9,7 +9,7 @@ typedef int bs_type;//bias
 typedef fix_32_1 scale_type;//scale type
 typedef int8 wt_type;//weight
 typedef int8 fm_type;//feature map data type
-typedef int fms_type;//feature map for scale type
+typedef int fms_type;//feature map for scale type aaa
 /*
 fm_type fm_buf[96][82][50];
 fms_type fms_buf[96][82][50];
