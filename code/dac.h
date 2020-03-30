@@ -16,16 +16,10 @@ fm_type fm_buf2[96*82*50];
 wt_type wt_buf[480*80];
 bs_type bias[480];
 */
-void load_bias(fm_type out_buf[96][82][50],
-		bs_type bias[480],
-		uint9 w_o, uint9 h_o,uint9 ch_o
-		);
-
+void load_bias();
+void load_weight();
 void load_img();
-
-void conv3x3(fm_type in_buf[96*82*50],
-		fm_type out_buf[96*82*50],
-		wt_type weight[480*80],
-		uint9 w_i, uint9 h_i ,uint9 ch_i, //input feature map scale
-		uint9 w_o, uint9 h_o ,uint9 ch_o  //output feature map scale
-		);
+void conv3x3();
+void conv1x1();
+void dw_conv_1();
+void dw_conv_2();
