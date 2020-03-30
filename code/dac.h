@@ -19,6 +19,7 @@ bs_type bias[480];
 void load_bias();
 void load_weight();
 void load_img();
+void upload_img();
 void conv3x3();
 void conv1x1();
 void dw_conv_1();
