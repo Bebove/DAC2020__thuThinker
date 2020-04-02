@@ -28,6 +28,6 @@ void dw_conv_2();
 */
 
 
-void load_img(fm_type img_buf[80][49][81], uint16 image_in_raw_pad_burst[3*(320+4)*(192+4)*4],
+void load_img(fm_type img_buf[80][49][81], uint16 image_in_raw_pad_burst[3*(320+2)*(192+2)*4],
 							int col, int row, int offset_h , int offset_w );
-void SkyNet(	uint16 image_in_raw_pad[3*(320+4)*(192+4)*4]);
+void SkyNet(	uint16 image_in_raw_pad[3*(320+2)*(192+2)*4]);
