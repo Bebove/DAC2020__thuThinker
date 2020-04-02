@@ -1,13 +1,13 @@
 #include "dac.h"
 //#include <malloc.h>
-uint16 IMG[3*(320+4)*(192+4)*4];
+uint16 IMG[imagesize];
 
 
 
-void fold_data(uint16 IMG[3*(320+4)*(192+4)*4])
+void fold_data(uint16 IMG[imagesize])
 {
 	int ip1;
-	ip1=3*(320+4)*(192+4)*4;
+	ip1=imagesize;
 	float data;
 	data=4/float(ip1);
 	float temp;
