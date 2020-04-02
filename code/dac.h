@@ -15,12 +15,19 @@ fm_type fm_buf1[96*82*50];
 fm_type fm_buf2[96*82*50];
 wt_type wt_buf[480*80];
 bs_type bias[480];
-*/
+
 void load_bias();
 void load_weight();
-void load_img();
+void load_ddr();
 void upload_img();
+
 void conv3x3();
 void conv1x1();
 void dw_conv_1();
 void dw_conv_2();
+*/
+
+
+void load_img(fm_type img_buf[80][49][81], uint16 image_in_raw_pad_burst[3*(320+4)*(192+4)*4],
+							int col, int row, int offset_h , int offset_w );
+void SkyNet(	uint16 image_in_raw_pad[3*(320+4)*(192+4)*4]);
