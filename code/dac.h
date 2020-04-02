@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <ap_int.h>
 #include <ap_fixed.h>
+#define imagesize 749616//3*(320+2)*(192+2)*4;
+
+
 
 typedef ap_int<8> int8;
 typedef ap_uint<9> uint9;
@@ -28,6 +31,6 @@ void dw_conv_2();
 */
 
 
-void load_img(fm_type img_buf[80][49][81], uint16 image_in_raw_pad_burst[3*(320+2)*(192+2)*4],
+void load_img(fm_type img_buf[80][49][81], uint16 image_in_raw_pad_burst[imagesize],
 							int col, int row, int offset_h , int offset_w );
-void SkyNet(	uint16 image_in_raw_pad[3*(320+2)*(192+2)*4]);
+void SkyNet(	uint16 image_in_raw_pad[imagesize]);
