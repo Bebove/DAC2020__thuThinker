@@ -1,1 +1,2 @@
 
+the input image is (320+2,192+2) ,because there are 2 pad in input_image.
