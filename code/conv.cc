@@ -7,35 +7,79 @@ wt_type wt_buf[480*80];
 bs_type bias[480];
 */
 
-void conv3x3(fm_type in_buf[96*82*50],
-		fm_type out_buf[96*82*50],
-		wt_type weight[480*80],
-		uint9 w_i, uint9 h_i ,uint9 ch_i,
-		uint9 w_o, uint9 h_o ,uint9 ch_o
+void conv3x3(fm_type (&in_buf)[80][49][81],
+		fm_type (&out_buf)[80][49][81],
+		wt_type (&weight)[32][32][3][3]
 		){
-    load_bias();//load bias to out_buf before conv
-    /*
-        cho: channel of output = number of fliter
-        h_o,w_o: height(row),width(col) of output
-        h_i,w_i: height(row),width(col) of input
-        weight[a][b][c][d]
-            weight[x][y][z][q]=weight[x*(b*c*d)+y*(c*d)+z*(d)+q]
-    */
-    for(uint9 cho=0; cho<ch_o; cho++){
-        for (uint9 h=0,hi=0; h<h_o; h++,hi+=2){
-            for(uint9 w=0,wi=0; w<w_o; w++,wi+=2){
-                for(uint9 chi=0;chi<ch_i;ch++){
-                    for(uint9 x=0;x<3;x++){
-                        for(uint9 y=0;y<3;y++){
-                            uint20 index_o= (uint20)(cho*h_o*w_o+h*w_o+w);
-                            uint20 index_i= (uint20)(chi*h_i*w_i+(hi+y)*w_i+(wi+x));
-                            uint16 index_w= (uint16)(cho*ch_i*9+chi*9+y*3+x);
-                            out_buf[index_o]+=weight[index_w]*in_buf[index_i];
+    for(uint2 y=0;y<3;y++){
+        for (uint2 x=0;x<3;x++){
+            for(uint5 h=0,hi=0; h<24; h++,hi+=2){
+                for(uint6 w=0,wi=0; w<40; w++,wi+=2){
+#pragma HLS PIPELINE
+                    for(uint5 cho=0; cho<32; cho++){
+                        for(uint5 chi=0;chi<32;chi++){
+                            out_buf[cho][h][w]+=weight[cho][chi][y][x]*in_buf[chi][hi+y][wi+x];
                         }
                     }
                 }
             }
         }
-    }    
+    }
+}
 
+void conv1x1(fm_type (&in_buf)[80][49][81],
+		fm_type (&out_buf)[80][49][81],
+		wt_type (&weight)[16][16],
+		uint4 to, uint4 ti){
+    for(uint6 h=0,hi=0; h<49; h++){
+        for(uint6 w=0,wi=0; w<81; w++){
+#pragma HLS PIPELINE
+            for(uint4 cho=0; cho<16; cho++){
+                for(uint4 chi=0;chi<16;chi++){
+                    out_buf[cho+to][h][w]+=weight[cho][chi]*in_buf[chi+ti][h][w];
+                    //cout<<"cho="<<cho<<" chi="<<chi<<" hi="<<hi<<" wi="<<wi<<"\n";
+					//cout<<weight[cho][chi]<<"  "<<in_buf[chi][hi][wi]<<"\n";
+                    //cout<<out_buf[cho][h][w]<<"\n";
+                    //system("pause");
+                }
+            }
+        }
+    }
+}
+
+void dw_conv_1(fm_type (&in_buf)[80][49][81],
+		fm_type (&out_buf)[80][49][81],
+		wt_type (&weight)[80][3][3]){
+    for(uint2 y=0;y<3;y++){
+        for (uint2 x=0;x<3;x++){
+            for(uint6 h=0; h<47; h++){
+                for(uint6 w=0; w<79; w++){
+#pragma HLS PIPELINE
+                    for(uint6 ch=0; ch<80; ch++){
+                        out_buf[ch][h][w]+=weight[ch][y][x]*in_buf[ch][h+y][w+x];
+                        //cout<<weight[ch][y][x]<<"  "<<in_buf[ch][h+y][w+x]<<"\n";
+                        //cout<<out_buf[ch][h][w]<<"\n";
+                        //system("pause");
+                    }
+                }
+            }
+        }
+    }
+}
+
+void dw_conv_2(fm_type (&in_buf)[80][49][81],
+		fm_type (&out_buf)[80][49][81],
+		wt_type (&weight)[80][3][3]){
+    for(uint2 y=0;y<3;y++){
+        for (uint2 x=0;x<3;x++){
+            for(uint6 h=0,hi=0; h<24; h++,hi+=2){
+                for(uint6 w=0,wi=0; w<40; w++,wi+=2){
+#pragma HLS PIPELINE
+                    for(uint6 ch=0; ch<80; ch++){
+                        out_buf[ch][h][w]+=weight[ch][y][x]*in_buf[ch][hi+y][wi+x];
+                    }
+                }
+            }
+        }
+    }
 }
