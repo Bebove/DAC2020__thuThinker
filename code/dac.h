@@ -10,6 +10,7 @@ typedef ap_uint<2> uint2;
 typedef ap_uint<5> uint5;
 typedef ap_uint<4> uint4;
 typedef ap_uint<6> uint6;
+typedef ap_uint<7> uint7;
 typedef ap_uint<9> uint9;
 typedef ap_uint<20> uint20;
 typedef ap_uint<16> uint16;
