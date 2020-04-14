@@ -1,6 +1,19 @@
 #include <stdio.h>
 #include <ap_int.h>
 #include <ap_fixed.h>
+#include <math.h>
+#include <fstream>
+#include <hls_math.h>
+#include <string.h>
+
+
+#include <cstddef>
+#include <stdio.h>
+#include <math.h>
+#include "hls_stream.h"
+#include <iostream>
+#include <cmath>
+using namespace std;
 #define imagesize 749616//3*(320+2)*(192+2)*4;
 
 
@@ -54,8 +67,8 @@ void set_bias_conv1x1( fm_type buf[80][49][81], bs_type bias[80]);
 
 void load_bias_from_axi(bs_type dest[80], uint256 src[5]);
 void conv3x3(fm_type in_buf[80][49][81],
-		fm_type out_buf[80][49][81],
-		wt_type weight[32][32][3][3]
+		fm_type out_buf[8][49][81],
+		wt_type weight[8][32][3][3]
 		);
 void conv1x1(fm_type (&in_buf)[80][49][81],
 		fm_type (&out_buf)[80][49][81],
