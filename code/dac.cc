@@ -263,24 +263,35 @@ void SkyNet(	uint16 image_in_raw_pad[imagesize],
 
 #pragma HLS INTERFACE s_axilite register	port=return
 #pragma HLS INTERFACE m_axi depth=2			port=debug				offset=slave	bundle=OUTPUT
-#pragma HLS ALLOCATION instances=conv3x3			 		limit=1 function
-    load_img( fm_buf1, image_in_raw_pad, 0,  7,  0,  0);
-    load_weight_conv3x3(wt_buf3_for33, w_port_3x3, 0);
+#pragma HLS ALLOCATION instances=conv3x3			 		limit=4 function
+
+	load_weight_conv3x3(wt_buf3_for33, w_port_3x3, 0);   //load all full weight for conv3x3
+	load_bias_from_axi(bias, bias_port[0]);              //load all bias 		for conv3x3
+
+
+
+	for(int y=0;y<4;y++)
+	{
+		for(int x=0;x<4;x++)
+		{
+			load_img(fm_buf1, image_in_raw_pad, x,  y,  0,  0); //load the first small part of image
+			set_bias_conv3x3( fm_buf_for33, bias);               //set  all bias 		for conv3x3
+			for(int i=0;i<4;i++)
+			{
+			    conv3x3(fm_buf1,fm_buf_for33[i],wt_buf3_for33[i]);
+			}
+
+		}
+	}
+
+
 	
-    //load_dwweight_conv3x3(dwt_buf3,w_port_3x3,32);
-    //load_weight_conv1x1(wt_buf1,w_port_1x1[5]);
+    //first layer
 
-    load_bias_from_axi(bias, bias_port[0]);
-    set_bias_conv3x3( fm_buf_for33, bias);
 
-    conv3x3(fm_buf1,fm_buf_for33[0],wt_buf3_for33[0]);
-    conv3x3(fm_buf1,fm_buf_for33[1],wt_buf3_for33[1]);
-    conv3x3(fm_buf1,fm_buf_for33[2],wt_buf3_for33[2]);
-    conv3x3(fm_buf1,fm_buf_for33[3],wt_buf3_for33[3]);
-    //conv3x3(fm_buf1,fm_buf3+8,wt_buf3+8);
-    //conv3x3(fm_buf1,fm_buf3+16,wt_buf3+16);
-    //conv3x3(fm_buf1,fm_buf3+24,wt_buf3+24);
-    //test(fm_buf_for33[0]);
+
+
+
 
 
 
