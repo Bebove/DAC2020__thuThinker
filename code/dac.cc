@@ -311,7 +311,7 @@ void SkyNet(	uint16 image_in_raw_pad[imagesize],
 				uint256     bias_port[500][5],
 				uint16 debug[2])
 {
-	
+ 	
 #pragma HLS INTERFACE m_axi depth=3*(320+2)*(192+2) 	port=image_in_raw_pad			offset=slave	bundle=INPUT
 #pragma HLS INTERFACE m_axi depth=500*3*3 	port=w_port_3x3			offset=slave	bundle=INPUT
 	//16000 3x3 kernel
