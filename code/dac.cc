@@ -270,8 +270,8 @@ void SkyNet(	uint16 image_in_raw_pad[imagesize],
     //load_dwweight_conv3x3(dwt_buf3,w_port_3x3,32);
     //load_weight_conv1x1(wt_buf1,w_port_1x1[5]);
 
-    //load_bias_from_axi(bias, bias_port[1]);
-    //set_bias_conv3x3( fm_buf3, bias);
+    load_bias_from_axi(bias, bias_port[0]);
+    set_bias_conv3x3( fm_buf_for33, bias);
 
     conv3x3(fm_buf1,fm_buf_for33[0],wt_buf3_for33[0]);
     conv3x3(fm_buf1,fm_buf_for33[1],wt_buf3_for33[1]);

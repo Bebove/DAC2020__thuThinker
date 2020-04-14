@@ -8,7 +8,7 @@
 #include <string.h>
 using namespace std;
 
-
+//fm_type fm_buf_for33[4][8][49][81];
 void conv3x3(fm_type in_buf[80][49][81],
 		fm_type out_buf[8][49][81],
 		wt_type weight[8][32][3][3]
@@ -36,16 +36,18 @@ void conv3x3(fm_type in_buf[80][49][81],
 }
 
 
-void set_bias_conv3x3( fm_type buf[80][49][81], bs_type bias[80])
+void set_bias_conv3x3( fm_type buf[4][8][49][81], bs_type bias[80])
 {
 #pragma HLS array_partition variable=buf dim=1 complete
 //#pragma HLS array_partition variable=bias dim=1 complete
 	for(int h = 1; h <= 49; h+=2) {
 		for(int w = 1; w <= 81; w++) {
 #pragma HLS pipeline
-			for(int c = 0; c < 32; c++) {
+			for(int c = 0; c < 4; c++) {
+				for(int cd = 0; cd < 8; cd++) {
 #pragma HLS unroll
-				buf[c][h  ][w] = bias[c];
+				buf[c][cd][h  ][w] = bias[c*8+cd];
+				}
 			}
 		}
 	}
