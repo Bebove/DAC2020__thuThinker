@@ -325,6 +325,7 @@ void SkyNet(	uint16 image_in_raw_pad[imagesize],
 #pragma HLS ALLOCATION instances=conv3x3			 		limit=1 function
     load_img( fm_buf1, image_in_raw_pad, 0,  7,  0,  0);
     load_weight_conv3x3(wt_buf3,w_port_3x3,0);
+	
     //load_dwweight_conv3x3(dwt_buf3,w_port_3x3,32);
     //load_weight_conv1x1(wt_buf1,w_port_1x1[5]);
 
