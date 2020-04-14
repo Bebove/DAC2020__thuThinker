@@ -1,5 +1,12 @@
 #include "dac.h"
-
+#include <stdio.h>
+#include <ap_int.h>
+#include <ap_fixed.h>
+#include <math.h>
+#include <fstream>
+#include <hls_math.h>
+#include <string.h>
+using namespace std;
 fm_type fm_buf1[80][49][81];
 fm_type fm_buf2[80][49][81];
 fm_type fm_buf3[80][49][81];
@@ -201,15 +208,21 @@ void set_dwbias_conv3x3( fm_type buf[80][49][81], bs_type bias[80])
 
 
 void conv3x3(fm_type in_buf[80][49][81],
-		fm_type out_buf[80][49][81],
-		wt_type weight[32][32][3][3]
+		fm_type out_buf[8][49][81],
+		wt_type weight[8][32][3][3]
 		){
+#pragma HLS array_partition variable=in_buf dim=1 complete
+#pragma HLS array_partition variable=out_buf dim=1 complete
+#pragma HLS array_partition variable=weight dim=1 complete
+#pragma HLS array_partition variable=weight dim=2 complete
+
+
     for(int y=0;y<3;y++){
         for (int x=0;x<3;x++){
             for(int h=0,hi=0; h<24; h++,hi+=2){
                 for(int w=0,wi=0; w<40; w++,wi+=2){
 #pragma HLS PIPELINE
-                    for(int cho=0; cho<32; cho++){
+                    for(int cho=0; cho<8; cho++){
                         for(int chi=0;chi<32;chi++){
                             out_buf[cho][h][w]+=weight[cho][chi][y][x]*in_buf[chi][hi+y][wi+x];
                         }
@@ -315,10 +328,11 @@ void SkyNet(	uint16 image_in_raw_pad[imagesize],
     //load_dwweight_conv3x3(dwt_buf3,w_port_3x3,32);
     //load_weight_conv1x1(wt_buf1,w_port_1x1[5]);
 
-    load_bias_from_axi(bias, bias_port[1]);
-    set_bias_conv3x3( fm_buf3, bias);
+    //load_bias_from_axi(bias, bias_port[1]);
+    //set_bias_conv3x3( fm_buf3, bias);
 
     conv3x3(fm_buf1,fm_buf3,wt_buf3);
+
 
 
 	debug[0]=0.1;
