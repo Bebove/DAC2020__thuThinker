@@ -11,11 +11,18 @@ fm_type fm_buf1[80][49][81];
 fm_type fm_buf2[80][49][81];
 fm_type fm_buf3[80][49][81];
 
+
+
+
+
 wt_type wt_buf3[32][32][3][3];
 wt_type dwt_buf3[96][3][3];
 wt_type wt_buf1[16][16];
 
 
+//these buffer is for 3x3 undepth conv. just splite the 32 into 4*8, no other change
+fm_type fm_buf_for33[4][8][49][81];
+wt_type wt_buf3_for33[4][8][32][3][3];
 
 void load_img(fm_type img_buf[80][49][81], uint16 image_port[imagesize],
 							int col, int row, int offset_h = 0, int offset_w = 0)
@@ -67,23 +74,26 @@ void load_img(fm_type img_buf[80][49][81], uint16 image_port[imagesize],
 	}
 
 }
-void load_weight_conv3x3( wt_type dest[32][32][3][3], uint512 src[500][3][3],int ofset)
+void load_weight_conv3x3( wt_type dest[4][8][32][3][3], uint512 src[500][3][3],int ofset)
 {
 	//this function should be able to load 32*32*3*3 weight, so the src port should have the size of 3x3x32
 	for(int m = 0; m < 3; m++)
 	{
 		for(int n = 0; n < 3; n++)
 		{
-			for(int co = 0; co < 32; co++)
+			for(int co = 0; co < 4; co++)
 			{
+				for(int coindex = 0; coindex < 8; coindex++)
+				{
 #pragma HLS pipeline
 				uint512 DATA = 0;
 
-				DATA.range(511, 0) = src[co+	ofset	][m][n].range(511, 0);        //the ofset function in there
+				DATA.range(511, 0) = src[co*8+coindex+	ofset	][m][n].range(511, 0);        //the ofset function in there
 				for(int ci = 0; ci < 32; ci++)
 				{
 #pragma HLS unroll
-					dest[co][ci][m][n].range(10, 0) = DATA.range(10 + ci*16, ci*16);  //this means for 3x3 conv, every index(0-500) contains 32 3x3 weight
+					dest[co][coindex][ci][m][n].range(10, 0) = DATA.range(10 + ci*16, ci*16);  //this means for 3x3 conv, every index(0-500) contains 32 3x3 weight
+				}
 				}
 
 			}
@@ -297,7 +307,11 @@ void dw_conv_2(fm_type (&in_buf)[80][49][81],
 
 
 
-
+void test(fm_type fm_buf3[80][49][81])
+{
+	printf("%f",(float)fm_buf3[0][22][22]);
+	printf("%f",(float)fm_buf3[5][22][22]);
+}
 
 
 
@@ -326,7 +340,7 @@ void SkyNet(	uint16 image_in_raw_pad[imagesize],
 #pragma HLS INTERFACE m_axi depth=2			port=debug				offset=slave	bundle=OUTPUT
 #pragma HLS ALLOCATION instances=conv3x3			 		limit=1 function
     load_img( fm_buf1, image_in_raw_pad, 0,  7,  0,  0);
-    load_weight_conv3x3(wt_buf3,w_port_3x3,0);
+    load_weight_conv3x3(wt_buf3_for33, w_port_3x3, 0);
 	
     //load_dwweight_conv3x3(dwt_buf3,w_port_3x3,32);
     //load_weight_conv1x1(wt_buf1,w_port_1x1[5]);
@@ -334,7 +348,14 @@ void SkyNet(	uint16 image_in_raw_pad[imagesize],
     //load_bias_from_axi(bias, bias_port[1]);
     //set_bias_conv3x3( fm_buf3, bias);
 
-    conv3x3(fm_buf1,fm_buf3,wt_buf3);
+    conv3x3(fm_buf1,fm_buf_for33[0],wt_buf3_for33[0]);
+    conv3x3(fm_buf1,fm_buf_for33[1],wt_buf3_for33[1]);
+    conv3x3(fm_buf1,fm_buf_for33[2],wt_buf3_for33[2]);
+    conv3x3(fm_buf1,fm_buf_for33[3],wt_buf3_for33[3]);
+    //conv3x3(fm_buf1,fm_buf3+8,wt_buf3+8);
+    //conv3x3(fm_buf1,fm_buf3+16,wt_buf3+16);
+    //conv3x3(fm_buf1,fm_buf3+24,wt_buf3+24);
+    //test(fm_buf_for33[0]);
 
 
 

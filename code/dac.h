@@ -56,7 +56,7 @@ void SkyNet(	uint16 image_in_raw_pad[imagesize],
 
 void load_img(fm_type img_buf[80][49][81], uint16 image_in_raw_pad_burst[imagesize],int col, int row, int offset_h , int offset_w );
 
-void load_weight_conv3x3( wt_type dest[32][32][3][3], uint512 src[500][3][3],int ofset);
+void load_weight_conv3x3( wt_type dest[4][8][32][3][3], uint512 src[500][3][3],int ofset);
 void set_bias_conv3x3( fm_type buf[80][49][81], bs_type bias[80]);
 
 void load_dwweight_conv3x3(wt_type dest[96][3][3], uint512 src[500][3][3],int ofset);
