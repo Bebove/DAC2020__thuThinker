@@ -206,7 +206,7 @@ void SkyNet(	uint16 image_in_raw_pad[imagesize],
 
 #pragma HLS INTERFACE s_axilite register	port=return
 #pragma HLS INTERFACE m_axi depth=2			port=debug				offset=slave	bundle=OUTPUT
-#pragma HLS ALLOCATION instances=conv1x1			 		limit=1 function
+#pragma HLS ALLOCATION instances=CONV_1x1			 		limit=1 function
 
 	load_weight_conv1x1(wt_buf1, w_port_1x1[1]);   //load all full weight for conv1x1
 	load_bias_from_axi(bias, bias_port[0]);              //load all bias 		for conv1x1
@@ -219,7 +219,7 @@ void SkyNet(	uint16 image_in_raw_pad[imagesize],
 		{
 			load_img(fm_buf1, image_in_raw_pad, x,  y,  0,  0); //load the first small part of image
 			set_bias_conv1x1( fm_buf2, bias);               //set  all bias 		for conv3x3
-			conv1x1(fm_buf1,fm_buf2,wt_buf1,1,1);
+			CONV_1x1(fm_buf1,fm_buf2,wt_buf1);
 			/*
 			for(int i=0;i<4;i++)
 			{

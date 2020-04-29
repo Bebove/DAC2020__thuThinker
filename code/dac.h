@@ -60,16 +60,9 @@ void load_img(fm_type img_buf[80][49][81], uint16 image_in_raw_pad_burst[imagesi
 
 void load_dwweight_conv3x3(wt_type dest[96][3][3], uint512 src[500][3][3],int ofset);
 void set_dwbias_conv3x3( fm_type buf[80][49][81], bs_type bias[80]);
-
-void load_weight_conv1x1( wt_type dest[16][16], uint256 src[16]);
-void set_bias_conv1x1( fm_type buf[80][49][81], bs_type bias[80]);
-
 void load_bias_from_axi(bs_type dest[80], uint256 src[5]);
 
-void conv1x1(fm_type (&in_buf)[80][49][81],
-		fm_type (&out_buf)[80][49][81],
-		wt_type (&weight)[16][16],
-		uint4 to, uint4 ti);
+
 void dw_conv_1(fm_type (&in_buf)[80][49][81],
 		fm_type (&out_buf)[80][49][81],
 		wt_type (&weight)[80][3][3]);
@@ -86,10 +79,30 @@ void dw_conv_2(fm_type (&in_buf)[80][49][81],
 
 
 
-
+//function for 3x3:
 void load_weight_conv3x3( wt_type dest[4][8][32][3][3], uint512 src[500][3][3],int ofset);
 void set_bias_conv3x3( fm_type buf[4][8][49][81], bs_type bias[80]);
 void conv3x3(fm_type in_buf[80][49][81],
 		fm_type out_buf[8][49][81],
 		wt_type weight[8][32][3][3]
 		);
+
+
+//function for 1x1:
+void CONV_1x1(fm_type bottom[80][49][81],
+			  fm_type top[80][49][81],
+			  wt_type weights[16][16]);
+void load_weight_conv1x1( wt_type dest[16][16], uint256 src[16]);
+void set_bias_conv1x1( fm_type buf[80][49][81], bs_type bias[80]);
+
+
+
+
+
+//removed function:
+/*
+void conv1x1(fm_type (&in_buf)[80][49][81],
+		fm_type (&out_buf)[80][49][81],
+		wt_type (&weight)[16][16],
+		uint4 to, uint4 ti);
+ */
