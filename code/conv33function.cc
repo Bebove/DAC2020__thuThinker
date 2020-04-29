@@ -40,7 +40,7 @@ void set_bias_conv3x3( fm_type buf[4][8][49][81], bs_type bias[80])
 {
 #pragma HLS array_partition variable=buf dim=1 complete
 //#pragma HLS array_partition variable=bias dim=1 complete
-	for(int h = 1; h <= 49; h+=2) {
+	for(int h = 1; h <= 49; h+=1) {
 		for(int w = 1; w <= 81; w++) {
 #pragma HLS pipeline
 			for(int c = 0; c < 4; c++) {

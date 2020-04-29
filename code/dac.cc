@@ -97,21 +97,6 @@ void load_dwweight_conv3x3(wt_type dest[96][3][3], uint512 src[500][3][3],int of
 		}
 	}
 }
-void load_weight_conv1x1( wt_type dest[16][16], uint256 src[16])
-{
-	for(int co = 0; co < 16; co++)
-	{
-#pragma HLS pipeline
-		uint256 DATA = 0;
-		DATA.range(255, 0) = src[co].range(255, 0);
-		for(int ci = 0; ci < 16; ci++)
-		{
-#pragma HLS unroll
-			dest[co][ci].range(10, 0) = DATA.range(10 + ci*16, ci*16);  //this means for 3x3 conv, every index(0-500) contains 32 3x3 weight
-		}
-
-	}
-}
 
 bs_type bias[80];
 void load_bias_from_axi(bs_type dest[80], uint256 src[5])
@@ -131,27 +116,6 @@ void load_bias_from_axi(bs_type dest[80], uint256 src[5])
 	}
 }
 
-
-
-
-
-void set_bias_conv1x1( fm_type buf[80][49][81], bs_type bias[80])
-{
-#pragma HLS array_partition variable=buf dim=1 complete
-//#pragma HLS array_partition variable=bias dim=1 complete
-	for(int h = 1; h <= 49; h+=2) {
-		for(int w = 1; w <= 81; w++) {
-#pragma HLS pipeline
-			for(int c = 0; c < 80; c++) {
-#pragma HLS unroll
-				buf[c][h  ][w] = bias[c];
-			}
-		}
-	}
-}
-
-
-
 void set_dwbias_conv3x3( fm_type buf[80][49][81], bs_type bias[80])
 {
 #pragma HLS array_partition variable=buf dim=1 complete
@@ -165,27 +129,6 @@ void set_dwbias_conv3x3( fm_type buf[80][49][81], bs_type bias[80])
 			}
 		}
 	}
-}
-
-
-void conv1x1(fm_type (&in_buf)[80][49][81],
-		fm_type (&out_buf)[80][49][81],
-		wt_type (&weight)[16][16],
-		uint4 to, uint4 ti){
-    for(uint6 h=0,hi=0; h<49; h++){
-        for(uint6 w=0,wi=0; w<81; w++){
-#pragma HLS PIPELINE
-            for(uint4 cho=0; cho<16; cho++){
-                for(uint4 chi=0;chi<16;chi++){
-                    out_buf[cho+to][h][w]+=weight[cho][chi]*in_buf[chi+ti][h][w];
-                    //cout<<"cho="<<cho<<" chi="<<chi<<" hi="<<hi<<" wi="<<wi<<"\n";
-					//cout<<weight[cho][chi]<<"  "<<in_buf[chi][hi][wi]<<"\n";
-                    //cout<<out_buf[cho][h][w]<<"\n";
-                    //system("pause");
-                }
-            }
-        }
-    }
 }
 
 void dw_conv_1(fm_type (&in_buf)[80][49][81],
@@ -263,10 +206,10 @@ void SkyNet(	uint16 image_in_raw_pad[imagesize],
 
 #pragma HLS INTERFACE s_axilite register	port=return
 #pragma HLS INTERFACE m_axi depth=2			port=debug				offset=slave	bundle=OUTPUT
-#pragma HLS ALLOCATION instances=conv3x3			 		limit=4 function
+#pragma HLS ALLOCATION instances=conv1x1			 		limit=4 function
 
-	load_weight_conv3x3(wt_buf3_for33, w_port_3x3, 0);   //load all full weight for conv3x3
-	load_bias_from_axi(bias, bias_port[0]);              //load all bias 		for conv3x3
+	load_weight_conv1x1(wt_buf1, w_port_1x1[1]);   //load all full weight for conv1x1
+	load_bias_from_axi(bias, bias_port[0]);              //load all bias 		for conv1x1
 
 
 
@@ -275,11 +218,15 @@ void SkyNet(	uint16 image_in_raw_pad[imagesize],
 		for(int x=0;x<4;x++)
 		{
 			load_img(fm_buf1, image_in_raw_pad, x,  y,  0,  0); //load the first small part of image
-			set_bias_conv3x3( fm_buf_for33, bias);               //set  all bias 		for conv3x3
+			set_bias_conv1x1( fm_buf2, bias);               //set  all bias 		for conv3x3
+			conv1x1(fm_buf1,fm_buf2,wt_buf1,1,1);
+			/*
 			for(int i=0;i<4;i++)
 			{
+#pragma HLS unroll
 			    conv3x3(fm_buf1,fm_buf_for33[i],wt_buf3_for33[i]);
 			}
+			*/
 
 		}
 	}
