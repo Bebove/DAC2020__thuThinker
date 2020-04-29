@@ -18,6 +18,7 @@ void conv1x1(fm_type (&in_buf)[80][49][81],
             for(int cho=0; cho<16; cho++){
                 for(int chi=0;chi<16;chi++){
                     out_buf[cho+to][h][w]+=weight[cho][chi]*in_buf[chi+ti][h][w];
+                    //out_buf[cho][h][w]+=weight[cho][chi]*in_buf[chi][h][w];
                     //cout<<"cho="<<cho<<" chi="<<chi<<" hi="<<hi<<" wi="<<wi<<"\n";
 					//cout<<weight[cho][chi]<<"  "<<in_buf[chi][hi][wi]<<"\n";
                     //cout<<out_buf[cho][h][w]<<"\n";
