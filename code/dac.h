@@ -29,9 +29,9 @@ typedef ap_uint<16> uint16;
 typedef ap_uint<512> uint512;
 typedef ap_uint<256> uint256;
 typedef ap_fixed<32, 1, AP_RND, AP_SAT> fix_32_1;
-typedef ap_fixed<11, 4, AP_RND, AP_SAT> wt_type;//weight type
+typedef ap_fixed<11, 3, AP_RND, AP_SAT> wt_type;//weight type
 typedef ap_fixed<9,  3, AP_RND, AP_SAT> fm_type;//feature map data type
-typedef ap_fixed<11, 4, AP_RND, AP_SAT> bs_type;//bias type
+typedef ap_fixed<11, 3, AP_RND, AP_SAT> bs_type;//bias type
 /*
 fm_type fm_buf1[96*82*50];
 fm_type fm_buf2[96*82*50];
@@ -53,10 +53,8 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 				uint256     w_port_1x1[500][16],
 				uint256     bias_port[500][5],
 				uint16 debug[2]);
-
-void load_img(fm_type img_buf[80][49][81], uint16 image_in_raw_pad_burst[imagesize],int col, int row, int offset_h , int offset_w );
-
-
+void load_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
+							int col, int row, int offset_h , int offset_w );
 
 void load_dwweight_conv3x3(wt_type dest[96][3][3], uint512 src[500][3][3],int ofset);
 void set_dwbias_conv3x3( fm_type buf[80][49][81], bs_type bias[80]);
@@ -66,9 +64,9 @@ void load_bias_from_axi(bs_type dest[80], uint256 src[5]);
 void dw_conv_1(fm_type (&in_buf)[80][49][81],
 		fm_type (&out_buf)[80][49][81],
 		wt_type (&weight)[80][3][3]);
-void dw_conv_2(fm_type (&in_buf)[80][49][81],
-		fm_type (&out_buf)[80][49][81],
-		wt_type (&weight)[80][3][3]);
+void dw_conv_2(fm_type (&in_buf)[80][50][82],
+		fm_type (&out_buf)[80][50][82],
+		wt_type (&weight)[96][3][3]);
 
 
 
@@ -89,20 +87,13 @@ void conv3x3(fm_type in_buf[80][49][81],
 
 
 //function for 1x1:
-void CONV_1x1(fm_type bottom[80][49][81],
-			  fm_type top[80][49][81],
-			  wt_type weights[16][16]);
+void CONV_1x1(fm_type bottom[80][50][82],
+			  fm_type top[80][50][82],
+			  wt_type weights[16][16],int to,int ti);
 void load_weight_conv1x1( wt_type dest[16][16], uint256 src[16]);
-void set_bias_conv1x1( fm_type buf[80][49][81], bs_type bias[80]);
+void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80]);
+
+void chear_pad(int x,int y, fm_type buff[80][50][82]);
 
 
 
-
-
-//removed function:
-/*
-void conv1x1(fm_type (&in_buf)[80][49][81],
-		fm_type (&out_buf)[80][49][81],
-		wt_type (&weight)[16][16],
-		uint4 to, uint4 ti);
- */

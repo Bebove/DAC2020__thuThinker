@@ -75,11 +75,12 @@ fm_type compute_engine_16(wt_type w0,  fm_type b0,
 	return add14;
 
 }
-void CONV_1x1(fm_type bottom[80][49][81],
-			  fm_type top[80][49][81],
-			  wt_type weights[16][16])
+void CONV_1x1(fm_type bottom[80][50][82],
+			  fm_type top[80][50][82],
+			  wt_type weights[16][16],int to,int ti)
 {
-
+//to :choose which out channel to accumulate
+//ti :choose which in  channel data to use
 #pragma HLS array_partition variable=top dim=1 complete
 #pragma HLS array_partition variable=bottom dim=1 complete
 
@@ -91,15 +92,16 @@ void CONV_1x1(fm_type bottom[80][49][81],
 
 
 		int ci = 0;
-		for(int h = 0; h < 49; h++)
+		ci=ti;
+		for(int h = 0; h < 50; h++)
 		{
-			for(int w = 0; w < 81; w++)
+			for(int w = 0; w < 82; w++)
 			{
 #pragma HLS pipeline II=2
 				for(int coo = 0; coo < 16; coo++)
 				{
 #pragma HLS unroll
-					top[coo][h][w] += compute_engine_16(
+					top[coo+to][h][w] += compute_engine_16(
 							weights[coo][0],   bottom[ci+0][h][w],
 							weights[coo][1],   bottom[ci+1][h][w],
 							weights[coo][2],   bottom[ci+2][h][w],
@@ -125,12 +127,12 @@ void CONV_1x1(fm_type bottom[80][49][81],
 
 
 
-void set_bias_conv1x1( fm_type buf[80][49][81], bs_type bias[80])
+void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80])
 {
 #pragma HLS array_partition variable=buf dim=1 complete
 //#pragma HLS array_partition variable=bias dim=1 complete
-	for(int h = 1; h <= 49; h+=1) {
-		for(int w = 1; w <= 81; w++) {
+	for(int h = 0; h < 50; h+=1) {
+		for(int w = 0; w < 82; w++) {
 #pragma HLS pipeline
 			for(int c = 0; c < 80; c++) {
 #pragma HLS unroll
@@ -141,7 +143,65 @@ void set_bias_conv1x1( fm_type buf[80][49][81], bs_type bias[80])
 }
 
 
+void chear_pad(int x,int y, fm_type buff[80][50][82])
+{
 
+
+	if(x==0 or x==4)
+	{
+		for(int h = 0; h < 82; h+=1)
+		{
+#pragma HLS pipeline
+				for(int c = 0; c < 80; c++)
+				{
+#pragma HLS unroll
+					buff[c][0][h]=0;
+				}
+		}
+
+	}
+
+	if(x==7 or x==3)
+	{
+		for(int h = 0; h < 82; h+=1)
+		{
+#pragma HLS pipeline
+				for(int c = 0; c < 80; c++)
+				{
+#pragma HLS unroll
+					buff[c][49][h]=0;
+				}
+		}
+	}
+
+	if(y==0 or y==4)
+	{
+		for(int h = 0; h < 50; h+=1)
+		{
+#pragma HLS pipeline
+				for(int c = 0; c < 80; c++)
+				{
+#pragma HLS unroll
+					buff[c][h][0]=0;
+				}
+		}
+	}
+
+	if(y==7 or y==3)
+	{
+		for(int h = 0; h < 50; h+=1)
+		{
+#pragma HLS pipeline
+				for(int c = 0; c < 80; c++)
+				{
+#pragma HLS unroll
+					buff[c][h][82]=0;
+				}
+		}
+	}
+
+
+}
 
 void load_weight_conv1x1( wt_type dest[16][16], uint256 src[16])
 {
