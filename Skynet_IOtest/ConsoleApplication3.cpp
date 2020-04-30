@@ -353,6 +353,22 @@ void test_golden(const char* img0) {
 	cv::imwrite("17.PNG", grHistogram);
 }
 
+
+
+
+float w1[6][3][1][1];
+void load_w1()
+{
+	std::ifstream ifs_param("C:\\Users\\f\\DAC2020__thuThinker\\weightdata\\w1\\307.bin", std::ios::in | std::ios::binary);
+	ifs_param.read((char*)(**w1), 6 * 3 * 1 * sizeof(float));
+	ifs_param.close();
+	std::cout << w1[0][0][0][0]  << std::endl;
+
+
+}
+
+
+
 int main()
 {
 	//load_weights();
@@ -368,7 +384,8 @@ int main()
 
 	/*
 	load_full_weight();*/
-	test_golden("F:\\FPGA\\SkyNet-master\\FPGA\\HLS\\test_image_bins\\2.bin");
+	//test_golden("F:\\FPGA\\SkyNet-master\\FPGA\\HLS\\test_image_bins\\2.bin");
+	load_w1();
 }
 
 

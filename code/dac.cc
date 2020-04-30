@@ -187,7 +187,7 @@ void test(fm_type fm_buf3[80][49][81])
  
  
 
-void SkyNet(	uint16 image_in_raw_pad[imagesize],
+void Thinker(	uint16 image_in_raw_pad[imagesize],
 				uint512		w_port_3x3[500][3][3],
 				uint256     w_port_1x1[500][16],
 				uint256     bias_port[500][5],
