@@ -91,15 +91,13 @@ void CONV_1x1(fm_type bottom[80][49][81],
 
 
 		int ci = 0;
-
-
-
-		int buf_idx = ci/16;
-		for(int h = 0; h < 49; h++){
-			for(int w = 0; w < 81; w++) {
-
+		for(int h = 0; h < 49; h++)
+		{
+			for(int w = 0; w < 81; w++)
+			{
 #pragma HLS pipeline II=2
-				for(int coo = 0; coo < 16; coo++) {
+				for(int coo = 0; coo < 16; coo++)
+				{
 #pragma HLS unroll
 					top[coo][h][w] += compute_engine_16(
 							weights[coo][0],   bottom[ci+0][h][w],
@@ -119,12 +117,9 @@ void CONV_1x1(fm_type bottom[80][49][81],
 							weights[coo][14],  bottom[ci+14][h][w],
 							weights[coo][15],  bottom[ci+15][h][w]);
 
-					}
 				}
 			}
-
-	//}
-
+		}
 }
 ///////////////////
 
@@ -158,33 +153,9 @@ void load_weight_conv1x1( wt_type dest[16][16], uint256 src[16])
 		for(int ci = 0; ci < 16; ci++)
 		{
 #pragma HLS unroll
-			dest[co][ci].range(10, 0) = DATA.range(10 + ci*16, ci*16);
+			dest[co][ci].range(wt_lenth, 0) = DATA.range(wt_lenth + ci*16, ci*16);
 		}
 
 	}
 }
 
-
-
-/*
-void conv1x1(fm_type (&in_buf)[80][49][81],
-		fm_type (&out_buf)[80][49][81],
-		wt_type (&weight)[16][16],
-		uint4 to, uint4 ti){
-    for(int h=0,hi=0; h<49; h++){
-        for(int w=0,wi=0; w<81; w++){
-#pragma HLS PIPELINE
-            for(int cho=0; cho<16; cho++){
-                for(int chi=0;chi<16;chi++){
-                    out_buf[cho+to][h][w]+=weights[cho][chi]*in_buf[chi+ti][h][w];
-                    //out_buf[cho][h][w]+=weights[cho][chi]*in_buf[chi][h][w];
-                    //cout<<"cho="<<cho<<" chi="<<chi<<" hi="<<hi<<" wi="<<wi<<"\n";
-					//cout<<weights[cho][chi]<<"  "<<in_buf[chi][hi][wi]<<"\n";
-                    //cout<<out_buf[cho][h][w]<<"\n";
-                    //system("pause");
-                }
-            }
-        }
-    }
-}
-*/

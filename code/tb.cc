@@ -57,18 +57,6 @@ void fold_w3(uint512 w3[500][3][3])
 
 
 
-void fold_w1_toport(uint256 w1[500][16])
-{// this function put data from .bin to skynet port
-	float temp[6][3][1][1];
-	std::ifstream ifs_param("C:\\Users\\f\\DAC2020__thuThinker\\weightdata\\w1\\307.bin", std::ios::in | std::ios::binary);
-	ifs_param.read((char*)(**temp), 6 * 3 * 1 * sizeof(float));
-	ifs_param.close();
-	printf("%f",temp[0][0][0][0]);
-
-
-
-
-}
 
 
 void fold_BS(uint256 bias_port[500][5])
@@ -96,6 +84,29 @@ void fold_BS(uint256 bias_port[500][5])
 			}
 	}
 
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void fold_w1_toport(uint256 w1[500][16])
+{
+	float temp[6][3][1][1];
+	std::ifstream ifs_param("C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\307.bin", std::ios::in | std::ios::binary);
+	ifs_param.read((char*)(**temp), 6 * 3 * 1 * sizeof(float));
+	ifs_param.close();
+	printf("%f",temp[0][0][0][0]);
+	//w_port_1x1[500][16],
+	//choose 1 index, get 16 uint256.
+	//every uint256 is 16 weight.
+	//so we should
+	for(int co = 0; co< 6; co++)
+	{
+		for(int ci = 0; ci < 3; ci++)
+		{
+			w1[0][co].range(wt_lenth + ci*16, ci*16)=((wt_type)temp[co][ci][0][0]).range(wt_lenth, 0);
+		}
+	}
+	wt_type tss;
+	tss.range(wt_lenth, 0)=w1[0][0].range(wt_lenth ,0);
+	printf("%f",(float)(tss));
 }
 
 int main()
