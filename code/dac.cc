@@ -186,6 +186,10 @@ void set_dwbias_conv3x3( fm_type buf[80][50][82], bs_type bias[80])
 		}
 	}
 }
+
+
+
+
 ////////////////////////////////////
 
 
@@ -216,7 +220,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 
 
-
+	int relu;
 	//layer 307 310
 	load_weight_conv1x1(wt_buf1, w_port_1x1[0]);   //load  weight for conv1x1 307  		,   	which is store at the index 0
 	load_dwweight_conv3x3(dwt_buf3, w_port_3x3,0); //load  weight for dwconv3x3 310		,	    which is store at the index 0,1,2
@@ -227,6 +231,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 	int offsetx;
 	int offsety;
+	relu=1;
 	for(int x=0;x<8;x++)
 	{
 		for(int y=0;y<8;y++)
@@ -239,7 +244,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 			load_img(fm_buf1, image_in_raw_pad, x,  y,  offsetx,  offsety); //load the first small part of image
 			set_bias_conv1x1( fm_buf2, bias);               //set  all bias. the pad 0 is set to bias, which need to be cleared
-			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,0,0);          //after conv1x1, part of input image is 6channel and put in fm_buf. If want to dwconv3x3, we need to:
+			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,0,0,relu);          //after conv1x1, part of input image is 6channel and put in fm_buf. If want to dwconv3x3, we need to:
 																	//1. do the relu6
 																//2. load bias for dpconv3x3
 			set_dwbias_conv3x3(fm_buf3,bias2);

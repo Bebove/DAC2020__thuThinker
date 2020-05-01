@@ -75,9 +75,23 @@ fm_type compute_engine_16(wt_type w0,  fm_type b0,
 	return add14;
 
 }
+
+
+
+inline fm_type relu_single( fm_type d ,int relu) {
+	if(relu ==1){
+	if( d > 6 )
+		return 6;
+	if( d < 0 )
+		return 0;}
+	return d;
+}
+
+
+
 void CONV_1x1(fm_type bottom[80][50][82],
 			  fm_type top[80][50][82],
-			  wt_type weights[16][16],int to,int ti)
+			  wt_type weights[16][16],int to,int ti,int relu)
 {
 //to :choose which out channel to accumulate
 //ti :choose which in  channel data to use
@@ -101,7 +115,7 @@ void CONV_1x1(fm_type bottom[80][50][82],
 				for(int coo = 0; coo < 16; coo++)
 				{
 #pragma HLS unroll
-					top[coo+to][h][w] += compute_engine_16(
+					top[coo+to][h][w] += relu_single(compute_engine_16(
 							weights[coo][0],   bottom[ci+0][h][w],
 							weights[coo][1],   bottom[ci+1][h][w],
 							weights[coo][2],   bottom[ci+2][h][w],
@@ -117,7 +131,7 @@ void CONV_1x1(fm_type bottom[80][50][82],
 							weights[coo][12],  bottom[ci+12][h][w],
 							weights[coo][13],  bottom[ci+13][h][w],
 							weights[coo][14],  bottom[ci+14][h][w],
-							weights[coo][15],  bottom[ci+15][h][w]);
+							weights[coo][15],  bottom[ci+15][h][w]),relu);
 
 				}
 			}
