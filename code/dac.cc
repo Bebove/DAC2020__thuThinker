@@ -19,49 +19,15 @@ wt_type wt_buf3[32][32][3][3];
 wt_type dwt_buf3[96][3][3];
 wt_type wt_buf1[16][16];
 bs_type bias[80];
-
+bs_type bias2[80];
 
 /*
-void load_dwweight_conv3x3(wt_type dest[96][3][3], uint512 src[500][3][3],int ofset)
-{
-//should be able to load 80x3x3 weight. so, we need 3 index to store one layer. The redundancy should be 0.
-	for(int m = 0; m < 3; m++)
-	{
-		for(int n = 0; n < 3; n++)
-		{
-			for(int co = 0; co < 3; co++)
-			{
-#pragma HLS pipeline
-				uint512 DATA = 0;
-				DATA.range(511, 0) = src[co+	ofset	][m][n].range(511, 0);        //the ofset function in there
-				for(int ci = 0; ci < 32; ci++)
-				{
-#pragma HLS unroll
-					dest[ci+32*co][m][n].range(10, 0) = DATA.range(10 + ci*16, ci*16);  //this means for 3x3 conv, every index(0-500) contains 32 3x3 weight
-				}
-
-			}
-		}
-	}
-}
 
 
 
 
-void set_dwbias_conv3x3( fm_type buf[80][49][81], bs_type bias[80])
-{
-#pragma HLS array_partition variable=buf dim=1 complete
-//#pragma HLS array_partition variable=bias dim=1 complete
-	for(int h = 1; h <= 49; h+=2) {
-		for(int w = 1; w <= 81; w++) {
-#pragma HLS pipeline
-			for(int c = 0; c < 80; c++) {
-#pragma HLS unroll
-				buf[c][h  ][w] = bias[c];
-			}
-		}
-	}
-}
+
+
 
 void dw_conv_1(fm_type (&in_buf)[80][49][81],
 		fm_type (&out_buf)[80][49][81],
@@ -161,14 +127,14 @@ void load_bias_from_axi(bs_type dest[80], uint256 src[5])
 
 void dw_conv_2(fm_type (&in_buf)[80][50][82],
 		fm_type (&out_buf)[80][50][82],
-		wt_type (&weight)[96][3][3])
+		wt_type (&weight)[96][3][3],int wise)
 {
     for(int y=0;y<3;y++){
         for (int x=0;x<3;x++){
             for(int h=0,hi=0; h<24; h++,hi+=2){
                 for(int w=0,wi=0; w<40; w++,wi+=2){
 #pragma HLS PIPELINE
-                    for(int ch=0; ch<8; ch++){
+                    for(int ch=0; ch<wise; ch++){
 #pragma HLS unroll
                         out_buf[ch][h][w]+=weight[ch][y][x]*in_buf[ch][hi+y][wi+x];
                     }
@@ -178,6 +144,48 @@ void dw_conv_2(fm_type (&in_buf)[80][50][82],
     }
 }
 
+
+void load_dwweight_conv3x3(wt_type dest[96][3][3], uint512 src[500][3][3],int ofset)
+{
+//should be able to load 80x3x3 weight. so, we need 3 index to store one layer. The redundancy should be 0.
+	uint512 DATA = 0;
+	for(int co = 0; co < 3; co++)
+	{
+	for(int m = 0; m < 3; m++)
+	{
+		for(int n = 0; n < 3; n++)
+		{
+#pragma HLS pipeline
+				//DATA.range(511, 0) = src[co+	ofset	][m][n].range(511, 0);        //the ofset function in there
+				for(int ci = 0; ci < 32; ci++)
+				{
+#pragma HLS unroll
+					//dest[ci+32*co][m][n].range(10, 0) = DATA.range(10 + ci*16, ci*16);  //this means for 3x3 conv, every index(0-500) contains 32 3x3 weight
+					dest[ci+32*co][m][n].range(10, 0) =src[co+	ofset	][m][n].range(10 + ci*16, ci*16);
+				}
+
+			}
+		}
+	}
+	//printf("%f",(float)(dest[1][1][1]));
+}
+
+
+
+void set_dwbias_conv3x3( fm_type buf[80][50][82], bs_type bias[80])
+{
+#pragma HLS array_partition variable=buf dim=1 complete
+//#pragma HLS array_partition variable=bias dim=1 complete
+	for(int h = 0; h < 50; h+=1) {
+		for(int w = 0; w < 82; w++) {
+#pragma HLS pipeline
+			for(int c = 0; c < 80; c++) {
+#pragma HLS unroll
+				buf[c][h  ][w] = bias[c];
+			}
+		}
+	}
+}
 ////////////////////////////////////
 
 
@@ -206,8 +214,14 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 #pragma HLS INTERFACE m_axi depth=2			port=debug				offset=slave	bundle=OUTPUT
 #pragma HLS ALLOCATION instances=CONV_1x1			 		limit=1 function
 
-	load_weight_conv1x1(wt_buf1, w_port_1x1[1]);   //load all full weight for conv1x1
-	load_bias_from_axi(bias, bias_port[0]);              //load all bias 		for conv1x1
+
+
+
+	//layer 307 310
+	load_weight_conv1x1(wt_buf1, w_port_1x1[0]);   //load  weight for conv1x1 307  		,   	which is store at the index 0
+	load_dwweight_conv3x3(dwt_buf3, w_port_3x3,0); //load  weight for dwconv3x3 310		,	    which is store at the index 0,1,2
+	load_bias_from_axi(bias, bias_port[0]);        //load  bias   for conv1x1 ,	    which is store at the index 0
+	load_bias_from_axi(bias2, bias_port[1]);       //load  bias   for conv3x3 ,	    which is store at the index 1
 
 
 
@@ -225,12 +239,12 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 			load_img(fm_buf1, image_in_raw_pad, x,  y,  offsetx,  offsety); //load the first small part of image
 			set_bias_conv1x1( fm_buf2, bias);               //set  all bias. the pad 0 is set to bias, which need to be cleared
-			//
 			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,0,0);          //after conv1x1, part of input image is 6channel and put in fm_buf. If want to dwconv3x3, we need to:
 																	//1. do the relu6
 																//2. load bias for dpconv3x3
-			chear_pad(x,y, fm_buf2);
-			dw_conv_2(fm_buf2,fm_buf3,dwt_buf3);
+			set_dwbias_conv3x3(fm_buf3,bias2);
+			chear_pad(x,y, fm_buf2,6);
+			dw_conv_2(fm_buf2,fm_buf3,dwt_buf3,6);
 
 		}
 	}

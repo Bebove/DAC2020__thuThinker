@@ -143,7 +143,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80])
 }
 
 
-void chear_pad(int x,int y, fm_type buff[80][50][82])
+void chear_pad(int x,int y, fm_type buff[80][50][82],int round)
 {
 
 
@@ -152,7 +152,7 @@ void chear_pad(int x,int y, fm_type buff[80][50][82])
 		for(int h = 0; h < 82; h+=1)
 		{
 #pragma HLS pipeline
-				for(int c = 0; c < 80; c++)
+				for(int c = 0; c < round; c++)
 				{
 #pragma HLS unroll
 					buff[c][0][h]=0;
@@ -166,7 +166,7 @@ void chear_pad(int x,int y, fm_type buff[80][50][82])
 		for(int h = 0; h < 82; h+=1)
 		{
 #pragma HLS pipeline
-				for(int c = 0; c < 80; c++)
+				for(int c = 0; c < round; c++)
 				{
 #pragma HLS unroll
 					buff[c][49][h]=0;
@@ -179,7 +179,7 @@ void chear_pad(int x,int y, fm_type buff[80][50][82])
 		for(int h = 0; h < 50; h+=1)
 		{
 #pragma HLS pipeline
-				for(int c = 0; c < 80; c++)
+				for(int c = 0; c < round; c++)
 				{
 #pragma HLS unroll
 					buff[c][h][0]=0;
@@ -192,7 +192,7 @@ void chear_pad(int x,int y, fm_type buff[80][50][82])
 		for(int h = 0; h < 50; h+=1)
 		{
 #pragma HLS pipeline
-				for(int c = 0; c < 80; c++)
+				for(int c = 0; c < round; c++)
 				{
 #pragma HLS unroll
 					buff[c][h][82]=0;

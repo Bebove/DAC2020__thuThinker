@@ -57,7 +57,7 @@ void load_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
 							int col, int row, int offset_h , int offset_w );
 
 void load_dwweight_conv3x3(wt_type dest[96][3][3], uint512 src[500][3][3],int ofset);
-void set_dwbias_conv3x3( fm_type buf[80][49][81], bs_type bias[80]);
+void set_dwbias_conv3x3( fm_type buf[80][50][82], bs_type bias[80]);
 void load_bias_from_axi(bs_type dest[80], uint256 src[5]);
 
 
@@ -66,7 +66,7 @@ void dw_conv_1(fm_type (&in_buf)[80][49][81],
 		wt_type (&weight)[80][3][3]);
 void dw_conv_2(fm_type (&in_buf)[80][50][82],
 		fm_type (&out_buf)[80][50][82],
-		wt_type (&weight)[96][3][3]);
+		wt_type (&weight)[96][3][3],int wise);
 
 
 
@@ -93,7 +93,7 @@ void CONV_1x1(fm_type bottom[80][50][82],
 void load_weight_conv1x1( wt_type dest[16][16], uint256 src[16]);
 void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80]);
 
-void chear_pad(int x,int y, fm_type buff[80][50][82]);
+void chear_pad(int x,int y, fm_type buff[80][50][82],int round);
 
 
 
