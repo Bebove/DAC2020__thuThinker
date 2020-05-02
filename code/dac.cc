@@ -172,43 +172,13 @@ void load_dwweight_conv3x3(wt_type dest[96][3][3], uint512 src[500][3][3],int of
 
 
 
-void set_dwbias_conv3x3( fm_type buf[80][50][82], bs_type bias[80],int x, int y)
+void set_dwbias_conv3x3( fm_type buf[80][50][82], bs_type bias[80])
 {
 #pragma HLS array_partition variable=buf dim=1 complete
 //#pragma HLS array_partition variable=bias dim=1 complete
 
-	for(int w = 0; w < 82; w+=1)
-	{
-#pragma HLS pipeline
-		for(int c = 0; c < 80; c++)
-		{
-#pragma HLS unroll
-			if (x==0 or x==4){
-				buf[c][0][w]=0;
-			}
-			else{
-				buf[c][0][w]=bias[c];
-			}
-		}
-	}
-
-	for(int h = 0; h < 50; h+=1)
-	{
-#pragma HLS pipeline
-		for(int c = 0; c < 80; c++)
-		{
-#pragma HLS unroll
-			if (y==0 or y==4){
-				buf[c][h][0]=0;
-			}
-			else{
-				buf[c][h][0]=bias[c];
-			}
-		}
-	}
-	
-	for(int h = 1; h < 50; h+=1) {
-		for(int w = 1; w < 82; w++) {
+	for(int h = 0; h < 50; h+=1) {
+		for(int w = 0; w < 82; w++) {
 #pragma HLS pipeline
 			for(int c = 0; c < 80; c++) {
 #pragma HLS unroll
@@ -274,11 +244,11 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			else{offsety=0;}
 
 			load_img(fm_buf1, image_in_raw_pad, x,  y,  offsetx,  offsety); //load the first small part of image
-			set_bias_conv1x1( fm_buf2, bias);               //set  all bias. the pad 0 is set to bias, which need to be cleared
+			set_bias_conv1x1( fm_buf2, bias,x,y);               //set  all bias. the pad 0 is set to bias, which need to be cleared
 			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,0,0,relu);          //after conv1x1, part of input image is 6channel and put in fm_buf. If want to dwconv3x3, we need to:
 																	//1. do the relu6
 																//2. load bias for dpconv3x3
-			set_dwbias_conv3x3(fm_buf3,bias2,x,y);
+			set_dwbias_conv3x3(fm_buf3,bias2);
 			//chear_pad(x,y, fm_buf2,6);
 			dw_conv_2(fm_buf2,fm_buf3,dwt_buf3,6);
 

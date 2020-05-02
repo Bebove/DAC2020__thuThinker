@@ -104,7 +104,6 @@ void CONV_1x1(fm_type bottom[80][50][82],
 #pragma HLS array_partition variable=weight dim=1 complete
 #pragma HLS array_partition variable=weight dim=2 complete
 
-
 		int ci = 0;
 		ci=ti;
 		for(int h = 0; h < 50; h++)
@@ -141,12 +140,53 @@ void CONV_1x1(fm_type bottom[80][50][82],
 
 
 
-void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80])
+void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y)
 {
 #pragma HLS array_partition variable=buf dim=1 complete
 //#pragma HLS array_partition variable=bias dim=1 complete
-	for(int h = 0; h < 50; h+=1) {
-		for(int w = 0; w < 82; w++) {
+
+	if (x==0 or x==4){
+		for(int w = 0; w < 82; w+=1){
+#pragma HLS pipeline
+			for(int c = 0; c < 80; c++){
+#pragma HLS unroll
+				buf[c][0][w]=0;
+			}
+		}
+	}
+	else{
+		for(int w = 0; w < 82; w+=1){
+#pragma HLS pipeline
+			for(int c = 0; c < 80; c++){
+#pragma HLS unroll
+				buf[c][0][w]=bias[c];
+			}
+		}
+	}
+
+
+	if (y==0 or y==4){
+		for(int h = 0; h < 50; h+=1){
+#pragma HLS pipeline
+			for(int c = 0; c < 80; c++){
+#pragma HLS unroll
+				buf[c][h][0]=0;
+			}
+		}
+	}
+	else{
+		for(int h = 0; h < 50; h+=1){
+#pragma HLS pipeline
+			for(int c = 0; c < 80; c++){
+#pragma HLS unroll
+				buf[c][h][0]=0;
+			}
+		}
+	}
+	
+
+	for(int h = 1; h < 50; h+=1) {
+		for(int w = 1; w < 82; w++) {
 #pragma HLS pipeline
 			for(int c = 0; c < 80; c++) {
 #pragma HLS unroll
@@ -155,6 +195,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80])
 		}
 	}
 }
+
 
 /*
 void chear_pad(int x,int y, fm_type buff[80][50][82],int round)
