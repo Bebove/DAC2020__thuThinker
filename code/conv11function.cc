@@ -156,7 +156,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80])
 	}
 }
 
-
+/*
 void chear_pad(int x,int y, fm_type buff[80][50][82],int round)
 {
 
@@ -216,7 +216,7 @@ void chear_pad(int x,int y, fm_type buff[80][50][82],int round)
 
 
 }
-
+*/
 void load_weight_conv1x1( wt_type dest[16][16], uint256 src[16])
 {
 	for(int co = 0; co < 16; co++)
