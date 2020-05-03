@@ -114,6 +114,7 @@ void CONV_1x1(fm_type bottom[80][50][82],
 				for(int coo = 0; coo < 16; coo++)
 				{
 #pragma HLS unroll
+
 					top[coo+to][h][w] += relu_single(compute_engine_16(
 							weights[coo][0],   bottom[ci+0][h][w],
 							weights[coo][1],   bottom[ci+1][h][w],
@@ -131,6 +132,7 @@ void CONV_1x1(fm_type bottom[80][50][82],
 							weights[coo][13],  bottom[ci+13][h][w],
 							weights[coo][14],  bottom[ci+14][h][w],
 							weights[coo][15],  bottom[ci+15][h][w]),relu);
+
 
 				}
 			}

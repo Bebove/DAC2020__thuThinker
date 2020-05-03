@@ -15,8 +15,9 @@
 #include <cmath>
 using namespace std;
 #define imagesize 749616//3*(320+2)*(192+2)*4;
-#define wt_lenth 10//3*(320+2)*(192+2)*4;
-
+#define ddrsize 800000//3*(320+2)*(192+2)*4;
+#define wt_lenth 10//
+#define fm_lenth 8//
 
 typedef ap_int<8> int8;
 typedef ap_uint<2> uint2;
@@ -52,6 +53,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			    uint512	w_port_3x3[500][3][3],
 				uint256     w_port_1x1[500][16],
 				uint256     bias_port[500][5],
+				uint16 ddr1 [ddrsize],
 				uint16 debug[2]);
 void load_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
 							int col, int row, int offset_h , int offset_w );
@@ -86,5 +88,11 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80],int x, int y );
 
 void chear_pad(int x,int y, fm_type buff[80][50][82],int round);
 
-
+//global
+void store_DDR(uint16 ddr1 [ddrsize],  fm_type fm_buf2[80][50][82],
+				int sizew,int sizeh, int sizec,  		//the data size    for full image
+				int bufferw, int bufferh, int bufferc,  //the data size	   for one buffer
+				int offsetc,   //the offset index for this buffer
+				int offsetx, int offsety
+				);
 

@@ -1,6 +1,7 @@
 #include "dac.h"
 
 uint16 IMG[imagesize];
+uint16 ddr1[ddrsize];
 uint512 w3[500][3][3];
 uint256 w1[500][16];
 uint16 debug[2];
@@ -89,6 +90,16 @@ void fold_BS_toport(uint256 bias_port[500][5])
 
 
 
+	//313 layer : index 2
+	float temp3[16];
+	std::ifstream ifs_param2("C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\313bs.bin", std::ios::in | std::ios::binary);
+	ifs_param2.read((char*)(temp3), 16 * sizeof(float));
+	ifs_param2.close();
+	for(int ci = 0; ci < 16; ci++)
+	{
+		bias_port[2][0].range(wt_lenth + ci*16, ci*16)=((bs_type)temp3[ci]).range(wt_lenth, 0);
+	}
+
 /*
 		printf("%f",temp[1]);
 		wt_type tss;
@@ -134,6 +145,6 @@ int main()
 	fold_w3_toport(w3);
 	fold_BS_toport(bias_port);
 	fold_w1_toport(w1);
-    Thinker(	 IMG ,w3,w1,bias_port,debug);
+    Thinker(	 IMG ,w3,w1,bias_port,ddr1,debug);
     return 0;
 }
