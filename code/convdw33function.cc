@@ -8,6 +8,7 @@
 #include <string.h>
 using namespace std;
 
+
 inline fm_type relu_single( fm_type d ,int relu) {
 	if(relu ==1){
 	if( d > 6 )

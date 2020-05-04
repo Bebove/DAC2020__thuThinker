@@ -8,6 +8,7 @@
 #include <string.h>
 using namespace std;
 
+
 //fm_type fm_buf_for33[4][8][49][81];
 void conv3x3(fm_type in_buf[80][49][81],
 		fm_type out_buf[8][49][81],

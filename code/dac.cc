@@ -98,6 +98,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 	load_bias_from_axi(bias2, bias_port[1]);       //load  bias   for conv3x3 ,	    which is store at the index 1
 
 
+
 	int offsetx;
 	int offsety;
 
