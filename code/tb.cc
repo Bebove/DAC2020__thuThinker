@@ -1,7 +1,7 @@
 #include "dac.h"
 
 uint16 IMG[imagesize];
-uint16 ddr1[ddrsize];
+uint16 ddr1[imagesize];
 uint512 w3[500][3][3];
 uint256 w1[500][16];
 uint16 debug[2];

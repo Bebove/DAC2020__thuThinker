@@ -80,8 +80,6 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 #pragma HLS INTERFACE m_axi depth=3*(320+2)*(192+2) 	port=ddr1			offset=slave	bundle=INPUT
 
 
-
-
 #pragma HLS INTERFACE s_axilite register	port=return
 #pragma HLS INTERFACE m_axi depth=2			port=debug				offset=slave	bundle=OUTPUT
 
@@ -91,7 +89,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 #pragma HLS ALLOCATION instances=dw_conv_2			 		limit=1 function
 
 
-	int relu;
+
 	//layer 307 310
 	load_weight_conv1x1(wt_buf1, w_port_1x1[0]);   //load  weight for conv1x1 307  		,   	which is store at the index 0
 	load_dwweight_conv3x3(dwt_buf3, w_port_3x3,0); //load  weight for dwconv3x3 310		,	    which is store at the index 0,1,2
@@ -102,7 +100,12 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 	int offsetx;
 	int offsety;
-	relu=0;
+
+	int relu11=0;
+	int relu33=1;
+	int channelnumber=6;
+	int channeloffset=0;
+
 	for(int x=0;x<8;x++)
 	{
 		for(int y=0;y<8;y++)
@@ -115,20 +118,24 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			if(y==4){offsety=1;}
 			else{offsety=0;}
 
-			load_img(fm_buf1, image_in_raw_pad, x,  y,  offsetx,  offsety); //load the first small part of image
+			//load_img(fm_buf1, image_in_raw_pad, x,  y,  offsetx,  offsety); //load the first small part of image
+			aload_img(fm_buf1, image_in_raw_pad, x,  y,  offsetx,  offsety,3,0,
+								(320+2)*2,
+								(192+2)*2,
+								82,
+								50);
 			set_bias_conv1x1( fm_buf2, bias,x,y);
-			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,0,0,relu);
+			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,0,0,relu11);
 
 			set_dwbias_conv3x3(fm_buf3,bias2);
 			dw_conv_2(fm_buf2,fm_buf3,dwt_buf3,6);
-/*
-			store_DDR( ddr1 ,   fm_buf3,
-							320, 192,  16,  		//the data size    for full image
-							40,  24, 16,  //the data size	   for one buffer
-							0,   //the offset index for this buffer
-							y, x
-							); */
-			deload_img(fm_buf3, ddr1, x,  y,  offsetx,  offsety,6,1);
+
+
+			deload_img(fm_buf3, ddr1, x,  y,  offsetx,  offsety,channelnumber,channeloffset,relu33,
+								(160+2)*2,
+								(96+2)*2,
+								40,
+								24);
 
 		}
 	}

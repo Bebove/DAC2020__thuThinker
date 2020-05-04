@@ -7,6 +7,8 @@
 #include <hls_math.h>
 #include <string.h>
 using namespace std;
+
+/*
 void load_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
 							int col, int row, int offset_h , int offset_w )
 {
@@ -56,7 +58,7 @@ void load_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
 
 	}
 
-}
+}*/
 
 
 void load_bias_from_axi(bs_type dest[80], uint256 src[5])
@@ -86,30 +88,57 @@ inline fm_type relu_single( fm_type d ,int relu) {
 }
 
 
-
-
-void deload_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
+void aload_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
 							int col, int row, int offset_h , int offset_w ,
-							int channel,int channel_offset)
+							int channel,int channel_offset,
+							int all_image_w=(160+2)*2,
+							int all_image_h=(96+2)*2,
+							int buffer_w=40,
+							int buffer_h=24)
 {
 	uint16* port_pointer; //col: 192;	row: 320; 	offset_w: when row=4,do the offset;		offset_h: when col=4,do the offset
-	int OFFSET_ALL=(col*24 +2* offset_h) * ((160+2)*2) + row*40 +2*offset_w;
-
-
-
-
+	int OFFSET_ALL=(col*buffer_h +2* offset_h) * (all_image_w) + row*buffer_w +2*offset_w;
 
 
 	for(int c = 0; c < channel; c++)
 	{
 
-	port_pointer=image_port+(c+channel_offset)*(160+2)*2*(96+2)*2+	OFFSET_ALL;
-	for(int i = 0; i < 24; i++)
-	{for(int j = 0; j < 40; j++)
+	port_pointer=image_port+(c+channel_offset)*all_image_w*all_image_h+	OFFSET_ALL;
+	for(int i = 0; i < buffer_h; i++)
+	{for(int j = 0; j < buffer_w; j++)
 		{
 #pragma HLS pipeline
-				 port_pointer[j].range(fm_lenth, 0)=img_buf[c][i][j].range(fm_lenth, 0);}
-		port_pointer += (160+2)*2;}
+				 img_buf[c][i][j].range(fm_lenth, 0)=port_pointer[j].range(fm_lenth, 0);}
+		port_pointer += all_image_w;}
+	}
+}
+
+
+
+
+
+void deload_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
+							int col, int row, int offset_h , int offset_w ,
+							int channel,int channel_offset,int relu,
+							int all_image_w=(160+2)*2,
+							int all_image_h=(96+2)*2,
+							int buffer_w=40,
+							int buffer_h=24)
+{
+	uint16* port_pointer; //col: 192;	row: 320; 	offset_w: when row=4,do the offset;		offset_h: when col=4,do the offset
+	int OFFSET_ALL=(col*buffer_h +2* offset_h) * (all_image_w) + row*buffer_w +2*offset_w;
+	OFFSET_ALL = OFFSET_ALL+ 1 + all_image_w;// this add pad ////////////////////////////////////////// important
+
+	for(int c = 0; c < channel; c++)
+	{
+
+	port_pointer=image_port+(c+channel_offset)*all_image_w*all_image_h+	OFFSET_ALL;
+	for(int i = 0; i < buffer_h; i++)
+	{for(int j = 0; j < buffer_w; j++)
+		{
+#pragma HLS pipeline
+				 port_pointer[j].range(fm_lenth, 0)=relu_single(img_buf[c][i][j],relu).range(fm_lenth, 0);}
+		port_pointer += all_image_w;}
 	}
 }
 
