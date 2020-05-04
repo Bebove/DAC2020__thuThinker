@@ -128,7 +128,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 							0,   //the offset index for this buffer
 							y, x
 							); */
-			deload_img(fm_buf3, ddr1, x,  y,  offsetx,  offsety);
+			deload_img(fm_buf3, ddr1, x,  y,  offsetx,  offsety,6,1);
 
 		}
 	}

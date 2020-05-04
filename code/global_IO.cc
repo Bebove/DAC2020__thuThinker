@@ -86,90 +86,30 @@ inline fm_type relu_single( fm_type d ,int relu) {
 }
 
 
-/*
-void store_DDR(uint16 ddr1 [ddrsize],  fm_type fm_buf2[80][50][82],
-				int sizew,int sizeh, int sizec,  		//the data size    for full image
-				int bufferw, int bufferh, int bufferc,  //the data size	   for one buffer
-				int offsetc,   //the offset index for this buffer
-				int offsetx, int offsety  //offsety: the index for h
-				)
-{
-	int offset_for_onechannel = sizew*sizeh;
-	uint16* port_pointer;
-	uint16* port_pointer_tmp;
-	//initial the port_pointer:
-	port_pointer=ddr1+  		offsetc * offset_for_onechannel ;
-	port_pointer=port_pointer + offsety * sizew;
-	port_pointer=port_pointer + offsetx * bufferw;
-	port_pointer_tmp = port_pointer;
-	uint16 data;
-	//save data
-	for(int c = 0; c < bufferc; c++)
-	{
 
-		for(int j = 0; j < bufferh; j++)
-		{
-#pragma HLS pipeline
-			for(int i = 0; i < bufferw; i++)
-			{
-#pragma HLS unroll
-				port_pointer[i].range(fm_lenth, 0)=fm_buf2[c][j][i].range(fm_lenth, 0);
-
-			}
-			port_pointer = port_pointer+sizew;
-		}
-		port_pointer = port_pointer_tmp + c*offset_for_onechannel;
-	}
-}*/
 
 void deload_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
-							int col, int row, int offset_h , int offset_w )
+							int col, int row, int offset_h , int offset_w ,
+							int channel,int channel_offset)
 {
 	uint16* port_pointer; //col: 192;	row: 320; 	offset_w: when row=4,do the offset;		offset_h: when col=4,do the offset
-	int OFFSET_ALL=(col*48 +2* offset_h) * ((320+2)*2) + row*80 +2*offset_w;
+	int OFFSET_ALL=(col*24 +2* offset_h) * ((160+2)*2) + row*40 +2*offset_w;
 
-	//CHANNEL 0
-	port_pointer=image_port	+	OFFSET_ALL;
-	for(int i = 0; i < 25; i++)
+
+
+
+
+
+	for(int c = 0; c < channel; c++)
 	{
-		for(int j = 0; j < 82; j++)
+
+	port_pointer=image_port+(c+channel_offset)*(160+2)*2*(96+2)*2+	OFFSET_ALL;
+	for(int i = 0; i < 24; i++)
+	{for(int j = 0; j < 40; j++)
 		{
 #pragma HLS pipeline
-				 port_pointer[j].range(fm_lenth, 0)=img_buf[0][i][j].range(fm_lenth, 0);
-		}
-		port_pointer += (320+2)*2;
-
+				 port_pointer[j].range(fm_lenth, 0)=img_buf[c][i][j].range(fm_lenth, 0);}
+		port_pointer += (160+2)*2;}
 	}
-
-
-	//CHANNEL 1
-	port_pointer=image_port+(320+2)*2*(192+2)*2+	OFFSET_ALL;
-	for(int i = 0; i < 25; i++)
-	{
-		for(int j = 0; j < 82; j++)
-		{
-#pragma HLS pipeline
-				 port_pointer[j].range(fm_lenth, 0)=img_buf[1][i][j].range(fm_lenth, 0);
-		}
-		port_pointer += (320+2)*2;
-
-	}
-
-
-	//CHANNEL 2
-	port_pointer=image_port+2*(320+2)*2*(192+2)*2+	OFFSET_ALL;
-	for(int i = 0; i < 25; i++)
-	{
-		for(int j = 0; j < 82; j++)
-		{
-#pragma HLS pipeline
-				port_pointer[j].range(fm_lenth, 0)=img_buf[2][i][j].range(fm_lenth, 0);
-					//if((i%20==0)and (j%20==0))
-					//{printf("%f",(float)img_buf[2][i][j]);}
-		}
-		port_pointer += (320+2)*2;
-
-	}
-
 }
 

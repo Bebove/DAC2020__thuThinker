@@ -98,4 +98,5 @@ void store_DDR(uint16 ddr1 [ddrsize],  fm_type fm_buf2[80][50][82],
 				);
 */
 void deload_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
-							int col, int row, int offset_h , int offset_w );
+							int col, int row, int offset_h , int offset_w ,
+							int channel,int channel_offset);
