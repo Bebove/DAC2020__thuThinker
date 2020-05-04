@@ -7,6 +7,16 @@
 #include <hls_math.h>
 #include <string.h>
 using namespace std;
+
+inline fm_type relu_single( fm_type d ,int relu) {
+	if(relu ==1){
+	if( d > 6 )
+		return 6;
+	if( d < 0 )
+		return 0;}
+	return d;
+}
+
 void dw_conv_2(fm_type (&in_buf)[80][50][82],
 		fm_type (&out_buf)[80][50][82],
 		wt_type (&weight)[96][3][3],int wise)

@@ -89,10 +89,13 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80],int x, int y );
 void chear_pad(int x,int y, fm_type buff[80][50][82],int round);
 
 //global
+/*
 void store_DDR(uint16 ddr1 [ddrsize],  fm_type fm_buf2[80][50][82],
 				int sizew,int sizeh, int sizec,  		//the data size    for full image
 				int bufferw, int bufferh, int bufferc,  //the data size	   for one buffer
 				int offsetc,   //the offset index for this buffer
 				int offsetx, int offsety
 				);
-
+*/
+void deload_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
+							int col, int row, int offset_h , int offset_w );

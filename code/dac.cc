@@ -65,7 +65,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 				uint256     w_port_1x1[500][16],
 				uint256     bias_port[500][5],
 
-				uint16 ddr1 [ddrsize],
+				uint16 ddr1 [imagesize],
 				uint16 debug[2])
 {
  	
@@ -121,13 +121,14 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 			set_dwbias_conv3x3(fm_buf3,bias2);
 			dw_conv_2(fm_buf2,fm_buf3,dwt_buf3,6);
-
+/*
 			store_DDR( ddr1 ,   fm_buf3,
 							320, 192,  16,  		//the data size    for full image
 							40,  24, 16,  //the data size	   for one buffer
 							0,   //the offset index for this buffer
 							y, x
-							);
+							); */
+			deload_img(fm_buf3, ddr1, x,  y,  offsetx,  offsety);
 
 		}
 	}
