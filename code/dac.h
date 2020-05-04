@@ -68,7 +68,7 @@ void dw_conv_1(fm_type (&in_buf)[80][49][81],
 		wt_type (&weight)[80][3][3]);
 void dw_conv_2(fm_type (&in_buf)[80][50][82],
 		fm_type (&out_buf)[80][50][82],
-		wt_type (&weight)[96][3][3],int wise);
+		wt_type (&weight)[96][3][3],int wise,int relu);
 
 //function for 3x3:
 void load_weight_conv3x3( wt_type dest[4][8][32][3][3], uint512 src[500][3][3],int ofset);

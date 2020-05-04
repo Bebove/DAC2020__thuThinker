@@ -8,7 +8,14 @@
 #include <string.h>
 using namespace std;
 
-
+inline fm_type relu_single( fm_type d ,int relu) {
+	if(relu ==1){
+	if( d > 6 )
+		return 6;
+	if( d < 0 )
+		return 0;}
+	return d;
+}
 //fm_type fm_buf_for33[4][8][49][81];
 void conv3x3(fm_type in_buf[80][49][81],
 		fm_type out_buf[8][49][81],

@@ -103,6 +103,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 	int offsety;
 
 	int relu11=0;
+	int relu13=0;
 	int relu33=1;
 	int channelnumber=6;
 	int channeloffset=0;
@@ -129,7 +130,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,0,0,relu11);
 
 			set_dwbias_conv3x3(fm_buf3,bias2);
-			dw_conv_2(fm_buf2,fm_buf3,dwt_buf3,6);
+			dw_conv_2(fm_buf2,fm_buf3,dwt_buf3,6,relu13);
 
 
 			deload_img(fm_buf3, ddr1, x,  y,  offsetx,  offsety,channelnumber,channeloffset,relu33,

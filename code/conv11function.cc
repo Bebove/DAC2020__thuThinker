@@ -115,7 +115,7 @@ void CONV_1x1(fm_type bottom[80][50][82],
 				for(int coo = 0; coo < 16; coo++)
 				{
 #pragma HLS unroll
-
+/*
 					top[coo+to][h][w] += relu_single(compute_engine_16(
 							weights[coo][0],   bottom[ci+0][h][w],
 							weights[coo][1],   bottom[ci+1][h][w],
@@ -133,8 +133,24 @@ void CONV_1x1(fm_type bottom[80][50][82],
 							weights[coo][13],  bottom[ci+13][h][w],
 							weights[coo][14],  bottom[ci+14][h][w],
 							weights[coo][15],  bottom[ci+15][h][w]),relu);
-
-
+*/
+					top[coo+to][h][w] += compute_engine_16(
+							weights[coo][0],   relu_single(bottom[ci+0][h][w],relu),
+							weights[coo][1],   relu_single(bottom[ci+1][h][w],relu),
+							weights[coo][2],   relu_single(bottom[ci+2][h][w],relu),
+							weights[coo][3],   relu_single(bottom[ci+3][h][w],relu),
+							weights[coo][4],   relu_single(bottom[ci+4][h][w],relu),
+							weights[coo][5],   relu_single(bottom[ci+5][h][w],relu),
+							weights[coo][6],   relu_single(bottom[ci+6][h][w],relu),
+							weights[coo][7],   relu_single(bottom[ci+7][h][w],relu),
+							weights[coo][8],   relu_single(bottom[ci+8][h][w],relu),
+							weights[coo][9],   relu_single(bottom[ci+9][h][w],relu),
+							weights[coo][10],  relu_single(bottom[ci+10][h][w],relu),
+							weights[coo][11],  relu_single(bottom[ci+11][h][w],relu),
+							weights[coo][12],  relu_single(bottom[ci+12][h][w],relu),
+							weights[coo][13],  relu_single(bottom[ci+13][h][w],relu),
+							weights[coo][14],  relu_single(bottom[ci+14][h][w],relu),
+							weights[coo][15],  relu_single(bottom[ci+15][h][w],relu));
 				}
 			}
 		}

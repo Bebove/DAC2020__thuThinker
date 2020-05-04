@@ -18,9 +18,15 @@ inline fm_type relu_single( fm_type d ,int relu) {
 	return d;
 }
 
+
+
+
+
+
+
 void dw_conv_2(fm_type (&in_buf)[80][50][82],
 		fm_type (&out_buf)[80][50][82],
-		wt_type (&weight)[96][3][3],int wise)
+		wt_type (&weight)[96][3][3],int wise,int relu)
 {
     for(int y=0;y<3;y++){
         for (int x=0;x<3;x++){
@@ -29,7 +35,7 @@ void dw_conv_2(fm_type (&in_buf)[80][50][82],
 #pragma HLS pipeline
                     for(int ch=0; ch<wise; ch++){
 #pragma HLS unroll
-                        out_buf[ch][h][w]+=weight[ch][y][x]*in_buf[ch][hi+y][wi+x];
+                        out_buf[ch][h][w]+=weight[ch][y][x]*relu_single(in_buf[ch][hi+y][wi+x],relu);
                     }
                 }
             }
