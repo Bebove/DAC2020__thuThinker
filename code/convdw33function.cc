@@ -44,6 +44,25 @@ void dw_conv_2(fm_type (&in_buf)[80][50][82],
 }
 
 
+void dw_conv_1(fm_type (&in_buf)[80][50][82],
+		fm_type (&out_buf)[80][50][82],
+		wt_type (&weight)[96][3][3],int wise,int relu){
+    for(int y=0;y<3;y++){
+        for (int x=0;x<3;x++){
+            for(int h=0; h<48; h++){
+                for(int w=0; w<80; w++){
+#pragma HLS PIPELINE
+                    for(int ch=0; ch<wise; ch++){
+#pragma HLS unroll
+                        out_buf[ch][h][w]+=weight[ch][y][x]*relu_single(in_buf[ch][h+y][w+x],relu);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 void load_dwweight_conv3x3(wt_type dest[96][3][3], uint512 src[500][3][3],int ofset)
 {
 //should be able to load 80x3x3 weight. so, we need 3 index to store one layer. The redundancy should be 0.

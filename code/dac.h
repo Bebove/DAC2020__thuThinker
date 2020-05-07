@@ -63,9 +63,9 @@ void set_dwbias_conv3x3( fm_type buf[80][50][82], bs_type bias[80]);
 
 
 
-void dw_conv_1(fm_type (&in_buf)[80][49][81],
-		fm_type (&out_buf)[80][49][81],
-		wt_type (&weight)[80][3][3]);
+void dw_conv_1(fm_type (&in_buf)[80][50][82],
+		fm_type (&out_buf)[80][50][82],
+		wt_type (&weight)[96][3][3],int wise,int relu);
 void dw_conv_2(fm_type (&in_buf)[80][50][82],
 		fm_type (&out_buf)[80][50][82],
 		wt_type (&weight)[96][3][3],int wise,int relu);

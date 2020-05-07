@@ -18,44 +18,21 @@ fm_type fm_buf3[80][50][82];
 wt_type wt_buf3[32][32][3][3];
 wt_type dwt_buf3[96][3][3];
 wt_type wt_buf1[16][16];
+wt_type wt_buf1a[16][16];
 bs_type bias[80];
 bs_type bias2[80];
-
+bs_type bias3[80];
 
 /*
+void padding_offset(int x, int y, int &offsetx, int &offsety)
+{
+	if(x==4){offsetx=1;}
+	else{offsetx=0;}
 
-
-
-
-
-
-
-void dw_conv_1(fm_type (&in_buf)[80][49][81],
-		fm_type (&out_buf)[80][49][81],
-		wt_type (&weight)[80][3][3]){
-    for(uint2 y=0;y<3;y++){
-        for (uint2 x=0;x<3;x++){
-            for(uint6 h=0; h<47; h++){
-                for(uint6 w=0; w<79; w++){
-#pragma HLS PIPELINE
-                    for(uint6 ch=0; ch<80; ch++){
-                        out_buf[ch][h][w]+=weight[ch][y][x]*in_buf[ch][h+y][w+x];
-                        //cout<<weight[ch][y][x]<<"  "<<in_buf[ch][h+y][w+x]<<"\n";
-                        //cout<<out_buf[ch][h][w]<<"\n";
-                        //system("pause");
-                    }
-                }
-            }
-        }
-    }
+	if(y==4){offsety=1;}
+	else{offsety=0;}
 }
-
-
-
 */
-
-
-
 
  
  
@@ -127,10 +104,10 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 								82,
 								50);
 			set_bias_conv1x1( fm_buf2, bias,x,y);
-			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,0,0,relu11);
+			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,0,0,0); //level 1
 
 			set_dwbias_conv3x3(fm_buf3,bias2);
-			dw_conv_2(fm_buf2,fm_buf3,dwt_buf3,6,relu13);
+			dw_conv_2(fm_buf2,fm_buf3,dwt_buf3,6,1); //level 2
 
 
 			deload_img(fm_buf3, ddr1, x,  y,  offsetx,  offsety,channelnumber,channeloffset,relu33,
@@ -145,9 +122,46 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 
 	//layer 313
-	load_bias_from_axi(bias, bias_port[2]);       //load  bias   for conv1x1 ,	    which is store at the index 2
+	load_bias_from_axi(bias, bias_port[2]);   //load  bias  for the first conv1x1 ,	 which is store at the index 2
+	load_bias_from_axi(bias2,bias_port[3]); //bias for dw conv3x3
+	load_bias_from_axi(bias3,bias_port[4]); //bias for the second conv1x1
+	load_weight_conv1x1(wt_buf1,w_port_1x1[1]);
+	load_weight_conv1x1(wt_buf1a,w_port_1x1[2]);
+	load_dwweight_conv3x3(dwt_buf3,w_port_3x3[1],3);
+	
+	channelnumber=8;//only for the feature map to be stored in ddr
+	channeloffset=0;
+	
+	for(int x=0;x<4;x++){
+		for(int y=0;y<4;y++){
 
+			if(x==2){offsetx=1;}
+			else{offsetx=0;}
 
+			if(y==2){offsety=1;}
+			else{offsety=0;}
+
+			aload_img(fm_buf1,ddr1,x,y,offsetx,offsety,6,0,
+						(160+2)*2,
+						(96+2)*2,
+						82,
+						50);
+			set_bias_conv1x1(fm_buf2,bias,x,y);
+			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,0,0,0); //level 3
+
+			set_dwbias_conv3x3(fm_buf3,bias2);
+			dw_conv_1(fm_buf2,fm_buf3,dwt_buf3,16,0); //level 4 
+
+			set_bias_conv1x1(fm_buf1,bias3,x,y);
+			CONV_1x1(fm_buf3,fm_buf1,wt_buf1a,0,0,1); // level 5 
+
+			deload_img(fm_buf1, ddr1, x, y,  offsetx, offsety,channelnumber,channeloffset,0,
+				(160+2)*2,
+				(96+2)*2,
+				80,
+				48);
+		}
+	}
 
 	debug[0]=0.1;
 
