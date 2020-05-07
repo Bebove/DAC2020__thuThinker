@@ -162,7 +162,7 @@ void CONV_1x1(fm_type bottom[80][50][82],
 void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y)
 {
 #pragma HLS array_partition variable=buf dim=1 complete
-//#pragma HLS array_partition variable=bias dim=1 complete
+#pragma HLS array_partition variable=bias dim=1 complete
 
 	if (x==0 or x==4){
 		for(int w = 0; w < 82; w+=1){

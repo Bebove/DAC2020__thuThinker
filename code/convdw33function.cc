@@ -28,6 +28,9 @@ void dw_conv_2(fm_type (&in_buf)[80][50][82],
 		fm_type (&out_buf)[80][50][82],
 		wt_type (&weight)[96][3][3],int wise,int relu)
 {
+#pragma HLS array_partition variable=in_buf dim=1 complete
+#pragma HLS array_partition variable=out_buf dim=1 complete
+#pragma HLS array_partition variable=weight dim=1 complete
     for(int y=0;y<3;y++){
         for (int x=0;x<3;x++){
             for(int h=0,hi=0; h<24; h++,hi+=2){
@@ -47,6 +50,9 @@ void dw_conv_2(fm_type (&in_buf)[80][50][82],
 void dw_conv_1(fm_type (&in_buf)[80][50][82],
 		fm_type (&out_buf)[80][50][82],
 		wt_type (&weight)[96][3][3],int wise,int relu){
+#pragma HLS array_partition variable=in_buf dim=1 complete
+#pragma HLS array_partition variable=out_buf dim=1 complete
+#pragma HLS array_partition variable=weight dim=1 complete
     for(int y=0;y<3;y++){
         for (int x=0;x<3;x++){
             for(int h=0; h<48; h++){
@@ -93,7 +99,7 @@ void load_dwweight_conv3x3(wt_type dest[96][3][3], uint512 src[500][3][3],int of
 void set_dwbias_conv3x3( fm_type buf[80][50][82], bs_type bias[80])
 {
 #pragma HLS array_partition variable=buf dim=1 complete
-//#pragma HLS array_partition variable=bias dim=1 complete
+#pragma HLS array_partition variable=bias dim=1 complete
 
 	for(int h = 0; h < 50; h+=1) {
 		for(int w = 0; w < 82; w++) {

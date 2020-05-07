@@ -10,7 +10,7 @@ using namespace std;
 fm_type fm_buf1[80][50][82];
 fm_type fm_buf2[80][50][82];
 fm_type fm_buf3[80][50][82];
-
+fm_type fm_buf4[80][50][82];
 
 
 
@@ -64,7 +64,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 #pragma HLS ALLOCATION instances=CONV_1x1			 		limit=1 function
 #pragma HLS ALLOCATION instances=dw_conv_2			 		limit=1 function
-
+#pragma HLS ALLOCATION instances=dw_conv_1			 		limit=1 function
 
 
 	//layer 307 310
@@ -87,6 +87,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 	for(int x=0;x<8;x++)
 	{
+
 		for(int y=0;y<8;y++)
 		{
 			//x: h index, x*48*320=offset
@@ -127,7 +128,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 	load_bias_from_axi(bias3,bias_port[4]); //bias for the second conv1x1
 	load_weight_conv1x1(wt_buf1,w_port_1x1[1]);
 	load_weight_conv1x1(wt_buf1a,w_port_1x1[2]);
-	load_dwweight_conv3x3(dwt_buf3,w_port_3x3[1],3);
+	load_dwweight_conv3x3(dwt_buf3,w_port_3x3,3);
 	
 	channelnumber=8;//only for the feature map to be stored in ddr
 	channeloffset=0;
@@ -150,12 +151,12 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,0,0,0); //level 3
 
 			set_dwbias_conv3x3(fm_buf3,bias2);
-			dw_conv_1(fm_buf2,fm_buf3,dwt_buf3,16,0); //level 4 
+			dw_conv_1(fm_buf2,fm_buf3,dwt_buf3,16,0); //level 4
 
-			set_bias_conv1x1(fm_buf1,bias3,x,y);
-			CONV_1x1(fm_buf3,fm_buf1,wt_buf1a,0,0,1); // level 5 
+			set_bias_conv1x1(fm_buf4,bias3,x,y);
+			CONV_1x1(fm_buf3,fm_buf4,wt_buf1a,0,0,1); // level 5
 
-			deload_img(fm_buf1, ddr1, x, y,  offsetx, offsety,channelnumber,channeloffset,0,
+			deload_img(fm_buf4, ddr1, x, y,  offsetx, offsety,channelnumber,channeloffset,0,
 				(160+2)*2,
 				(96+2)*2,
 				80,
