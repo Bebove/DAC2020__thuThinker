@@ -15,7 +15,7 @@
 #include <cmath>
 using namespace std;
 #define imagesize 749616//3*(320+2)*(192+2)*4;
-#define ddrsize 800000//3*(320+2)*(192+2)*4;
+#define ddrsize   150000//3*(320+2)*(192+2)*4;
 #define wt_lenth 10//
 #define fm_lenth 8//
 
@@ -53,7 +53,9 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			    uint512	w_port_3x3[500][3][3],
 				uint256     w_port_1x1[500][16],
 				uint256     bias_port[500][5],
-				uint16 ddr1 [ddrsize],
+				uint256 ddr1 [ddrsize],
+				uint256 ddr2 [ddrsize],
+
 				uint16 debug[2]);
 
 
@@ -98,7 +100,16 @@ void aload_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
 							int all_image_h,
 							int buffer_w,
 							int buffer_h);
+/*
 void deload_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
+							int col, int row, int offset_h , int offset_w ,
+							int channel,int channel_offset,int relu,
+							int all_image_w ,
+							int all_image_h ,
+							int buffer_w,
+							int buffer_h);*/
+
+void deload_img2(fm_type img_buf[80][50][82], uint256 image_port[ddrsize],
 							int col, int row, int offset_h , int offset_w ,
 							int channel,int channel_offset,int relu,
 							int all_image_w ,
@@ -106,8 +117,12 @@ void deload_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
 							int buffer_w,
 							int buffer_h);
 
-
-
-
+void aload_img2(fm_type img_buf[80][50][82], uint256 image_port[ddrsize],
+							int col, int row, int offset_h , int offset_w ,
+							int channel,int channel_offset,
+							int all_image_w,
+							int all_image_h,
+							int buffer_w,
+							int buffer_h);
 //void load_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
 //							int col, int row, int offset_h , int offset_w );

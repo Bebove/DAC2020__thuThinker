@@ -42,7 +42,8 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 				uint256     w_port_1x1[500][16],
 				uint256     bias_port[500][5],
 
-				uint16 ddr1 [imagesize],
+				uint256 ddr1 [imagesize],
+				uint256 ddr2 [imagesize],
 				uint16 debug[2])
 {
  	
@@ -55,18 +56,21 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 #pragma HLS INTERFACE m_axi depth=500 	port=bias_port			offset=slave	bundle=INPUT
 	//So we use a ddr of size at least 48*(20*8)*(12*8)
 #pragma HLS INTERFACE m_axi depth=3*(320+2)*(192+2) 	port=ddr1			offset=slave	bundle=INPUT
+#pragma HLS INTERFACE m_axi depth=3*(320+2)*(192+2) 	port=ddr2			offset=slave	bundle=INPUT
 
 
 #pragma HLS INTERFACE s_axilite register	port=return
 #pragma HLS INTERFACE m_axi depth=2			port=debug				offset=slave	bundle=OUTPUT
 
 
-
+/*
 #pragma HLS ALLOCATION instances=CONV_1x1			 		limit=1 function
 #pragma HLS ALLOCATION instances=dw_conv_2			 		limit=1 function
 #pragma HLS ALLOCATION instances=dw_conv_1			 		limit=1 function
-
-
+#pragma HLS ALLOCATION instances=deload_img2			 		limit=1 function
+#pragma HLS ALLOCATION instances=aload_img2			 		limit=1 function
+#pragma HLS ALLOCATION instances=load_weight_conv1x1			 		limit=1 function
+#pragma HLS ALLOCATION instances=load_bias_from_axi			 		limit=1 function */
 	//layer 307 310
 	load_weight_conv1x1(wt_buf1, w_port_1x1[0]);   //load  weight for conv1x1 307  		,   	which is store at the index 0
 	load_dwweight_conv3x3(dwt_buf3, w_port_3x3,0); //load  weight for dwconv3x3 310		,	    which is store at the index 0,1,2
@@ -111,7 +115,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			dw_conv_2(fm_buf2,fm_buf3,dwt_buf3,6,1); //level 2
 
 
-			deload_img(fm_buf3, ddr1, x,  y,  offsetx,  offsety,channelnumber,channeloffset,relu33,
+			deload_img2(fm_buf3, ddr2, x,  y,  offsetx,  offsety,channelnumber,channeloffset,relu33,
 								(160+2)*2,
 								(96+2)*2,
 								40,
@@ -142,7 +146,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			if(y==2){offsety=1;}
 			else{offsety=0;}
 
-			aload_img(fm_buf1,ddr1,x,y,offsetx,offsety,6,0,
+			aload_img2(fm_buf1,ddr2,x,y,offsetx,offsety,6,0,
 						(160+2)*2,
 						(96+2)*2,
 						82,
@@ -156,13 +160,35 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			set_bias_conv1x1(fm_buf4,bias3,x,y);
 			CONV_1x1(fm_buf3,fm_buf4,wt_buf1a,0,0,1); // level 5
 
-			deload_img(fm_buf4, ddr1, x, y,  offsetx, offsety,channelnumber,channeloffset,0,
+			deload_img2(fm_buf4, ddr1, x, y,  offsetx, offsety,channelnumber,channeloffset,0,
 				(160+2)*2,
 				(96+2)*2,
-				80,
-				48);
+				40,
+				24);
 		}
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	debug[0]=0.1;
 

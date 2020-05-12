@@ -1,7 +1,8 @@
 #include "dac.h"
 
 uint16 IMG[imagesize];
-uint16 ddr1[imagesize];
+uint256 ddr2[ddrsize];
+uint256 ddr1[ddrsize];
 uint512 w3[500][3][3];
 uint256 w1[500][16];
 uint16 debug[2];
@@ -146,6 +147,6 @@ int main()
 	fold_w3_toport(w3);
 	fold_BS_toport(bias_port);
 	fold_w1_toport(w1);
-    Thinker(	 IMG ,w3,w1,bias_port,ddr1,debug);
+    Thinker(	 IMG ,w3,w1,bias_port,ddr1,ddr2,debug);
     return 0;
 }
