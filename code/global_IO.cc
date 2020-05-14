@@ -67,124 +67,78 @@ void aload_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
 
 
 
-/*
-void deload_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
-							int col, int row, int offset_h , int offset_w ,
-							int channel,int channel_offset,int relu,
-							int all_image_w=(160+2)*2,
-							int all_image_h=(96+2)*2,
-							int buffer_w=40,
-							int buffer_h=24)
+
+
+
+void deload_img(fm_type img_buf[80][50][82], uint256 image_port[ddrsize][30],   //use 30 uint256 to store  480 channel
+							int howmany256,
+							int offsetw,
+							int offseth,
+
+							int w,    //80
+							int h,    //48
+							int allw
+							)
 {
-	uint16* port_pointer; //col: 192;	row: 320; 	offset_w: when row=4,do the offset;		offset_h: when col=4,do the offset
-	int OFFSET_ALL=(col*buffer_h +2* offset_h) * (all_image_w) + row*buffer_w +2*offset_w;
-	OFFSET_ALL = OFFSET_ALL+ 1 + all_image_w;// this add pad ////////////////////////////////////////// important
-
-	for(int c = 0; c < channel; c++)
+	//rule:
+	int offset_ALL=allw*offseth +offsetw;
+	int  pointer;
+	uint256 DATA;
+	for(int j=0;j<h;j++)
 	{
-
-	port_pointer=image_port+(c+channel_offset)*all_image_w*all_image_h+	OFFSET_ALL;
-	for(int i = 0; i < buffer_h; i++)
-	{
-
-		for(int j = 0; j < buffer_w; j++)
+		pointer=offset_ALL	+	allw*j;
+		for(int i=0;i<w;i++)
 		{
-#pragma HLS pipeline II=2
-				 //port_pointer[j].range(fm_lenth, 0)=relu_single(img_buf[c][i][j],relu).range(fm_lenth, 0);}
-				port_pointer[j].range(fm_lenth, 0)=img_buf[c][i][j].range(fm_lenth, 0);
+			for(int c=0;c<howmany256;c++)
+			{
+#pragma HLS pipeline
+				for(int p=0;p<16;p++)
+				{
+#pragma HLS unroll
+					DATA.range(p*16+fm_lenth,p*16)=img_buf[c*16+p][j][i].range(fm_lenth,0);
+				}
+				image_port[pointer][c].range(255,0)=DATA.range(255,0);
+			}
+			pointer=pointer+1;
 		}
-		port_pointer += all_image_w;}
 	}
 }
 
-*/
 
-void aload_img2(fm_type img_buf[80][50][82], uint256 image_port[ddrsize],
-							int col, int row, int offset_h , int offset_w ,
-							int channel,int channel_offset,
-							int all_image_w=(160+2)*2,
-							int all_image_h=(96+2)*2,
-							int buffer_w=40,
-							int buffer_h=24)
+void aload_img_2(fm_type img_buf[80][50][82], uint256 image_port[ddrsize][30],   //use 30 uint256 to store  480 channel
+							int howmany256,
+							int offsetw,
+							int offseth,
+
+							int w,    //80
+							int h,    //48
+							int allw
+							)
 {
-	buffer_w=buffer_w/10;
-	uint256* port_pointer; //col: 192;	row: 320; 	offset_w: when row=4,do the offset;		offset_h: when col=4,do the offset
-	int OFFSET_ALL=(col*(buffer_h-2) +2* offset_h) * (all_image_w) + row*(buffer_w-2) +2*offset_w;
-	//It's the offset of a block start address relative to the start address of the whole channel
-
-	for(int c = 0; c < channel; c++)
+	//rule:
+	int offset_ALL=allw*offseth +offsetw;
+	int  pointer;
+	uint256 DATA;
+	for(int j=0;j<h;j++)
 	{
-
-		port_pointer=image_port+(c+channel_offset)*all_image_w*all_image_h+	OFFSET_ALL;
-		//channnel start address + offset_all
-		for(int i = 0; i < buffer_h; i++)
+		pointer=offset_ALL	+	allw*j;
+		for(int i=0;i<w;i++)
 		{
-
-			for(int j = 0; j < buffer_w; j++)
+			for(int c=0;c<howmany256;c++)
 			{
 #pragma HLS pipeline
-				uint256 DATA = 0;
-				DATA.range(255, 0)=port_pointer[j].range(255, 0);
-					 //port_pointer[j].range(fm_lenth, 0)=relu_single(img_buf[c][i][j],relu).range(fm_lenth, 0);}
-				for(int p=0;p<10;p++)
+				DATA.range(255,0)=image_port[pointer][c].range(255,0);
+				for(int p=0;p<16;p++)
 				{
 #pragma HLS unroll
-					img_buf[c][i][10*j+p].range(fm_lenth, 0)=DATA.range(p*16+fm_lenth, p*16);
+					img_buf[c*16+p][j][i].range(fm_lenth,0)=DATA.range(p*16+fm_lenth,p*16);
 				}
 
 			}
-
+			pointer=pointer+1;
 		}
-		port_pointer += all_image_w;
+
 	}
 
 
-}
-
-
-
-
-
-
-
-
-
-
-
-
-void deload_img2(fm_type img_buf[80][50][82], uint256 image_port[ddrsize],
-							int col, int row, int offset_h , int offset_w ,
-							int channel,int channel_offset,int relu,
-							int all_image_w=(160+2)*2,
-							int all_image_h=(96+2)*2,
-							int buffer_w=40,
-							int buffer_h=24)
-{
-	buffer_w=buffer_w/10;
-	uint256* port_pointer; //col: 192;	row: 320; 	offset_w: when row=4,do the offset;		offset_h: when col=4,do the offset
-	int OFFSET_ALL=(col*buffer_h +2* offset_h) * (all_image_w) + row*buffer_w +2*offset_w;
-	OFFSET_ALL = OFFSET_ALL+ 1 + all_image_w;// this add pad ////////////////////////////////////////// important
-
-	for(int c = 0; c < channel; c++)
-	{
-
-	port_pointer=image_port+(c+channel_offset)*all_image_w*all_image_h+	OFFSET_ALL;
-	for(int i = 0; i < buffer_h; i++)
-	{
-
-		for(int j = 0; j < buffer_w; j++)
-		{
-#pragma HLS pipeline
-			uint256 DATA = 0;
-
-				 //port_pointer[j].range(fm_lenth, 0)=relu_single(img_buf[c][i][j],relu).range(fm_lenth, 0);}
-			for(int p=0;p<10;p++)
-			{
-#pragma HLS unroll
-			DATA.range(p*16+fm_lenth, p*16)=img_buf[c][i][10*j+p].range(fm_lenth, 0);
-			}
-			port_pointer[j].range(255, 0)=DATA.range(255, 0);
-		}
-		port_pointer += all_image_w;}
-	}
 }
