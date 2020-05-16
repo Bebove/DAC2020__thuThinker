@@ -159,12 +159,20 @@ void CONV_1x1(fm_type bottom[80][50][82],
 
 
 
-void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y)
+void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,int number_ofpart_for_one_image)
 {
 #pragma HLS array_partition variable=buf dim=1 complete
 #pragma HLS array_partition variable=bias dim=1 complete
+//this function only work when buffer is smaller than feature map
 
-	if (x==0 or x==4){
+
+
+	bool x_up=	(x%number_ofpart_for_one_image==0);
+	bool x_down=(x%number_ofpart_for_one_image==number_ofpart_for_one_image-1);
+	bool y_up=	(y%number_ofpart_for_one_image==0);
+	bool y_down=(y%number_ofpart_for_one_image==number_ofpart_for_one_image-1);
+
+	if (x_up){
 		for(int w = 0; w < 82; w+=1){
 #pragma HLS pipeline
 			for(int c = 0; c < 80; c++){
@@ -183,8 +191,29 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y)
 		}
 	}
 
+	if (x_down){
+		for(int w = 0; w < 82; w+=1){
+#pragma HLS pipeline
+			for(int c = 0; c < 80; c++){
+#pragma HLS unroll
+				buf[c][49][w]=0;
+			}
+		}
+	}
+	else{
+		for(int w = 0; w < 82; w+=1){
+#pragma HLS pipeline
+			for(int c = 0; c < 80; c++){
+#pragma HLS unroll
+				buf[c][49][w]=bias[c];
+			}
+		}
+	}
 
-	if (y==0 or y==4){
+
+
+
+	if (y_up){
 		for(int h = 0; h < 50; h+=1){
 #pragma HLS pipeline
 			for(int c = 0; c < 80; c++){
@@ -202,7 +231,27 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y)
 			}
 		}
 	}
-	
+	if (y_down){
+		for(int h = 0; h < 50; h+=1){
+#pragma HLS pipeline
+			for(int c = 0; c < 80; c++){
+#pragma HLS unroll
+				buf[c][h][81]=0;
+			}
+		}
+	}
+	else{
+		for(int h = 0; h < 50; h+=1){
+#pragma HLS pipeline
+			for(int c = 0; c < 80; c++){
+#pragma HLS unroll
+				buf[c][h][81]=0;
+			}
+		}
+	}
+
+
+
 
 	for(int h = 1; h < 50; h+=1) {
 		for(int w = 1; w < 82; w++) {

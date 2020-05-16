@@ -17,12 +17,17 @@ uint16  debug[2];
 #define l2 "F:/hls/thinker/code/test_data/data/conv_2.bin"*/
 #define imgpath "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\verify\\test_data\\dataimg.bin"
 #define w3_310 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\310.bin"
+#define w3_315 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\315.bin"
 #define bs_307 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\307bs.bin"
 #define bs_310 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\310bs.bin"
 #define bs_313 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\313bs.bin"
+#define bs_315 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\315bs.bin"
+#define bs_318 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\318bs.bin"
+#define bs_320 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\320bs.bin"
+
 #define w1_307 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\307.bin"
-
-
+#define w1_313 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\313.bin"
+#define w1_318 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\318.bin"
 //Those are the vars which is not related to Thinker itself and related to debug
 double temp_img[imagesize];
 uint16 check[imagesize];//correct data
@@ -77,7 +82,28 @@ void fold_w1_toport(uint256 w1[500][16])
 			w1[0][co].range(wt_lenth + ci*16, ci*16)=((wt_type)temp[co][ci][0][0]).range(wt_lenth, 0);
 		}
 	}
-
+	float temp1[16][6][1][1];
+	std::ifstream ifs_param1(w1_313, std::ios::in | std::ios::binary);
+	ifs_param1.read((char*)(**temp1), 16 * 6 * 1 * sizeof(float));
+	ifs_param1.close();
+	for(int co = 0; co< 16; co++)
+	{
+		for(int ci = 0; ci < 6; ci++)
+		{
+			w1[1][co].range(wt_lenth + ci*16, ci*16)=((wt_type)temp1[co][ci][0][0]).range(wt_lenth, 0);
+		}
+	}
+	float temp2[8][16][1][1];
+	std::ifstream ifs_param2(w1_318, std::ios::in | std::ios::binary);
+	ifs_param2.read((char*)(**temp2), 16 * 8 * 1 * sizeof(float));
+	ifs_param2.close();
+	for(int co = 0; co< 8; co++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			w1[2][co].range(wt_lenth + ci*16, ci*16)=((wt_type)temp2[co][ci][0][0]).range(wt_lenth, 0);
+		}
+	}
 }
 
 void fold_BS_toport(uint256 bias_port[500][5])
@@ -116,7 +142,36 @@ void fold_BS_toport(uint256 bias_port[500][5])
 		bias_port[2][0].range(wt_lenth + ci*16, ci*16)=((bs_type)temp3[ci]).range(wt_lenth, 0);
 	}
 
-
+	//315 layer : index 3
+	float temp4[16];
+	std::ifstream ifs_param4(bs_315, std::ios::in | std::ios::binary);
+	ifs_param4.read((char*)(temp4), 16 * sizeof(float));
+	ifs_param4.close();
+	for(int ci = 0; ci < 16; ci++)
+	{
+		bias_port[3][0].range(wt_lenth + ci*16, ci*16)=((bs_type)temp4[ci]).range(wt_lenth, 0);
+	}
+	//318 layer : index 4
+	float temp5[8];
+	std::ifstream ifs_param5(bs_318, std::ios::in | std::ios::binary);
+	ifs_param5.read((char*)(temp5), 8 * sizeof(float));
+	ifs_param5.close();
+	for(int ci = 0; ci < 8; ci++)
+	{
+		bias_port[4][0].range(wt_lenth + ci*16, ci*16)=((bs_type)temp5[ci]).range(wt_lenth, 0);
+	}
+	//320 layer : index 5
+	float temp6[48];
+	std::ifstream ifs_param6(bs_320, std::ios::in | std::ios::binary);
+	ifs_param6.read((char*)(temp6), 48 * sizeof(float));
+	ifs_param6.close();
+	for(int co = 0; co < 3; co++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			bias_port[5][co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp6[ci+16*co]).range(wt_lenth, 0);
+		}
+	}
 }
 
 void fold_w3_toport(uint512 w3[500][3][3])
@@ -137,7 +192,21 @@ void fold_w3_toport(uint512 w3[500][3][3])
 
 		}
 	}
+	float temp1[16][16][3][3];
+	std::ifstream ifs_param1(w3_315, std::ios::in | std::ios::binary);
+	ifs_param1.read((char*)(**temp1), 16 * 16 * 9 * sizeof(float));
+	ifs_param1.close();
+	for(int x=0;x<3;x++)
+	{
+		for(int y=0;y<3;y++)
+		{
+			for(int i=0;i<16;i++)
+			{
+				w3[1][x][y].range(wt_lenth + i*16, i*16)=((wt_type)(temp1[0][i][x][y])).range(wt_lenth, 0);
+			}
 
+		}
+	}
 /*
 			printf("%f",temp[0][1][1][1]);
 			wt_type tss;
@@ -151,37 +220,6 @@ void fold_w3_toport(uint512 w3[500][3][3])
 
 
 
-
-
-//Those are functions only for debug
-void deload_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
-							int col, int row, int offset_h , int offset_w ,
-							int channel,int channel_offset,int relu,
-							int all_image_w=(160+2)*2,
-							int all_image_h=(96+2)*2,
-							int buffer_w=40,
-							int buffer_h=24)
-{
-	uint16* port_pointer; //col: 192;	row: 320; 	offset_w: when row=4,do the offset;		offset_h: when col=4,do the offset
-	int OFFSET_ALL=(col*buffer_h +2* offset_h) * (all_image_w) + row*buffer_w +2*offset_w;
-	OFFSET_ALL = OFFSET_ALL+ 1 + all_image_w;// this add pad ////////////////////////////////////////// important
-
-	for(int c = 0; c < channel; c++)
-	{
-
-	port_pointer=image_port+(c+channel_offset)*all_image_w*all_image_h+	OFFSET_ALL;
-	for(int i = 0; i < buffer_h; i++)
-	{
-
-		for(int j = 0; j < buffer_w; j++)
-		{
-#pragma HLS pipeline II=2
-				 //port_pointer[j].range(fm_lenth, 0)=relu_single(img_buf[c][i][j],relu).range(fm_lenth, 0);}
-				port_pointer[j].range(fm_lenth, 0)=img_buf[c][i][j].range(fm_lenth, 0);
-		}
-		port_pointer += all_image_w;}
-	}
-}
 
 
 

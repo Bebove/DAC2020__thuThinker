@@ -72,6 +72,8 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 #pragma HLS ALLOCATION instances=deload_img			 		limit=1 function
 #pragma HLS ALLOCATION instances=load_weight_conv1x1			 		limit=1 function
 #pragma HLS ALLOCATION instances=load_bias_from_axi			 		limit=1 function
+
+
 	//layer 307 310
 	load_weight_conv1x1(wt_buf1, w_port_1x1[0]);   //load  weight for conv1x1 307  		,   	which is store at the index 0
 	load_dwweight_conv3x3(dwt_buf3, w_port_3x3,0); //load  weight for dwconv3x3 310		,	    which is store at the index 0,1,2
@@ -97,7 +99,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			//x: h index, x*48*320=offset
 			//y: w index, y*80=offset
 
-			aload_img(fm_buf1, image_in_raw_pad, x,  y,  x%4,  y%4,3,0,
+			aload_img(fm_buf1, image_in_raw_pad, x,  y,  x/4,  y/4,3,0,
 								(320+2)*2,
 								(192+2)*2,
 								82,
@@ -108,8 +110,8 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			set_dwbias_conv3x3(fm_buf3,bias2);
 			dw_conv_2(fm_buf2,fm_buf3,dwt_buf3,6,1); //level 2
 
-			offsetw=2*(y%4)+1+y*w;    //begin from which windex ,in the whole featuremap
-			offseth=2*(x%4)+1+x*h;    //begin from which hindex ,in the whole featuremap
+			offsetw=2*(y/4)+1+y*w;    //begin from which windex ,in the whole featuremap
+			offseth=2*(x/4)+1+x*h;    //begin from which hindex ,in the whole featuremap
 
 			deload_img(fm_buf3, ddrdebug,
 										howmany256,
@@ -125,7 +127,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 
 
-	//layer 313
+	//layer 313-318
 	load_bias_from_axi(bias, bias_port[2]);   //load  bias  for the first conv1x1 ,	 which is store at the index 2
 	load_bias_from_axi(bias2,bias_port[3]); //bias for dw conv3x3
 	load_bias_from_axi(bias3,bias_port[4]); //bias for the second conv1x1
@@ -143,8 +145,8 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 	for(int x=0;x<4;x++){
 		for(int y=0;y<4;y++){
 
-			offsetw=2*(y%2)+y*80;
-			offseth=2*(x%2)+x*48;
+			offsetw=2*(y/2)+y*80;
+			offseth=2*(x/2)+x*48;
 			aload_img_2(fm_buf1, ddrdebug,
 										howmany256,
 										offsetw,
@@ -162,8 +164,8 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 			set_bias_conv1x1(fm_buf4,bias3,x,y);
 			CONV_1x1(fm_buf3,fm_buf4,wt_buf1a,0,0,1); // level 5
-			offsetw=2*(y%2)+y*80+1;
-			offseth=2*(x%2)+x*48+1;
+			offsetw=2*(y/2)+y*80+1;
+			offseth=2*(x/2)+x*48+1; 					 //this is offset for padding
 			deload_img(fm_buf4, ddrdebug_2,
 										howmany256,
 										offsetw,
@@ -175,6 +177,41 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 										);
 		}
 	}
+
+
+	//layer 320-326
+	load_bias_from_axi(bias, bias_port[5]);
+	//IO variable:
+		howmany256=1;
+		allw=2*((320/2)+2);
+		w=82;
+		h=50;
+
+	for(int x=0;x<4;x++){
+		for(int y=0;y<4;y++){
+
+			offsetw=2*(y/2)+y*80;
+			offseth=2*(x/2)+x*48;
+			aload_img_2(fm_buf1, ddrdebug_2,
+										howmany256,
+										offsetw,
+										offseth,
+
+										w,
+										h,
+										allw
+										);
+
+			set_bias_conv1x1(fm_buf2,bias,x,y);
+
+
+			}
+		}
+
+
+
+
+
 
 
 
