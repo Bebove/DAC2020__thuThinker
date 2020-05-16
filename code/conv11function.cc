@@ -159,7 +159,7 @@ void CONV_1x1(fm_type bottom[80][50][82],
 
 
 
-void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,int number_ofpart_for_one_image)
+void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,int number_ofpart_for_one_image,bool pad)
 {
 #pragma HLS array_partition variable=buf dim=1 complete
 #pragma HLS array_partition variable=bias dim=1 complete
@@ -172,7 +172,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,i
 	bool y_up=	(y%number_ofpart_for_one_image==0);
 	bool y_down=(y%number_ofpart_for_one_image==number_ofpart_for_one_image-1);
 
-	if (x_up){
+	if (x_up and pad){
 		for(int w = 0; w < 82; w+=1){
 #pragma HLS pipeline
 			for(int c = 0; c < 80; c++){
@@ -191,7 +191,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,i
 		}
 	}
 
-	if (x_down){
+	if (x_down and pad ){
 		for(int w = 0; w < 82; w+=1){
 #pragma HLS pipeline
 			for(int c = 0; c < 80; c++){
@@ -213,7 +213,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,i
 
 
 
-	if (y_up){
+	if (y_up and pad){
 		for(int h = 0; h < 50; h+=1){
 #pragma HLS pipeline
 			for(int c = 0; c < 80; c++){
@@ -231,7 +231,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,i
 			}
 		}
 	}
-	if (y_down){
+	if (y_down and pad){
 		for(int h = 0; h < 50; h+=1){
 #pragma HLS pipeline
 			for(int c = 0; c < 80; c++){

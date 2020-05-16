@@ -18,6 +18,7 @@ uint16  debug[2];
 #define imgpath "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\verify\\test_data\\dataimg.bin"
 #define w3_310 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\310.bin"
 #define w3_315 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\315.bin"
+
 #define bs_307 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\307bs.bin"
 #define bs_310 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\310bs.bin"
 #define bs_313 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\313bs.bin"
@@ -28,6 +29,9 @@ uint16  debug[2];
 #define w1_307 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\307.bin"
 #define w1_313 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\313.bin"
 #define w1_318 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\318.bin"
+#define w1_320 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\320.bin"
+
+
 //Those are the vars which is not related to Thinker itself and related to debug
 double temp_img[imagesize];
 uint16 check[imagesize];//correct data
@@ -102,6 +106,21 @@ void fold_w1_toport(uint256 w1[500][16])
 		for(int ci = 0; ci < 16; ci++)
 		{
 			w1[2][co].range(wt_lenth + ci*16, ci*16)=((wt_type)temp2[co][ci][0][0]).range(wt_lenth, 0);
+		}
+	}
+
+	float temp3[48][8][1][1];
+	std::ifstream ifs_param3(w1_320, std::ios::in | std::ios::binary);
+	ifs_param3.read((char*)(**temp3), 48 * 8 * 1 * sizeof(float));
+	ifs_param3.close();
+	for(int ic = 0; ic< 3;  ic++)
+	{
+		for(int co = 0; co< 16; co++)
+		{
+			for(int ci = 0; ci < 8; ci++)
+			{
+				w1[3+ic][co].range(wt_lenth + ci*16, ci*16)=((wt_type)temp3[co+16*ic][ci][0][0]).range(wt_lenth, 0);
+			}
 		}
 	}
 }

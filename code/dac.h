@@ -68,7 +68,7 @@ void CONV_1x1(fm_type bottom[80][50][82],
 			  fm_type top[80][50][82],
 			  wt_type weights[16][16],int to,int ti,int relu);
 void load_weight_conv1x1( wt_type dest[16][16], uint256 src[16]);
-void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80],int x, int y );
+void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,int number_ofpart_for_one_image,bool pad);
 
 void chear_pad(int x,int y, fm_type buff[80][50][82],int round);
 

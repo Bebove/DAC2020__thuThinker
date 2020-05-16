@@ -104,7 +104,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 								(192+2)*2,
 								82,
 								50);
-			set_bias_conv1x1( fm_buf2, bias,x,y);
+			set_bias_conv1x1( fm_buf2, bias,x,y,4,true);
 			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,0,0,0); //level 1
 
 			set_dwbias_conv3x3(fm_buf3,bias2);
@@ -156,14 +156,14 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 										h,
 										allw
 										);
-			set_bias_conv1x1(fm_buf2,bias,x,y);
-			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,0,0,0); //level 3
+			set_bias_conv1x1(fm_buf2,bias,x,y,2,true);
+			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,0,0,1); //level 3
 
 			set_dwbias_conv3x3(fm_buf3,bias2);
 			dw_conv_1(fm_buf2,fm_buf3,dwt_buf3,16,0); //level 4
 
-			set_bias_conv1x1(fm_buf4,bias3,x,y);
-			CONV_1x1(fm_buf3,fm_buf4,wt_buf1a,0,0,1); // level 5
+			set_bias_conv1x1(fm_buf4,bias3,x,y,2,false);
+			CONV_1x1(fm_buf3,fm_buf4,wt_buf1a,0,0,1); // level 5 no relu
 			offsetw=2*(y/2)+y*80+1;
 			offseth=2*(x/2)+x*48+1; 					 //this is offset for padding
 			deload_img(fm_buf4, ddrdebug_2,
@@ -181,6 +181,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 	//layer 320-326
 	load_bias_from_axi(bias, bias_port[5]);
+	  //the weight for 1x1 lay320 is in index:3,4,5;
 	//IO variable:
 		howmany256=1;
 		allw=2*((320/2)+2);
@@ -202,7 +203,8 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 										allw
 										);
 
-			set_bias_conv1x1(fm_buf2,bias,x,y);
+			set_bias_conv1x1(fm_buf2,bias,x,y,2,true);
+			//layer 1 donot need to relu the input
 
 
 			}
