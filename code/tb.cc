@@ -1,5 +1,7 @@
 #include "dac.h"
+#include "tb.h"
 #include <bitset>
+#include <cmath>
 // Those are the ports which should not be changed unless the Thinker IO is changed
 uint16  IMG[imagesize];
 uint256 ddrdebug [ddrsize][30];
@@ -10,42 +12,13 @@ uint256 bias_port[500][5];
 uint16  debug[2];
 
 
-//Those are the paths which should be changed according to your env
-/*#define imgpath "F:/hls/thinker/code/test_data/data/img.bin"
-#define l1 "F:/hls/thinker/code/test_data/data/conv_1.bin"
-#define l1_relu "F:/hls/thinker/code/test_data/data/clip_1.bin"
-#define l2 "F:/hls/thinker/code/test_data/data/conv_2.bin"*/
-#define imgpath "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\verify\\test_data\\dataimg.bin"
-#define w3_310 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\310.bin"
-#define w3_315 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\315.bin"
-
-#define bs_307 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\307bs.bin"
-#define bs_310 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\310bs.bin"
-#define bs_313 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\313bs.bin"
-#define bs_315 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\315bs.bin"
-#define bs_318 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\318bs.bin"
-#define bs_320 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\320bs.bin"
-
-#define w1_307 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\307.bin"
-#define w1_313 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\313.bin"
-#define w1_318 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\318.bin"
-#define w1_320 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\weightdata\\w1\\320.bin"
-
-
 //Those are the vars which is not related to Thinker itself and related to debug
 double temp_img[imagesize];
+#define ddrsize_tb   249872//(320+2)*(192+2)*4;
+double ddrimg[6*ddrsize_tb];//match the largest feature map
 uint16 check[imagesize];//correct data
 #define imgsize_l2 381024//6*(96+2)*2*(160+2)*2
 #define ifcheck 0
-
-
-
-
-
-
-
-
-
 
 
 //Those are functions to fold data
@@ -53,7 +26,8 @@ void fold_data(uint16 IMG[imagesize],const char *filepath,int fmsize=imagesize)
 {
 
 	int ip1;
-	ip1=imagesize;
+	double error;
+	ip1=fmsize;
 	std::ifstream file(filepath,std::ios::in | std::ios::binary);
 	file.read((char *)(&temp_img),fmsize*sizeof(double));
 	file.close();
@@ -61,9 +35,49 @@ void fold_data(uint16 IMG[imagesize],const char *filepath,int fmsize=imagesize)
 
 	while(i<ip1)
 	{
+		fm_type temp_data=(fm_type)temp_img[i];
 		IMG[i].range(fm_lenth, 0)=((fm_type)temp_img[i]).range(fm_lenth, 0);
+		error+=fabs((temp_img[i]-(double)temp_data))/4;
 		i=i+1;
 	}
+	error=error/ip1*100;
+	cout<<"input image transfer error is "<<error<<"%\n";
+}
+
+void check_ddr(uint256 ddr [ddrsize][30],const char *filepath, int allch, int allh, int allw, int level){
+	int fm_size=allh*allw;
+	int ip1=allch*fm_size;
+	double error=0;
+	fm_type temp_data;
+
+	std::ifstream file(filepath,std::ios::in | std::ios::binary);
+	file.read((char *)(&ddrimg),ip1*sizeof(double));
+	file.close();
+	int i=0;
+
+	// to find max value and min value in ddrimg, aim to normalized the error
+	double max=0;
+	double min=0;
+	for(int i=0;i<ip1;i++){
+		if(ddrimg[i]<min) min=ddrimg[i];
+		if(ddrimg[i]>max) max=ddrimg[i];
+	}
+	//cout<<"max value "<<max<<"  min value "<<min<<" of level "<<level<<'\n';
+
+	//compare ddrimg and compute result and give error value
+	for(int i=0;i<fm_size;i++){
+		int w=i%allw;
+		int h=i/allw;
+		for(int ch=0;ch<allch;ch++){
+			int p=ch%16;
+			int c=ch/16;
+			//fm_type temp_data=(fm_type)ddrimg[ch*fm_size+h*allw+w];
+			temp_data.range(fm_lenth,0)=ddr[i][c].range(16*p+fm_lenth,16*p);
+			error+=fabs((ddrimg[ch*fm_size+h*allw+w]-(double)temp_data))/(max-min);//compute error
+		}
+	}
+	error=error/ip1*100;
+	cout<<"the error of level "<<level<<" is "<<error<<"%\n";
 
 }
 
@@ -236,27 +250,17 @@ void fold_w3_toport(uint512 w3[500][3][3])
 
 
 
-
-
-
-
-
-
-
-
-
 int main()
 {
-
 	const char *img_path=imgpath;
 	fold_data(IMG,img_path);
-
-
 
 	fold_w3_toport(w3);
 	fold_BS_toport(bias_port);
 	fold_w1_toport(w1);
-    Thinker(	 IMG ,w3,w1,bias_port,ddrdebug,ddrdebug_2,debug);
 
+    Thinker(	 IMG ,w3,w1,bias_port,ddrdebug,ddrdebug_2,debug);
+    check_ddr(ddrdebug,conv2,6,(96+2)*2,(160+2)*2,2);
+    check_ddr(ddrdebug_2,conv5,8,(96+2)*2,(160+2)*2,5);
     return 0;
 }

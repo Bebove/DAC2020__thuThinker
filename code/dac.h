@@ -15,7 +15,7 @@
 #include <cmath>
 using namespace std;
 #define imagesize 749616//3*(320+2)*(192+2)*4;
-#define ddrsize   150000//3*(320+2)*(192+2)*4;
+#define ddrsize   150000//(320+2)*(192+2)*4;
 #define wt_lenth 10//
 #define fm_lenth 8//
 
