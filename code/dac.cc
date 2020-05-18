@@ -75,7 +75,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 
 	//IO variable:
-		int howmany256=1;
+		int ddr_channelX16_index=0;
 		int allw=2*((320/2)+2);
 		int w=40;
 		int h=24;
@@ -103,7 +103,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			offseth=2*(x/4)+1+x*h;    //begin from which hindex ,in the whole featuremap
 
 			deload_img(fm_buf3, ddrdebug,
-										howmany256,
+										ddr_channelX16_index,
 										offsetw,
 										offseth,
 
@@ -124,7 +124,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 	load_dwweight_conv3x3(dwt_buf3,w_port_3x3[1]);
 	
 	//IO variable:
-		howmany256=1;
+		ddr_channelX16_index=0;
 		allw=2*((320/2)+2);
 		w=82;
 		h=50;
@@ -136,7 +136,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			offsetw=2*(y/2)+y*80;
 			offseth=2*(x/2)+x*48;
 			aload_img_2(fm_buf1, ddrdebug,
-										howmany256,
+										ddr_channelX16_index,
 										offsetw,
 										offseth,
 
@@ -155,7 +155,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			offsetw=2*(y/2)+y*80+1;
 			offseth=2*(x/2)+x*48+1; 					 //this is offset for padding
 			deload_img(fm_buf2, ddrdebug_2,
-										howmany256,
+										ddr_channelX16_index,
 										offsetw,
 										offseth,
 
@@ -167,7 +167,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 	}
 
 
-/*
+
 ///////////////////////////////////////////////////////////////////////////////////////////////layer 320-326//////////////////////////////////////////////////////////////////////////////////////////////
 	//320:
 		load_bias_from_axi(big_bias[0], bias_port[5]);    //bias for layer320 1-16
@@ -191,7 +191,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 
 	//IO variable:
-		howmany256=1;
+		ddr_channelX16_index=0;
 		allw=2*((320/2)+2);
 		w=82;
 		h=50;
@@ -199,15 +199,18 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 		int wafter=40;
 		int hafter=24;
 		int allwafter=2*((320/4)+2);
-
-
+		initial_ddr(ddrdebug,
+								1,
+								2*((320/4)+2),
+								2*((192/4)+2)
+									);
 	for(int x=0;x<4;x++){
 		for(int y=0;y<4;y++){
 
 			offsetw=2*(y/2)+y*80;
 			offseth=2*(x/2)+x*48;
 			aload_img_2(fm_buf1, ddrdebug_2,
-										howmany256,
+										ddr_channelX16_index,
 										offsetw,
 										offseth,
 
@@ -242,7 +245,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			offseth=2*(x/2)+1+x*hafter;    //begin from which hindex ,in the whole featuremap
 
 			deload_img(fm_buf3, ddrdebug,
-										howmany256,
+										ddr_channelX16_index,
 										offsetw,
 										offseth,
 
@@ -252,11 +255,10 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 										);
 
 
-			}
+			}               //still have ddr problem
 		}
 
 
-*/
 
 
 

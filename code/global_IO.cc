@@ -66,7 +66,7 @@ void aload_img(fm_type img_buf[16][50][82], uint16 image_port[imagesize],
 
 
 void deload_img(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],   //use 30 uint256 to store  480 channel
-							int howmany256,
+							int ddr_channelX16_index,
 							int offsetw,
 							int offseth,
 
@@ -91,7 +91,7 @@ void deload_img(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],   
 #pragma HLS unroll
 					DATA.range(p*16+fm_lenth,p*16)=img_buf[p][j][i].range(fm_lenth,0);
 				}
-				image_port[pointer][howmany256].range(255,0)=DATA.range(255,0);
+				image_port[pointer][ddr_channelX16_index].range(255,0)=DATA.range(255,0);
 
 			pointer=pointer+1;
 		}
@@ -100,7 +100,7 @@ void deload_img(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],   
 
 
 void aload_img_2(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],   //use 30 uint256 to store  480 channel
-							int howmany256,
+							int ddr_channelX16_index,
 							int offsetw,
 							int offseth,
 
@@ -120,7 +120,7 @@ void aload_img_2(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],  
 		{
 
 #pragma HLS pipeline
-				DATA.range(255,0)=image_port[pointer][howmany256].range(255,0);
+				DATA.range(255,0)=image_port[pointer][ddr_channelX16_index].range(255,0);
 				for(int p=0;p<16;p++)
 				{
 #pragma HLS unroll
@@ -134,4 +134,23 @@ void aload_img_2(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],  
 	}
 
 
+}
+void initial_ddr(uint256 image_port[ddrsize][30],
+							int ddr_channelX16_index,
+							int allw,
+							int allh
+							)
+{
+	for(int j=0;j<allh;j++)
+	{
+
+		for(int i=0;i<allw;i++)
+		{
+			for(int c=0;c<ddr_channelX16_index;c++)
+			{
+				image_port[j*allw+i][c]=0;
+			}
+		}
+
+	}
 }

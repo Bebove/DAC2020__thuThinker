@@ -83,7 +83,7 @@ void aload_img(fm_type img_buf[16][50][82], uint16 image_port[imagesize],
 							int buffer_w,
 							int buffer_h);
 void aload_img_2(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],   //use 30 uint256 to store  480 channel
-							int howmany256,
+							int ddr_channelX16_index,
 							int offsetw,
 							int offseth,
 
@@ -93,11 +93,16 @@ void aload_img_2(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],  
 							);
 
 void deload_img(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],   //use 30 uint256 to store  480 channel
-							int howmany256,
+							int ddr_channelX16_index,
 							int offsetw,
 							int offseth,
 
 							int w,    //80
 							int h,    //48
 							int allw
+							);
+void initial_ddr(uint256 image_port[ddrsize][30],
+							int ddr_channelX16_index,
+							int allw,
+							int allh
 							);

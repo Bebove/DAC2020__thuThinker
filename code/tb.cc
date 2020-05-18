@@ -248,7 +248,7 @@ void fold_w3_toport(uint256 w3[500][3][3])
 
 		}
 	}
-	/*
+
 	//323 layer : index 6,7,8
 	float temp2[48][48][3][3];
 	std::ifstream ifs_param2(w3_323, std::ios::in | std::ios::binary);
@@ -258,26 +258,17 @@ void fold_w3_toport(uint256 w3[500][3][3])
 	{
 		for(int y=0;y<3;y++)
 		{
-
-				for(int i=0;i<32;i++)
-				{
-					w3[6][x][y].range(wt_lenth + i*16, i*16)=((wt_type)(temp2[0][i][x][y])).range(wt_lenth, 0);
-				}
-
-		}
-	}
-	for(int x=0;x<3;x++)
-	{
-		for(int y=0;y<3;y++)
-		{
-
+			for(int IDX=0;IDX<3;IDX++)
+			{
 				for(int i=0;i<16;i++)
 				{
-					w3[7][x][y].range(wt_lenth + i*16, i*16)=((wt_type)(temp2[0][32+i][x][y])).range(wt_lenth, 0);
+					w3[6+IDX][x][y].range(wt_lenth + i*16, i*16)=((wt_type)(temp2[0][i+16*IDX][x][y])).range(wt_lenth, 0);
 				}
 
+			}
 		}
-	}*/
+	}
+
 }
 
 
