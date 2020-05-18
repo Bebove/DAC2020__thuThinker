@@ -329,7 +329,7 @@ int main()
 	fold_BS_toport(bias_port);
 	fold_w1_toport(w1);
     Thinker(	 IMG ,w3,w1,bias_port,ddrdebug,ddrdebug_2,debug);
-    check_ddr(ddrdebug,conv2,6,(96+2)*2,(160+2)*2,2);
+    //check_ddr(ddrdebug,conv2,6,(96+2)*2,(160+2)*2,2);
     check_ddr(ddrdebug_2,conv5,8,(96+2)*2,(160+2)*2,5);
     return 0;
     return 0;
