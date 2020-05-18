@@ -88,11 +88,9 @@ inline fm_type relu_single( fm_type d ,int relu) {
 	return d;
 }
 
-
-
-void CONV_1x1(fm_type bottom[80][50][82],
-			  fm_type top[80][50][82],
-			  wt_type weights[16][16],int to,int ti,int relu)
+void CONV_1x1(fm_type bottom[16][50][82],
+			  fm_type top[16][50][82],
+			  wt_type weights[16][16],int relu)
 {
 //to :choose which out channel to accumulate
 //ti :choose which in  channel data to use
@@ -105,61 +103,42 @@ void CONV_1x1(fm_type bottom[80][50][82],
 #pragma HLS array_partition variable=weight dim=1 complete
 #pragma HLS array_partition variable=weight dim=2 complete
 
-		int ci = 0;
-		ci=ti;
+
+
 		for(int h = 0; h < 50; h++)
 		{
 			for(int w = 0; w < 82; w++)
 			{
-#pragma HLS pipeline II=2
+#pragma HLS pipeline II=1
 				for(int coo = 0; coo < 16; coo++)
 				{
 #pragma HLS unroll
-/*
-					top[coo+to][h][w] += relu_single(compute_engine_16(
-							weights[coo][0],   bottom[ci+0][h][w],
-							weights[coo][1],   bottom[ci+1][h][w],
-							weights[coo][2],   bottom[ci+2][h][w],
-							weights[coo][3],   bottom[ci+3][h][w],
-							weights[coo][4],   bottom[ci+4][h][w],
-							weights[coo][5],   bottom[ci+5][h][w],
-							weights[coo][6],   bottom[ci+6][h][w],
-							weights[coo][7],   bottom[ci+7][h][w],
-							weights[coo][8],   bottom[ci+8][h][w],
-							weights[coo][9],   bottom[ci+9][h][w],
-							weights[coo][10],  bottom[ci+10][h][w],
-							weights[coo][11],  bottom[ci+11][h][w],
-							weights[coo][12],  bottom[ci+12][h][w],
-							weights[coo][13],  bottom[ci+13][h][w],
-							weights[coo][14],  bottom[ci+14][h][w],
-							weights[coo][15],  bottom[ci+15][h][w]),relu);
-*/
-					top[coo+to][h][w] += compute_engine_16(
-							weights[coo][0],   relu_single(bottom[ci+0][h][w],relu),
-							weights[coo][1],   relu_single(bottom[ci+1][h][w],relu),
-							weights[coo][2],   relu_single(bottom[ci+2][h][w],relu),
-							weights[coo][3],   relu_single(bottom[ci+3][h][w],relu),
-							weights[coo][4],   relu_single(bottom[ci+4][h][w],relu),
-							weights[coo][5],   relu_single(bottom[ci+5][h][w],relu),
-							weights[coo][6],   relu_single(bottom[ci+6][h][w],relu),
-							weights[coo][7],   relu_single(bottom[ci+7][h][w],relu),
-							weights[coo][8],   relu_single(bottom[ci+8][h][w],relu),
-							weights[coo][9],   relu_single(bottom[ci+9][h][w],relu),
-							weights[coo][10],  relu_single(bottom[ci+10][h][w],relu),
-							weights[coo][11],  relu_single(bottom[ci+11][h][w],relu),
-							weights[coo][12],  relu_single(bottom[ci+12][h][w],relu),
-							weights[coo][13],  relu_single(bottom[ci+13][h][w],relu),
-							weights[coo][14],  relu_single(bottom[ci+14][h][w],relu),
-							weights[coo][15],  relu_single(bottom[ci+15][h][w],relu));
+
+					top[coo][h][w] += compute_engine_16(
+							weights[coo][0],   relu_single(bottom[0][h][w],relu),
+							weights[coo][1],   relu_single(bottom[1][h][w],relu),
+							weights[coo][2],   relu_single(bottom[2][h][w],relu),
+							weights[coo][3],   relu_single(bottom[3][h][w],relu),
+							weights[coo][4],   relu_single(bottom[4][h][w],relu),
+							weights[coo][5],   relu_single(bottom[5][h][w],relu),
+							weights[coo][6],   relu_single(bottom[6][h][w],relu),
+							weights[coo][7],   relu_single(bottom[7][h][w],relu),
+							weights[coo][8],   relu_single(bottom[8][h][w],relu),
+							weights[coo][9],   relu_single(bottom[9][h][w],relu),
+							weights[coo][10],  relu_single(bottom[10][h][w],relu),
+							weights[coo][11],  relu_single(bottom[11][h][w],relu),
+							weights[coo][12],  relu_single(bottom[12][h][w],relu),
+							weights[coo][13],  relu_single(bottom[13][h][w],relu),
+							weights[coo][14],  relu_single(bottom[14][h][w],relu),
+							weights[coo][15],  relu_single(bottom[15][h][w],relu));
 				}
 			}
 		}
 }
-///////////////////
 
 
 
-void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,int number_ofpart_for_one_image,bool pad)
+void set_bias_conv1x1( fm_type buf[16][50][82], bs_type bias[16], int x, int y,int number_ofpart_for_one_image,bool pad)
 {
 #pragma HLS array_partition variable=buf dim=1 complete
 #pragma HLS array_partition variable=bias dim=1 complete
@@ -175,7 +154,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,i
 	if (x_up and pad){
 		for(int w = 0; w < 82; w+=1){
 #pragma HLS pipeline
-			for(int c = 0; c < 80; c++){
+			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
 				buf[c][0][w]=0;
 			}
@@ -184,7 +163,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,i
 	else{
 		for(int w = 0; w < 82; w+=1){
 #pragma HLS pipeline
-			for(int c = 0; c < 80; c++){
+			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
 				buf[c][0][w]=bias[c];
 			}
@@ -194,7 +173,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,i
 	if (x_down and pad ){
 		for(int w = 0; w < 82; w+=1){
 #pragma HLS pipeline
-			for(int c = 0; c < 80; c++){
+			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
 				buf[c][49][w]=0;
 			}
@@ -203,7 +182,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,i
 	else{
 		for(int w = 0; w < 82; w+=1){
 #pragma HLS pipeline
-			for(int c = 0; c < 80; c++){
+			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
 				buf[c][49][w]=bias[c];
 			}
@@ -216,7 +195,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,i
 	if (y_up and pad){
 		for(int h = 0; h < 50; h+=1){
 #pragma HLS pipeline
-			for(int c = 0; c < 80; c++){
+			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
 				buf[c][h][0]=0;
 			}
@@ -225,7 +204,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,i
 	else{
 		for(int h = 0; h < 50; h+=1){
 #pragma HLS pipeline
-			for(int c = 0; c < 80; c++){
+			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
 				buf[c][h][0]=0;
 			}
@@ -234,7 +213,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,i
 	if (y_down and pad){
 		for(int h = 0; h < 50; h+=1){
 #pragma HLS pipeline
-			for(int c = 0; c < 80; c++){
+			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
 				buf[c][h][81]=0;
 			}
@@ -243,7 +222,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,i
 	else{
 		for(int h = 0; h < 50; h+=1){
 #pragma HLS pipeline
-			for(int c = 0; c < 80; c++){
+			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
 				buf[c][h][81]=0;
 			}
@@ -256,7 +235,7 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,i
 	for(int h = 1; h < 50; h+=1) {
 		for(int w = 1; w < 82; w++) {
 #pragma HLS pipeline
-			for(int c = 0; c < 80; c++) {
+			for(int c = 0; c < 16; c++) {
 #pragma HLS unroll
 				buf[c][h  ][w] = bias[c];
 			}
@@ -265,67 +244,6 @@ void set_bias_conv1x1( fm_type buf[80][50][82], bs_type bias[80], int x, int y,i
 }
 
 
-/*
-void chear_pad(int x,int y, fm_type buff[80][50][82],int round)
-{
-
-
-	if(x==0 or x==4)
-	{
-		for(int h = 0; h < 82; h+=1)
-		{
-#pragma HLS pipeline
-				for(int c = 0; c < round; c++)
-				{
-#pragma HLS unroll
-					buff[c][0][h]=0;
-				}
-		}
-
-	}
-
-	if(x==7 or x==3)
-	{
-		for(int h = 0; h < 82; h+=1)
-		{
-#pragma HLS pipeline
-				for(int c = 0; c < round; c++)
-				{
-#pragma HLS unroll
-					buff[c][49][h]=0;
-				}
-		}
-	}
-
-	if(y==0 or y==4)
-	{
-		for(int h = 0; h < 50; h+=1)
-		{
-#pragma HLS pipeline
-				for(int c = 0; c < round; c++)
-				{
-#pragma HLS unroll
-					buff[c][h][0]=0;
-				}
-		}
-	}
-
-	if(y==7 or y==3)
-	{
-		for(int h = 0; h < 50; h+=1)
-		{
-#pragma HLS pipeline
-				for(int c = 0; c < round; c++)
-				{
-#pragma HLS unroll
-					buff[c][h][82]=0;
-				}
-		}
-	}
-
-
-}
-*/
 void load_weight_conv1x1( wt_type dest[16][16], uint256 src[16])
 {
 	for(int co = 0; co < 16; co++)

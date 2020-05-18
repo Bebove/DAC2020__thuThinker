@@ -10,21 +10,16 @@ using namespace std;
 
 
 
-void load_bias_from_axi(bs_type dest[80], uint256 src[5])
+void load_bias_from_axi(bs_type dest[16], uint256 src)
 {
 //#pragma HLS array_partition variable=dest dim=1 complete
-	for(int co = 0; co < 5; co++)
-	{
-#pragma HLS pipeline
-		uint256 DATA = 0;
-		DATA.range(255, 0) = src[co].range(255, 0);
+
 		for(int ci = 0; ci < 16; ci++)
 		{
 #pragma HLS unroll
-			dest[16*co+ci].range(10, 0) = DATA.range(10 + ci*16, ci*16);  //this means for 3x3 conv, every index(0-500) contains 32 3x3 weight
+			dest[ci].range(10, 0) = src.range(10 + ci*16, ci*16);  //this means for 3x3 conv, every index(0-500) contains 32 3x3 weight
 		}
 
-	}
 }
 
 inline fm_type relu_single( fm_type d ,int relu) {
@@ -37,7 +32,7 @@ inline fm_type relu_single( fm_type d ,int relu) {
 }
 
 
-void aload_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
+void aload_img(fm_type img_buf[16][50][82], uint16 image_port[imagesize],
 							int col, int row, int offset_h , int offset_w ,
 							int channel,int channel_offset,
 							int all_image_w=(160+2)*2,
@@ -70,7 +65,7 @@ void aload_img(fm_type img_buf[80][50][82], uint16 image_port[imagesize],
 
 
 
-void deload_img(fm_type img_buf[80][50][82], uint256 image_port[ddrsize][30],   //use 30 uint256 to store  480 channel
+void deload_img(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],   //use 30 uint256 to store  480 channel
 							int howmany256,
 							int offsetw,
 							int offseth,
@@ -89,23 +84,22 @@ void deload_img(fm_type img_buf[80][50][82], uint256 image_port[ddrsize][30],   
 		pointer=offset_ALL	+	allw*j;
 		for(int i=0;i<w;i++)
 		{
-			for(int c=0;c<howmany256;c++)
-			{
+
 #pragma HLS pipeline
 				for(int p=0;p<16;p++)
 				{
 #pragma HLS unroll
-					DATA.range(p*16+fm_lenth,p*16)=img_buf[c*16+p][j][i].range(fm_lenth,0);
+					DATA.range(p*16+fm_lenth,p*16)=img_buf[p][j][i].range(fm_lenth,0);
 				}
-				image_port[pointer][c].range(255,0)=DATA.range(255,0);
-			}
+				image_port[pointer][howmany256].range(255,0)=DATA.range(255,0);
+
 			pointer=pointer+1;
 		}
 	}
 }
 
 
-void aload_img_2(fm_type img_buf[80][50][82], uint256 image_port[ddrsize][30],   //use 30 uint256 to store  480 channel
+void aload_img_2(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],   //use 30 uint256 to store  480 channel
 							int howmany256,
 							int offsetw,
 							int offseth,
@@ -124,17 +118,16 @@ void aload_img_2(fm_type img_buf[80][50][82], uint256 image_port[ddrsize][30],  
 		pointer=offset_ALL	+	allw*j;
 		for(int i=0;i<w;i++)
 		{
-			for(int c=0;c<howmany256;c++)
-			{
+
 #pragma HLS pipeline
-				DATA.range(255,0)=image_port[pointer][c].range(255,0);
+				DATA.range(255,0)=image_port[pointer][howmany256].range(255,0);
 				for(int p=0;p<16;p++)
 				{
 #pragma HLS unroll
-					img_buf[c*16+p][j][i].range(fm_lenth,0)=DATA.range(p*16+fm_lenth,p*16);
+					img_buf[p][j][i].range(fm_lenth,0)=DATA.range(p*16+fm_lenth,p*16);
 				}
 
-			}
+
 			pointer=pointer+1;
 		}
 
