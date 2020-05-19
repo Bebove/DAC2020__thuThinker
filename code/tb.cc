@@ -19,7 +19,7 @@ uint16  debug[2];
 //Those are the vars which is not related to Thinker itself and related to debug
 double temp_img[imagesize];
 #define ddrsize_tb   249872//(320+2)*(192+2)*4;
-double ddrimg[6*ddrsize_tb];//match the largest feature map
+double ddrimg[48*ddrsize_tb];//match the largest feature map
 uint16 check[imagesize];//correct data
 #define imgsize_l2 381024//6*(96+2)*2*(160+2)*2
 #define ifcheck 0
@@ -206,7 +206,7 @@ void fold_BS_toport(uint256 bias_port[500])
 	//318 layer : index 7
 	float temp8[16];
 	std::ifstream ifs_param8(bs_326, std::ios::in | std::ios::binary);
-	ifs_param8.read((char*)(temp8), 8 * sizeof(float));
+	ifs_param8.read((char*)(temp8), 16 * sizeof(float));
 	ifs_param8.close();
 	for(int ci = 0; ci < 16; ci++)
 	{
@@ -294,6 +294,8 @@ void check_ddr(uint256 ddr [ddrsize][30],const char *filepath, int allch, int al
 		if(ddrimg[i]>max) max=ddrimg[i];
 	}
 	//cout<<"max value "<<max<<"  min value "<<min<<" of level "<<level<<'\n';
+	double allbin=0;
+	double allddr=0;
 
 	//compare ddrimg and compute result and give error value
 	for(int i=0;i<fm_size;i++){
@@ -304,10 +306,11 @@ void check_ddr(uint256 ddr [ddrsize][30],const char *filepath, int allch, int al
 			int c=ch/16;
 			//fm_type temp_data=(fm_type)ddrimg[ch*fm_size+h*allw+w];
 			temp_data.range(fm_lenth,0)=ddr[i][c].range(16*p+fm_lenth,16*p);
-			error+=fabs((ddrimg[ch*fm_size+h*allw+w]-(double)temp_data))/(max-min);//compute error
+			allddr+=fabs(ddrimg[ch*fm_size+h*allw+w])/ip1;
+			allbin+=fabs((double)temp_data)/ip1;
 		}
 	}
-	error=error/ip1*100;
+	error=(allddr-allbin)/allbin;
 	cout<<"the error of level "<<level<<" is "<<error<<"%\n";
 
 }
@@ -329,8 +332,11 @@ int main()
 	fold_BS_toport(bias_port);
 	fold_w1_toport(w1);
     Thinker(	 IMG ,w3,w1,bias_port,ddrdebug,ddrdebug_2,debug);
-    //check_ddr(ddrdebug,conv2,6,(96+2)*2,(160+2)*2,2);
-    check_ddr(ddrdebug_2,conv5,8,(96+2)*2,(160+2)*2,5);
+    int n=4;
+    int h=(192/n+2)*2;
+    int w=(320/n+2)*2;
+    //check_ddr(ddrdebug_2,conv5,8, (192/n+2)*2,(320/n+2)*2,5);
+    check_ddr(ddrdebug,  conv8,16,h,w,8);
     return 0;
     return 0;
 }

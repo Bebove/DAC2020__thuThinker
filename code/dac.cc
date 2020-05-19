@@ -204,6 +204,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 								2*((320/4)+2),
 								2*((192/4)+2)
 									);
+	//version 1.0
 	for(int x=0;x<4;x++){
 		for(int y=0;y<4;y++){
 
@@ -258,10 +259,144 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			}               //still have ddr problem
 		}
 
+/*layer 6
+		for(int x=0;x<4;x++){
+			for(int y=0;y<4;y++){
+
+				offsetw=2*(y/2)+y*80;
+				offseth=2*(x/2)+x*48;
+				aload_img_2(fm_buf1, ddrdebug_2,
+											ddr_channelX16_index,
+											offsetw,
+											offseth,
+
+											w,
+											h,
+											allw
+											);              //channel is 8, fm_buf1 0-7 is data
+				set_bias_conv1x1(fm_buf3,big_bias[6],x,y,2,false);
+
+				//0-15:
+				set_bias_conv1x1(fm_buf2,	  big_bias[0],x,y,2,true);     //16  bias is load
+				CONV_1x1(fm_buf1,fm_buf2,	wt_buf_big[0],0);     //full 16 output channel for 320
+
+				deload_img(fm_buf2, ddrdebug,
+											0,
+											offsetw,
+											offseth,
+
+											w,
+											h,
+											allw
+											);
+				//15-31:
+				set_bias_conv1x1(fm_buf2,	  big_bias[1],x,y,2,true);     //16  bias is load
+				CONV_1x1(fm_buf1,fm_buf2,   wt_buf_big[1],0);     //full 16 output channel for 320
+
+				deload_img(fm_buf2, ddrdebug,
+											1,
+											offsetw,
+											offseth,
+
+											w,
+											h,
+											allw
+											);
+				//32-47:
+				set_bias_conv1x1(fm_buf2,     big_bias[2],x,y,2,true);     //16  bias is load
+				CONV_1x1(fm_buf1,fm_buf2,   wt_buf_big[2],0);     //full 16 output channel for 320
+
+				deload_img(fm_buf2, ddrdebug,
+											2,
+											offsetw,
+											offseth,
+
+											w,
+											h,
+											allw
+											);
+				offsetw=y*wafter;    //begin from which windex ,in the whole featuremap
+				offseth=x*hafter;    //begin from which hindex ,in the whole featuremap
 
 
 
 
+				}               //still have ddr problem
+			}
+*/
+		/* layer7
+		for(int x=0;x<4;x++){
+			for(int y=0;y<4;y++){
+
+				offsetw=2*(y/2)+y*80;
+				offseth=2*(x/2)+x*48;
+				aload_img_2(fm_buf1, ddrdebug_2,
+											ddr_channelX16_index,
+											offsetw,
+											offseth,
+
+											w,
+											h,
+											allw
+											);              //channel is 8, fm_buf1 0-7 is data
+				set_bias_conv1x1(fm_buf3,big_bias[6],x,y,2,false);
+
+				//0-15:
+				set_bias_conv1x1(fm_buf2,	  big_bias[0],x,y,2,true);     //16  bias is load
+				CONV_1x1(fm_buf1,fm_buf2,	wt_buf_big[0],0);     //full 16 output channel for 320
+				set_dwbias_conv3x3(fm_buf1,   big_bias[3]);             //16  bias is load
+				dw_conv_2(fm_buf2,fm_buf1,dwt_buf3_big[0],1);
+				offsetw=2*(y/2)+1+y*wafter;    //begin from which windex ,in the whole featuremap
+				offseth=2*(x/2)+1+x*hafter;    //begin from which hindex ,in the whole featuremap
+
+				deload_img(fm_buf1, ddrdebug,
+											0,
+											offsetw,
+											offseth,
+
+											wafter,
+											hafter,
+											allwafter
+											);
+				//15-31:
+				set_bias_conv1x1(fm_buf2,	  big_bias[1],x,y,2,true);     //16  bias is load
+				CONV_1x1(fm_buf1,fm_buf2,   wt_buf_big[1],0);     //full 16 output channel for 320
+				set_dwbias_conv3x3(fm_buf1,   big_bias[4]);             //16  bias is load
+				dw_conv_2(fm_buf2,fm_buf1,dwt_buf3_big[1],1);
+				offsetw=2*(y/2)+1+y*wafter;    //begin from which windex ,in the whole featuremap
+				offseth=2*(x/2)+1+x*hafter;    //begin from which hindex ,in the whole featuremap
+
+				deload_img(fm_buf1, ddrdebug,
+											1,
+											offsetw,
+											offseth,
+
+											wafter,
+											hafter,
+											allwafter
+											);
+
+				//32-47:
+				set_bias_conv1x1(fm_buf2,     big_bias[2],x,y,2,true);     //16  bias is load
+				CONV_1x1(fm_buf1,fm_buf2,   wt_buf_big[2],0);     //full 16 output channel for 320
+				set_dwbias_conv3x3(fm_buf1,   big_bias[5]);             //16  bias is load
+				dw_conv_2(fm_buf2,fm_buf1,dwt_buf3_big[2],1);
+				offsetw=2*(y/2)+1+y*wafter;    //begin from which windex ,in the whole featuremap
+				offseth=2*(x/2)+1+x*hafter;    //begin from which hindex ,in the whole featuremap
+
+				deload_img(fm_buf1, ddrdebug,
+											2,
+											offsetw,
+											offseth,
+
+											wafter,
+											hafter,
+											allwafter
+											);
+
+
+				}               //still have ddr problem
+			}*/
 	debug[0]=0.1;
 
 }
