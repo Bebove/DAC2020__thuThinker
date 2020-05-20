@@ -294,9 +294,9 @@ void check_ddr(uint256 ddr [ddrsize][30],const char *filepath, int allch, int al
 		if(ddrimg[i]>max) max=ddrimg[i];
 	}
 	//cout<<"max value "<<max<<"  min value "<<min<<" of level "<<level<<'\n';
+	//double allbin=0;
+	double RMSD=0;
 	double allbin=0;
-	double allddr=0;
-
 	//compare ddrimg and compute result and give error value
 	for(int i=0;i<fm_size;i++){
 		int w=i%allw;
@@ -306,12 +306,15 @@ void check_ddr(uint256 ddr [ddrsize][30],const char *filepath, int allch, int al
 			int c=ch/16;
 			//fm_type temp_data=(fm_type)ddrimg[ch*fm_size+h*allw+w];
 			temp_data.range(fm_lenth,0)=ddr[i][c].range(16*p+fm_lenth,16*p);
-			allddr+=fabs(ddrimg[ch*fm_size+h*allw+w])/ip1;
-			allbin+=fabs((double)temp_data)/ip1;
+			RMSD+=(ddrimg[ch*fm_size+h*allw+w]-((double)temp_data)) * (ddrimg[ch*fm_size+h*allw+w]-((double)temp_data));
+			allbin+=ddrimg[ch*fm_size+h*allw+w] * ddrimg[ch*fm_size+h*allw+w];
 		}
 	}
-	error=(allddr-allbin)/allbin;
-	cout<<"the error of level "<<level<<" is "<<error<<"%\n";
+
+	double NRMSE=RMSD/(allbin);
+	cout<<"the NRMSE  of layer "<<level<<" is "<<NRMSE<<"\n";
+
+
 
 }
 
@@ -332,11 +335,11 @@ int main()
 	fold_BS_toport(bias_port);
 	fold_w1_toport(w1);
     Thinker(	 IMG ,w3,w1,bias_port,ddrdebug,ddrdebug_2,debug);
-    int n=4;
+    int n=2;
     int h=(192/n+2)*2;
     int w=(320/n+2)*2;
-    //check_ddr(ddrdebug_2,conv5,8, (192/n+2)*2,(320/n+2)*2,5);
-    check_ddr(ddrdebug,  conv8,16,h,w,8);
+    check_ddr(ddrdebug,    conv2,6, (192/n+2)*2,(320/n+2)*2,2);
+    check_ddr(ddrdebug_2,  conv3,16,h,w,3);
     return 0;
     return 0;
 }

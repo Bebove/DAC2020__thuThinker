@@ -147,20 +147,20 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			set_bias_conv1x1(fm_buf2,bias,x,y,2,true);
 			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,1); //level 3
 
-			set_dwbias_conv3x3(fm_buf3,bias2);
-			dw_conv_1(fm_buf2,fm_buf3,dwt_buf3,0); //level 4
+			//set_dwbias_conv3x3(fm_buf3,bias2);
+			//dw_conv_1(fm_buf2,fm_buf3,dwt_buf3,0); //level 4
 
-			set_bias_conv1x1(fm_buf2,bias3,x,y,2,false);
-			CONV_1x1(fm_buf3,fm_buf2,wt_buf1a,1); // level 5 no relu
-			offsetw=2*(y/2)+y*80+1;
-			offseth=2*(x/2)+x*48+1; 					 //this is offset for padding
+			//set_bias_conv1x1(fm_buf2,bias3,x,y,2,false);
+			//CONV_1x1(fm_buf3,fm_buf2,wt_buf1a,1); // level 5 no relu
+			offsetw=2*(y/2)+y*80;
+			offseth=2*(x/2)+x*48; 					 //this is offset for padding
 			deload_img(fm_buf2, ddrdebug_2,
 										ddr_channelX16_index,
 										offsetw,
 										offseth,
 
-										80,
-										48,
+										w,
+										h,
 										allw
 										);
 		}
@@ -199,12 +199,13 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 		int wafter=40;
 		int hafter=24;
 		int allwafter=2*((320/4)+2);
+		/*
 		initial_ddr(ddrdebug,
 								1,
 								2*((320/4)+2),
 								2*((192/4)+2)
-									);
-	//version 1.0
+									);*/
+/*
 	for(int x=0;x<4;x++){
 		for(int y=0;y<4;y++){
 
@@ -258,8 +259,8 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 			}               //still have ddr problem
 		}
-
-/*layer 6
+*/
+/*
 		for(int x=0;x<4;x++){
 			for(int y=0;y<4;y++){
 
@@ -324,7 +325,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 				}               //still have ddr problem
 			}
 */
-		/* layer7
+/*
 		for(int x=0;x<4;x++){
 			for(int y=0;y<4;y++){
 

@@ -1,12 +1,12 @@
 //Those are the paths which should be changed according to your env
 #define imgpath 		"C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\data\\img.bin"
 #define conv1 			"C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\data\\conv1.bin"
-#define conv2 			"C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\data\\conv2.bin"
+#define conv2 			"C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\data\\conv_2.bin"
 #define conv3 			"C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\data\\conv3.bin"
-#define conv4 			"C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\data\\conv4.bin"
+#define conv4 			"C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\data\\conv_4.bin"
 #define conv4_no_relu   "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\data\\conv_4.bin"
 #define conv5 			"C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\data\\conv5.bin"
-#define conv6 			"C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\data\\conv6.bin"
+#define conv6 			"C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\data\\conv_6.bin"
 #define conv7 			"C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\data\\conv_7.bin"
 #define conv8 			"C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\data\\conv8.bin"
 

@@ -206,7 +206,7 @@ void set_bias_conv1x1( fm_type buf[16][50][82], bs_type bias[16], int x, int y,i
 #pragma HLS pipeline
 			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
-				buf[c][h][0]=0;
+				buf[c][h][0]=bias[c];
 			}
 		}
 	}
@@ -224,7 +224,7 @@ void set_bias_conv1x1( fm_type buf[16][50][82], bs_type bias[16], int x, int y,i
 #pragma HLS pipeline
 			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
-				buf[c][h][81]=0;
+				buf[c][h][81]=bias[c];
 			}
 		}
 	}
