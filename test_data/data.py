@@ -3,8 +3,8 @@ import pdb
 import os
 
 def tran():
-    olocation="./modle_param/l2b.npy"
-    dlocation="./modle_param/l2b.bin"
+    olocation="./w1/323bs.npy"
+    dlocation="./w1/323bs.bin"
 
     weight=np.load(olocation)
     with open(dlocation , 'wb') as fd :
@@ -18,7 +18,7 @@ def get_file(filepath):
                 file_list.append(os.path.join(root,f).replace('\\','/'))
             #file_list.append(f)
     return file_list
-
+pdb.set_trace()
 source_path='./conv5' #the folder of your .npy files, one folder contains 4 images
 save_imgpath='./data/conv5.bin' #bin file to be saved
 

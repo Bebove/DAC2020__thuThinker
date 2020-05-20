@@ -1,3 +1,4 @@
+//layer3version
 #include "dac.h"
 #include <stdio.h>
 #include <ap_int.h>
@@ -10,6 +11,7 @@ using namespace std;
 fm_type fm_buf1[16][50][82];
 fm_type fm_buf2[16][50][82];
 fm_type fm_buf3[16][50][82];
+fm_type fm_buf4[16][50][82];
 
 wt_type dwt_buf3[16][3][3];  //33buffer
 wt_type wt_buf1[16][16];     //11buffer
@@ -144,16 +146,9 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 										h,
 										allw
 										);
+
 			set_bias_conv1x1(fm_buf2,bias,x,y,2,true);
 			CONV_1x1(fm_buf1,fm_buf2,wt_buf1,1); //level 3
-
-			//set_dwbias_conv3x3(fm_buf3,bias2);
-			//dw_conv_1(fm_buf2,fm_buf3,dwt_buf3,0); //level 4
-
-			//set_bias_conv1x1(fm_buf2,bias3,x,y,2,false);
-			//CONV_1x1(fm_buf3,fm_buf2,wt_buf1a,1); // level 5 no relu
-			offsetw=2*(y/2)+y*80;
-			offseth=2*(x/2)+x*48; 					 //this is offset for padding
 			deload_img(fm_buf2, ddrdebug_2,
 										ddr_channelX16_index,
 										offsetw,
@@ -163,241 +158,32 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 										h,
 										allw
 										);
+			fm_type debugddr;
+			debugddr.range(fm_lenth,0)=ddrdebug[80][0].range(13*16+fm_lenth,13*16);
+			printf("%f",(float)debugddr);
+			//set_dwbias_conv3x3(fm_buf3,bias2);
+			//dw_conv_1(fm_buf2,fm_buf3,dwt_buf3,0); //level 4
+
+			//set_bias_conv1x1(fm_buf2,bias3,x,y,2,false);
+			//CONV_1x1(fm_buf3,fm_buf2,wt_buf1a,1); // level 5 no relu
+			//offsetw=1+2*(y/2)+y*80;
+			//offseth=1+2*(x/2)+x*48; 					 //this is offset for padding
+			//deload_img(fm_buf2, ddrdebug_2,
+				//						ddr_channelX16_index,
+					//					offsetw,
+						//				offseth,
+//
+	//									80,
+		//								50,
+			//							allw
+				//						);
 		}
 	}
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////layer 320-326//////////////////////////////////////////////////////////////////////////////////////////////
-	//320:
-		load_bias_from_axi(big_bias[0], bias_port[5]);    //bias for layer320 1-16
-		load_bias_from_axi(big_bias[1], bias_port[6]);    //bias for layer320 17-32
-		load_bias_from_axi(big_bias[2], bias_port[7]);    //bias for layer320 33-48
-		load_weight_conv1x1( wt_buf_big[0], w_port_1x1[3]);  //the weight for 1x1 lay320 :output channel 1-16
-		load_weight_conv1x1( wt_buf_big[1], w_port_1x1[4]);  //the weight for 1x1 lay320 :output channel 17-32
-		load_weight_conv1x1( wt_buf_big[2], w_port_1x1[5]);  //the weight for 1x1 lay320 :output channel 33-48
-	//323:
-		load_bias_from_axi(big_bias[3], bias_port[8]);    //bias for layer323 1-16
-		load_bias_from_axi(big_bias[4], bias_port[9]);    //bias for layer323 17-32
-		load_bias_from_axi(big_bias[5], bias_port[10]);   //bias for layer323 33-48
-		load_dwweight_conv3x3(dwt_buf3_big[0],w_port_3x3[2]);//this load full 48 channel 3x3 weight
-		load_dwweight_conv3x3(dwt_buf3_big[1],w_port_3x3[3]);//this load full 48 channel 3x3 weight
-		load_dwweight_conv3x3(dwt_buf3_big[2],w_port_3x3[4]);//this load full 48 channel 3x3 weight
-	//326:
-		load_bias_from_axi(big_bias[6], bias_port[11]);   //bias for layer326 0-16
-		load_weight_conv1x1( wt_buf_big[3], w_port_1x1[6]);//the weight for 1x1 lay326 :output channel 1-16
-		load_weight_conv1x1( wt_buf_big[4], w_port_1x1[7]);//the weight for 1x1 lay326 :output channel 17-32
-		load_weight_conv1x1( wt_buf_big[5], w_port_1x1[8]);//the weight for 1x1 lay326 :output channel 33-48     //but mode is not same. this is [16][48]  seperate to    3* [16][16]
 
 
-	//IO variable:
-		ddr_channelX16_index=0;
-		allw=2*((320/2)+2);
-		w=82;
-		h=50;
-
-		int wafter=40;
-		int hafter=24;
-		int allwafter=2*((320/4)+2);
-		/*
-		initial_ddr(ddrdebug,
-								1,
-								2*((320/4)+2),
-								2*((192/4)+2)
-									);*/
-/*
-	for(int x=0;x<4;x++){
-		for(int y=0;y<4;y++){
-
-			offsetw=2*(y/2)+y*80;
-			offseth=2*(x/2)+x*48;
-			aload_img_2(fm_buf1, ddrdebug_2,
-										ddr_channelX16_index,
-										offsetw,
-										offseth,
-
-										w,
-										h,
-										allw
-										);              //channel is 8, fm_buf1 0-7 is data
-			set_bias_conv1x1(fm_buf3,big_bias[6],x,y,2,false);
-
-			//0-15:
-			set_bias_conv1x1(fm_buf2,	  big_bias[0],x,y,2,true);     //16  bias is load
-			CONV_1x1(fm_buf1,fm_buf2,	wt_buf_big[0],0);     //full 16 output channel for 320
-			set_dwbias_conv3x3(fm_buf1,   big_bias[3]);             //16  bias is load
-			dw_conv_2(fm_buf2,fm_buf1,dwt_buf3_big[0],1);
-			CONV_1x1(fm_buf1,fm_buf3,   wt_buf_big[3],1);     //full 16 output channel for 320
-
-			//15-31:
-			set_bias_conv1x1(fm_buf2,	  big_bias[1],x,y,2,true);     //16  bias is load
-			CONV_1x1(fm_buf1,fm_buf2,   wt_buf_big[1],0);     //full 16 output channel for 320
-			set_dwbias_conv3x3(fm_buf1,   big_bias[4]);             //16  bias is load
-			dw_conv_2(fm_buf2,fm_buf1,dwt_buf3_big[1],1);
-			CONV_1x1(fm_buf1,fm_buf3,   wt_buf_big[4],1);     //full 16 output channel for 320
-
-			//32-47:
-			set_bias_conv1x1(fm_buf2,     big_bias[2],x,y,2,true);     //16  bias is load
-			CONV_1x1(fm_buf1,fm_buf2,   wt_buf_big[2],0);     //full 16 output channel for 320
-			set_dwbias_conv3x3(fm_buf1,   big_bias[5]);             //16  bias is load
-			dw_conv_2(fm_buf2,fm_buf1,dwt_buf3_big[2],1);
-			CONV_1x1(fm_buf1,fm_buf3,   wt_buf_big[5],1);     //full 16 output channel for 320
-
-			offsetw=2*(y/2)+1+y*wafter;    //begin from which windex ,in the whole featuremap
-			offseth=2*(x/2)+1+x*hafter;    //begin from which hindex ,in the whole featuremap
-
-			deload_img(fm_buf3, ddrdebug,
-										ddr_channelX16_index,
-										offsetw,
-										offseth,
-
-										wafter,
-										hafter,
-										allwafter
-										);
-
-
-			}               //still have ddr problem
-		}
-*/
-/*
-		for(int x=0;x<4;x++){
-			for(int y=0;y<4;y++){
-
-				offsetw=2*(y/2)+y*80;
-				offseth=2*(x/2)+x*48;
-				aload_img_2(fm_buf1, ddrdebug_2,
-											ddr_channelX16_index,
-											offsetw,
-											offseth,
-
-											w,
-											h,
-											allw
-											);              //channel is 8, fm_buf1 0-7 is data
-				set_bias_conv1x1(fm_buf3,big_bias[6],x,y,2,false);
-
-				//0-15:
-				set_bias_conv1x1(fm_buf2,	  big_bias[0],x,y,2,true);     //16  bias is load
-				CONV_1x1(fm_buf1,fm_buf2,	wt_buf_big[0],0);     //full 16 output channel for 320
-
-				deload_img(fm_buf2, ddrdebug,
-											0,
-											offsetw,
-											offseth,
-
-											w,
-											h,
-											allw
-											);
-				//15-31:
-				set_bias_conv1x1(fm_buf2,	  big_bias[1],x,y,2,true);     //16  bias is load
-				CONV_1x1(fm_buf1,fm_buf2,   wt_buf_big[1],0);     //full 16 output channel for 320
-
-				deload_img(fm_buf2, ddrdebug,
-											1,
-											offsetw,
-											offseth,
-
-											w,
-											h,
-											allw
-											);
-				//32-47:
-				set_bias_conv1x1(fm_buf2,     big_bias[2],x,y,2,true);     //16  bias is load
-				CONV_1x1(fm_buf1,fm_buf2,   wt_buf_big[2],0);     //full 16 output channel for 320
-
-				deload_img(fm_buf2, ddrdebug,
-											2,
-											offsetw,
-											offseth,
-
-											w,
-											h,
-											allw
-											);
-				offsetw=y*wafter;    //begin from which windex ,in the whole featuremap
-				offseth=x*hafter;    //begin from which hindex ,in the whole featuremap
-
-
-
-
-				}               //still have ddr problem
-			}
-*/
-/*
-		for(int x=0;x<4;x++){
-			for(int y=0;y<4;y++){
-
-				offsetw=2*(y/2)+y*80;
-				offseth=2*(x/2)+x*48;
-				aload_img_2(fm_buf1, ddrdebug_2,
-											ddr_channelX16_index,
-											offsetw,
-											offseth,
-
-											w,
-											h,
-											allw
-											);              //channel is 8, fm_buf1 0-7 is data
-				set_bias_conv1x1(fm_buf3,big_bias[6],x,y,2,false);
-
-				//0-15:
-				set_bias_conv1x1(fm_buf2,	  big_bias[0],x,y,2,true);     //16  bias is load
-				CONV_1x1(fm_buf1,fm_buf2,	wt_buf_big[0],0);     //full 16 output channel for 320
-				set_dwbias_conv3x3(fm_buf1,   big_bias[3]);             //16  bias is load
-				dw_conv_2(fm_buf2,fm_buf1,dwt_buf3_big[0],1);
-				offsetw=2*(y/2)+1+y*wafter;    //begin from which windex ,in the whole featuremap
-				offseth=2*(x/2)+1+x*hafter;    //begin from which hindex ,in the whole featuremap
-
-				deload_img(fm_buf1, ddrdebug,
-											0,
-											offsetw,
-											offseth,
-
-											wafter,
-											hafter,
-											allwafter
-											);
-				//15-31:
-				set_bias_conv1x1(fm_buf2,	  big_bias[1],x,y,2,true);     //16  bias is load
-				CONV_1x1(fm_buf1,fm_buf2,   wt_buf_big[1],0);     //full 16 output channel for 320
-				set_dwbias_conv3x3(fm_buf1,   big_bias[4]);             //16  bias is load
-				dw_conv_2(fm_buf2,fm_buf1,dwt_buf3_big[1],1);
-				offsetw=2*(y/2)+1+y*wafter;    //begin from which windex ,in the whole featuremap
-				offseth=2*(x/2)+1+x*hafter;    //begin from which hindex ,in the whole featuremap
-
-				deload_img(fm_buf1, ddrdebug,
-											1,
-											offsetw,
-											offseth,
-
-											wafter,
-											hafter,
-											allwafter
-											);
-
-				//32-47:
-				set_bias_conv1x1(fm_buf2,     big_bias[2],x,y,2,true);     //16  bias is load
-				CONV_1x1(fm_buf1,fm_buf2,   wt_buf_big[2],0);     //full 16 output channel for 320
-				set_dwbias_conv3x3(fm_buf1,   big_bias[5]);             //16  bias is load
-				dw_conv_2(fm_buf2,fm_buf1,dwt_buf3_big[2],1);
-				offsetw=2*(y/2)+1+y*wafter;    //begin from which windex ,in the whole featuremap
-				offseth=2*(x/2)+1+x*hafter;    //begin from which hindex ,in the whole featuremap
-
-				deload_img(fm_buf1, ddrdebug,
-											2,
-											offsetw,
-											offseth,
-
-											wafter,
-											hafter,
-											allwafter
-											);
-
-
-				}               //still have ddr problem
-			}*/
 	debug[0]=0.1;
 
 }

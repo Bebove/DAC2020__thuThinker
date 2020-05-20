@@ -131,7 +131,7 @@ void fold_BS_toport(uint256 bias_port[500])
 	ifs_param.close();
 	for(int ci = 0; ci < 6; ci++)
 	{
-		bias_port[0].range(wt_lenth + ci*16, ci*16)=((bs_type)temp[ci]).range(wt_lenth, 0);
+		bias_port[0].range(bs_lenth + ci*16, ci*16)=((bs_type)temp[ci]).range(bs_lenth, 0);
 	}
 
 
@@ -143,7 +143,7 @@ void fold_BS_toport(uint256 bias_port[500])
 	ifs_param1.close();
 	for(int ci = 0; ci < 6; ci++)
 	{
-		bias_port[1].range(wt_lenth + ci*16, ci*16)=((bs_type)temp2[ci]).range(wt_lenth, 0);
+		bias_port[1].range(bs_lenth + ci*16, ci*16)=((bs_type)temp2[ci]).range(bs_lenth, 0);
 	}
 
 
@@ -155,7 +155,7 @@ void fold_BS_toport(uint256 bias_port[500])
 	ifs_param2.close();
 	for(int ci = 0; ci < 16; ci++)
 	{
-		bias_port[2].range(wt_lenth + ci*16, ci*16)=((bs_type)temp3[ci]).range(wt_lenth, 0);
+		bias_port[2].range(bs_lenth + ci*16, ci*16)=((bs_type)temp3[ci]).range(bs_lenth, 0);
 	}
 
 	//315 layer : index 3
@@ -165,7 +165,7 @@ void fold_BS_toport(uint256 bias_port[500])
 	ifs_param4.close();
 	for(int ci = 0; ci < 16; ci++)
 	{
-		bias_port[3].range(wt_lenth + ci*16, ci*16)=((bs_type)temp4[ci]).range(wt_lenth, 0);
+		bias_port[3].range(bs_lenth + ci*16, ci*16)=((bs_type)temp4[ci]).range(bs_lenth, 0);
 	}
 	//318 layer : index 4
 	float temp5[8];
@@ -174,7 +174,7 @@ void fold_BS_toport(uint256 bias_port[500])
 	ifs_param5.close();
 	for(int ci = 0; ci < 8; ci++)
 	{
-		bias_port[4].range(wt_lenth + ci*16, ci*16)=((bs_type)temp5[ci]).range(wt_lenth, 0);
+		bias_port[4].range(bs_lenth + ci*16, ci*16)=((bs_type)temp5[ci]).range(bs_lenth, 0);
 	}
 
 	//320 layer : index 5
@@ -186,7 +186,7 @@ void fold_BS_toport(uint256 bias_port[500])
 	{
 		for(int ci = 0; ci < 16; ci++)
 		{
-			bias_port[5+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp6[ci+16*co]).range(wt_lenth, 0);
+			bias_port[5+co].range(bs_lenth + ci*16, ci*16)=((bs_type)temp6[ci+16*co]).range(bs_lenth, 0);
 		}
 	}
 
@@ -199,7 +199,7 @@ void fold_BS_toport(uint256 bias_port[500])
 	{
 		for(int ci = 0; ci < 16; ci++)
 		{
-			bias_port[8+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp7[ci+16*co]).range(wt_lenth, 0);
+			bias_port[8+co].range(bs_lenth + ci*16, ci*16)=((bs_type)temp7[ci+16*co]).range(bs_lenth, 0);
 		}
 	}
 
@@ -210,7 +210,7 @@ void fold_BS_toport(uint256 bias_port[500])
 	ifs_param8.close();
 	for(int ci = 0; ci < 16; ci++)
 	{
-		bias_port[11].range(wt_lenth + ci*16, ci*16)=((bs_type)temp8[ci]).range(wt_lenth, 0);
+		bias_port[11].range(bs_lenth + ci*16, ci*16)=((bs_type)temp8[ci]).range(bs_lenth, 0);
 	}
 }
 
@@ -262,7 +262,7 @@ void fold_w3_toport(uint256 w3[500][3][3])
 			{
 				for(int i=0;i<16;i++)
 				{
-					w3[6+IDX][x][y].range(wt_lenth + i*16, i*16)=((wt_type)(temp2[0][i+16*IDX][x][y])).range(wt_lenth, 0);
+					w3[2+IDX][x][y].range(wt_lenth + i*16, i*16)=((wt_type)(temp2[0][i+16*IDX][x][y])).range(wt_lenth, 0);
 				}
 
 			}
@@ -297,6 +297,8 @@ void check_ddr(uint256 ddr [ddrsize][30],const char *filepath, int allch, int al
 	//double allbin=0;
 	double RMSD=0;
 	double allbin=0;
+	double debugdta;
+	double debugtrue;
 	//compare ddrimg and compute result and give error value
 	for(int i=0;i<fm_size;i++){
 		int w=i%allw;
@@ -306,6 +308,7 @@ void check_ddr(uint256 ddr [ddrsize][30],const char *filepath, int allch, int al
 			int c=ch/16;
 			//fm_type temp_data=(fm_type)ddrimg[ch*fm_size+h*allw+w];
 			temp_data.range(fm_lenth,0)=ddr[i][c].range(16*p+fm_lenth,16*p);
+
 			RMSD+=(ddrimg[ch*fm_size+h*allw+w]-((double)temp_data)) * (ddrimg[ch*fm_size+h*allw+w]-((double)temp_data));
 			allbin+=ddrimg[ch*fm_size+h*allw+w] * ddrimg[ch*fm_size+h*allw+w];
 		}
@@ -335,11 +338,20 @@ int main()
 	fold_BS_toport(bias_port);
 	fold_w1_toport(w1);
     Thinker(	 IMG ,w3,w1,bias_port,ddrdebug,ddrdebug_2,debug);
-    int n=2;
+
+    int index[9]=  {0,1,2,3, 4, 5,6, 7 ,8 };
+    int channel[9]={0,6,6,16,16,8,48,48,16};
+    int nlist[9]=  {0,1,2,2, 2, 2, 2, 4, 4};
+
+    int layer=3;                                                        //
+
+    int n=nlist[layer];
     int h=(192/n+2)*2;
     int w=(320/n+2)*2;
-    check_ddr(ddrdebug,    conv2,6, (192/n+2)*2,(320/n+2)*2,2);
-    check_ddr(ddrdebug_2,  conv3,16,h,w,3);
+    //check_ddr(ddrdebug,    conv2,6, (192/n+2)*2,(320/n+2)*2,2);
+    cout<<"the h  of layer "<<layer<<" is "<<h<<"\n";
+    cout<<"the w  of layer "<<layer<<" is "<<w<<"\n";
+    check_ddr(ddrdebug_2,  conv3,channel[layer],h,w,layer);               //
     return 0;
     return 0;
 }

@@ -79,7 +79,7 @@ void load_weight_conv3x3( wt_type dest[4][8][32][3][3], uint512 src[500][3][3],i
 				for(int ci = 0; ci < 32; ci++)
 				{
 #pragma HLS unroll
-					dest[co][coindex][ci][m][n].range(10, 0) = DATA.range(10 + ci*16, ci*16);  //this means for 3x3 conv, every index(0-500) contains 32 3x3 weight
+					dest[co][coindex][ci][m][n].range(wt_lenth, 0) = DATA.range(wt_lenth + ci*16, ci*16);  //this means for 3x3 conv, every index(0-500) contains 32 3x3 weight
 				}
 				}
 

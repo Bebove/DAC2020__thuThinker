@@ -82,7 +82,7 @@ void load_dwweight_conv3x3(wt_type dest[16][3][3], uint256 src[3][3])
 				{
 #pragma HLS unroll
 
-					dest[ci][m][n].range(10, 0) =src[m][n].range(10 + ci*16, ci*16);
+					dest[ci][m][n].range(wt_lenth, 0) =src[m][n].range(wt_lenth + ci*16, ci*16);
 				}
 
 		}

@@ -16,8 +16,6 @@
 using namespace std;
 #define imagesize 749616//3*(320+2)*(192+2)*4;
 #define ddrsize   150000//3*(320+2)*(192+2)*4;
-#define wt_lenth 10//
-#define fm_lenth 10//
 
 typedef ap_int<8> int8;
 typedef ap_uint<2> uint2;
@@ -30,6 +28,11 @@ typedef ap_uint<16> uint16;
 typedef ap_uint<512> uint512;
 typedef ap_uint<256> uint256;
 typedef ap_fixed<32, 1, AP_RND, AP_SAT> fix_32_1;
+
+#define wt_lenth 10//
+#define fm_lenth 10//
+#define bs_lenth 10//
+
 typedef ap_fixed<11, 3, AP_RND, AP_SAT> wt_type;//weight type
 typedef ap_fixed<11,  3, AP_RND, AP_SAT> fm_type;//feature map data type
 typedef ap_fixed<11, 3, AP_RND, AP_SAT> bs_type;//bias type

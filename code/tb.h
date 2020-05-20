@@ -23,7 +23,7 @@
 #define bs_318 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\w1\\318bs.bin"
 #define bs_320 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\w1\\320bs.bin"
 #define bs_323 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\w1\\323bs.bin"
-#define bs_326 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\w1\\323bs.bin"
+#define bs_326 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\w1\\326bs.bin"
 
 #define w1_307 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\w1\\307.bin"
 #define w1_313 "C:\\Users\\f\\Desktop\\github\\DAC2020__thuThinker\\test_data\\w1\\313.bin"

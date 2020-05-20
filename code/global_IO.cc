@@ -17,7 +17,7 @@ void load_bias_from_axi(bs_type dest[16], uint256 src)
 		for(int ci = 0; ci < 16; ci++)
 		{
 #pragma HLS unroll
-			dest[ci].range(10, 0) = src.range(10 + ci*16, ci*16);  //this means for 3x3 conv, every index(0-500) contains 32 3x3 weight
+			dest[ci].range(bs_lenth, 0) = src.range(bs_lenth + ci*16, ci*16);  //this means for 3x3 conv, every index(0-500) contains 32 3x3 weight
 		}
 
 }
