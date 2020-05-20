@@ -109,14 +109,15 @@ void fold_w1_toport(uint256 w1[500][16])
 	std::ifstream ifs_param4(w1_326, std::ios::in | std::ios::binary);
 	ifs_param4.read((char*)(**temp4), 48 * 16 * 1 * sizeof(float));
 	ifs_param4.close();
-	for(int ci = 0; ci < 16; ci++)
+
+	for(int INDEX = 0; INDEX< 3;  INDEX++)
 	{
-		for(int ic = 0; ic< 3;  ic++)
+		for(int ci = 0; ci < 16; ci++)
 		{
 			for(int co = 0; co< 16; co++)
 			{
 
-				w1[6+ic][ci].range(wt_lenth + co*16, co*16)=((wt_type)temp4[ci][co+16*ic][0][0]).range(wt_lenth, 0);
+				w1[6+INDEX][ci].range(wt_lenth + co*16, co*16)=((wt_type)temp4[ci][co+16*INDEX][0][0]).range(wt_lenth, 0);
 			}
 		}
 	}
@@ -339,11 +340,11 @@ int main()
 	fold_w1_toport(w1);
     Thinker(	 IMG ,w3,w1,bias_port,ddrdebug,ddrdebug_2,debug);
 
-    int index[9]=  {0,1,2,3, 4, 5,6, 7 ,8 };
-    int channel[9]={0,6,6,16,16,8,48,48,16};
-    int nlist[9]=  {0,1,2,2, 2, 2, 2, 4, 4};
+    int index[9]=  {0,	1,	2,	3, 4, 5,6, 7 ,8 };
+    int channel[9]={0,	6,	6,	16,16,8,48,48,16};
+    int nlist[9]=  {0,	1,	2,	2, 2, 2,2 ,4 ,4 };
 
-    int layer=3;                                                        //
+    int layer=8;                                                        //
 
     int n=nlist[layer];
     int h=(192/n+2)*2;
@@ -351,7 +352,7 @@ int main()
     //check_ddr(ddrdebug,    conv2,6, (192/n+2)*2,(320/n+2)*2,2);
     cout<<"the h  of layer "<<layer<<" is "<<h<<"\n";
     cout<<"the w  of layer "<<layer<<" is "<<w<<"\n";
-    check_ddr(ddrdebug_2,  conv3,channel[layer],h,w,layer);               //
+    check_ddr(ddrdebug,  conv8,channel[layer],h,w,layer);               //
     return 0;
-    return 0;
+
 }

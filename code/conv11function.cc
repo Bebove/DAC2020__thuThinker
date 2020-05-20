@@ -151,17 +151,18 @@ void set_bias_conv1x1( fm_type buf[16][50][82], bs_type bias[16], int x, int y,i
 	bool y_up=	(y%number_ofpart_for_one_image==0);
 	bool y_down=(y%number_ofpart_for_one_image==number_ofpart_for_one_image-1);
 
+
 	if (x_up and pad){
-		for(int w = 0; w < 82; w+=1){
+		for(int w = 0; w < 82; w++){
 #pragma HLS pipeline
 			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
-				buf[c][0][w]=0;
+				buf[c][0][w]=0;                              //第一行
 			}
 		}
 	}
 	else{
-		for(int w = 0; w < 82; w+=1){
+		for(int w = 0; w < 82; w++){
 #pragma HLS pipeline
 			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
@@ -171,16 +172,16 @@ void set_bias_conv1x1( fm_type buf[16][50][82], bs_type bias[16], int x, int y,i
 	}
 
 	if (x_down and pad ){
-		for(int w = 0; w < 82; w+=1){
+		for(int w = 0; w < 82; w++){
 #pragma HLS pipeline
 			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
-				buf[c][49][w]=0;
+				buf[c][49][w]=0;                            //最后一行
 			}
 		}
 	}
 	else{
-		for(int w = 0; w < 82; w+=1){
+		for(int w = 0; w < 82; w++){
 #pragma HLS pipeline
 			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
@@ -193,16 +194,16 @@ void set_bias_conv1x1( fm_type buf[16][50][82], bs_type bias[16], int x, int y,i
 
 
 	if (y_up and pad){
-		for(int h = 0; h < 50; h+=1){
+		for(int h = 0; h < 50; h++){
 #pragma HLS pipeline
 			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
-				buf[c][h][0]=0;
+				buf[c][h][0]=0;                           //第一列
 			}
 		}
 	}
 	else{
-		for(int h = 0; h < 50; h+=1){
+		for(int h = 0; h < 50; h++){
 #pragma HLS pipeline
 			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
@@ -211,16 +212,16 @@ void set_bias_conv1x1( fm_type buf[16][50][82], bs_type bias[16], int x, int y,i
 		}
 	}
 	if (y_down and pad){
-		for(int h = 0; h < 50; h+=1){
+		for(int h = 0; h < 50; h++){
 #pragma HLS pipeline
 			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
-				buf[c][h][81]=0;
+				buf[c][h][81]=0;                            //最后一列
 			}
 		}
 	}
 	else{
-		for(int h = 0; h < 50; h+=1){
+		for(int h = 0; h < 50; h++){
 #pragma HLS pipeline
 			for(int c = 0; c < 16; c++){
 #pragma HLS unroll
@@ -232,8 +233,8 @@ void set_bias_conv1x1( fm_type buf[16][50][82], bs_type bias[16], int x, int y,i
 
 
 
-	for(int h = 1; h < 50; h+=1) {
-		for(int w = 1; w < 82; w++) {
+	for(int h = 1; h < 49; h++) {
+		for(int w = 1; w < 81; w++) {
 #pragma HLS pipeline
 			for(int c = 0; c < 16; c++) {
 #pragma HLS unroll
@@ -241,6 +242,28 @@ void set_bias_conv1x1( fm_type buf[16][50][82], bs_type bias[16], int x, int y,i
 			}
 		}
 	}
+	bool xuyu = (x_up or y_up) and pad;
+	bool xuyd = (x_up or y_down) and pad;
+	bool xdyu = (x_down or y_up) and pad;
+	bool xdyd = (x_down or y_down) and pad;
+
+	if(xuyu){			for(int c = 0; c < 16; c++){
+#pragma HLS unroll
+				buf[c][0][0]=0;
+			}}
+	if(xuyd){			for(int c = 0; c < 16; c++){
+#pragma HLS unroll
+				buf[c][0][81]=0;
+			}}
+	if(xdyu){			for(int c = 0; c < 16; c++){
+#pragma HLS unroll
+				buf[c][49][0]=0;
+			}}
+	if(xdyd){			for(int c = 0; c < 16; c++){
+#pragma HLS unroll
+				buf[c][49][81]=0;
+			}}
+
 }
 
 

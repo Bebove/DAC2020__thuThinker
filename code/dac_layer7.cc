@@ -1,4 +1,4 @@
-//layer3version
+//layer7version
 #include "dac.h"
 #include <stdio.h>
 #include <ap_int.h>
@@ -226,22 +226,36 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 					CONV_1x1(fm_buf1,fm_buf2,	wt_buf_big[0],0);     //full 16 output channel for 320
 					set_dwbias_conv3x3(fm_buf4,   big_bias[3]);             //16  bias is load
 					dw_conv_2(fm_buf2,fm_buf4,dwt_buf3_big[0],1);
-					CONV_1x1(fm_buf4,fm_buf3,   wt_buf_big[3],1);
+					deload_img(fm_buf4, ddrdebug,
+												0,
+												2*(y/2)+y*40+1,
+												2*(x/2)+x*24+1,
 
+												40,
+												24,
+												allwafter
+												);
 					//15-31:
 					set_bias_conv1x1(fm_buf2,	  big_bias[1],x,y,2,true);     //16  bias is load
 					CONV_1x1(fm_buf1,fm_buf2,   wt_buf_big[1],0);     //full 16 output channel for 320
 					set_dwbias_conv3x3(fm_buf4,   big_bias[4]);             //16  bias is load
 					dw_conv_2(fm_buf2,fm_buf4,dwt_buf3_big[1],1);
-					CONV_1x1(fm_buf4,fm_buf3,   wt_buf_big[4],1);
+					deload_img(fm_buf4, ddrdebug,
+												1,
+												2*(y/2)+y*40+1,
+												2*(x/2)+x*24+1,
+
+												40,
+												24,
+												allwafter
+												);
 					//32-47:
 					set_bias_conv1x1(fm_buf2,     big_bias[2],x,y,2,true);     //16  bias is load
 					CONV_1x1(fm_buf1,fm_buf2,   wt_buf_big[2],0);     //full 16 output channel for 320
 					set_dwbias_conv3x3(fm_buf4,   big_bias[5]);             //16  bias is load
 					dw_conv_2(fm_buf2,fm_buf4,dwt_buf3_big[2],1);
-					CONV_1x1(fm_buf4,fm_buf3,   wt_buf_big[5],1);
-					deload_img(fm_buf3, ddrdebug,
-												0,
+					deload_img(fm_buf4, ddrdebug,
+												2,
 												2*(y/2)+y*40+1,
 												2*(x/2)+x*24+1,
 
