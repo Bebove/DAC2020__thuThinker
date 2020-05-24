@@ -44,6 +44,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 				uint256     bias_port[500],
 				uint256 ddrdebug [ddrsize][30],
 				uint256 ddrdebug_2 [ddrsize][30],
+				uint256 ddrdebug_3 [ddrsize][30],
 				uint16 debug[2]);
 
 

@@ -1,4 +1,5 @@
 //layer7version
+/*
 #include "dac.h"
 #include <stdio.h>
 #include <ap_int.h>
@@ -38,6 +39,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 				uint256 ddrdebug [ddrsize][30],
 				uint256 ddrdebug_2 [ddrsize][30],
+				uint256 ddrdebug_3 [ddrsize][30],
 				uint16 debug[2])
 {
  	
@@ -207,7 +209,8 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 										);
 			for(int x=0;x<4;x++){
 				for(int y=0;y<4;y++){
-
+					w=82;
+					h=50;
 					offsetw=2*(y/2)+y*80;
 					offseth=2*(x/2)+x*48;
 					aload_img_2(fm_buf1, ddrdebug_2,
@@ -221,6 +224,11 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 												);              //channel is 8, fm_buf1 0-7 is data
 					set_bias_conv1x1(fm_buf3,big_bias[6],x,y,2,false);
 
+					offsetw=2*(y/2)+y*40+1;
+					offseth=2*(x/2)+x*24+1;
+					w=40;
+					h=24;
+
 					//0-15:
 					set_bias_conv1x1(fm_buf2,	  big_bias[0],x,y,2,true);     //16  bias is load
 					CONV_1x1(fm_buf1,fm_buf2,	wt_buf_big[0],0);     //full 16 output channel for 320
@@ -228,11 +236,11 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 					dw_conv_2(fm_buf2,fm_buf4,dwt_buf3_big[0],1);
 					deload_img(fm_buf4, ddrdebug,
 												0,
-												2*(y/2)+y*40+1,
-												2*(x/2)+x*24+1,
+												offsetw,
+												offseth,
 
-												40,
-												24,
+												w,
+												h,
 												allwafter
 												);
 					//15-31:
@@ -242,11 +250,11 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 					dw_conv_2(fm_buf2,fm_buf4,dwt_buf3_big[1],1);
 					deload_img(fm_buf4, ddrdebug,
 												1,
-												2*(y/2)+y*40+1,
-												2*(x/2)+x*24+1,
+												offsetw,
+												offseth,
 
-												40,
-												24,
+												w,
+												h,
 												allwafter
 												);
 					//32-47:
@@ -256,15 +264,15 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 					dw_conv_2(fm_buf2,fm_buf4,dwt_buf3_big[2],1);
 					deload_img(fm_buf4, ddrdebug,
 												2,
-												2*(y/2)+y*40+1,
-												2*(x/2)+x*24+1,
+												offsetw,
+												offseth,
 
-												40,
-												24,
+												w,
+												h,
 												allwafter
 												);
-					offsetw=y*wafter;    //begin from which windex ,in the whole featuremap
-					offseth=x*hafter;    //begin from which hindex ,in the whole featuremap
+					//offsetw=y*wafter;    //begin from which windex ,in the whole featuremap
+					//offseth=x*hafter;    //begin from which hindex ,in the whole featuremap
 
 
 
@@ -276,4 +284,4 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 	debug[0]=0.1;
 
-}
+}*/

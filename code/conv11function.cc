@@ -113,8 +113,8 @@ void CONV_1x1(fm_type bottom[16][50][82],
 				for(int coo = 0; coo < 16; coo++)
 				{
 #pragma HLS unroll
-
-					top[coo][h][w] += compute_engine_16(
+					fm_type temp;
+					temp= compute_engine_16(
 							weights[coo][0],   relu_single(bottom[0][h][w],relu),
 							weights[coo][1],   relu_single(bottom[1][h][w],relu),
 							weights[coo][2],   relu_single(bottom[2][h][w],relu),
@@ -131,6 +131,8 @@ void CONV_1x1(fm_type bottom[16][50][82],
 							weights[coo][13],  relu_single(bottom[13][h][w],relu),
 							weights[coo][14],  relu_single(bottom[14][h][w],relu),
 							weights[coo][15],  relu_single(bottom[15][h][w],relu));
+					if((float)top[coo][h][w]+(float)temp>=32) cout<<(float)top[coo][h][w]+(float)temp<<" overflow\n";
+					top[coo][h][w] +=temp;
 				}
 			}
 		}
@@ -282,4 +284,3 @@ void load_weight_conv1x1( wt_type dest[16][16], uint256 src[16])
 
 	}
 }
-

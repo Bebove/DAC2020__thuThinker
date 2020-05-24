@@ -78,7 +78,8 @@ void deload_img(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],   
 	//rule:
 	int offset_ALL=allw*offseth +offsetw;
 	int  pointer;
-	uint256 DATA;
+	//uint256 DATA;
+	fm_type temp;
 	for(int j=0;j<h;j++)
 	{
 		pointer=offset_ALL	+	allw*j;
@@ -89,9 +90,11 @@ void deload_img(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],   
 				for(int p=0;p<16;p++)
 				{
 #pragma HLS unroll
-					DATA.range(p*16+fm_lenth,p*16)=img_buf[p][j][i].range(fm_lenth,0);
+					temp.range(fm_lenth,0)=image_port[pointer][ddr_channelX16_index].range(p*16+fm_lenth,p*16);
+					temp+=img_buf[p][j][i];
+					image_port[pointer][ddr_channelX16_index].range(p*16+fm_lenth,p*16)=temp.range(fm_lenth,0);
 				}
-				image_port[pointer][ddr_channelX16_index].range(255,0)=DATA.range(255,0);
+				//image_port[pointer][ddr_channelX16_index].range(255,0)=DATA.range(255,0);
 
 			pointer=pointer+1;
 		}
