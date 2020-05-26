@@ -19,8 +19,8 @@ def get_file(filepath):
             #file_list.append(f)
     return file_list
 pdb.set_trace()
-source_path='./conv5' #the folder of your .npy files, one folder contains 4 images
-save_imgpath='./data/conv5.bin' #bin file to be saved
+source_path='E:/npy9-17/npy9-17/11_第十四个卷积层输出' #the folder of your .npy files, one folder contains 4 images
+save_imgpath='C:/Users/f/Desktop/github/DAC2020__thuThinker/test_data/data/conv14.bin' #bin file to be saved
 
 file_list=get_file(source_path)
 

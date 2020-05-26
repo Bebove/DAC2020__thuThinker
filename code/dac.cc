@@ -256,7 +256,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 					//offseth=x*hafter;    //begin from which hindex ,in the whole featuremap
 					}               //still have ddr problem
 				}
-	debug[0]=0.1;
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////layer 328-331//////////////////////////////////////////////////////////////////////////////////////////////	
 		//328:
@@ -294,11 +294,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			load_weight_conv1x1( wt_buf_big[10], w_port_1x1[19]);  //the weight for 1x1 lay334 :output channel 64-80
 			load_weight_conv1x1( wt_buf_big[11], w_port_1x1[20]);  //the weight for 1x1 lay334 :output channel 81-96
 
-			initial_ddr(ddrdebug_3,
-									6,
-									2*((320/4)+2),
-									2*((192/4)+2)
-										);
+
 			for(int x=0;x<2;x++){
 				for(int y=0;y<2;y++){
 					offsetw=2*y+y*80;
@@ -366,4 +362,103 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 												);
 				}
 			}
+//////////////////////////////////////////////////////////////////////////////	layer 337 343 ///////////////////////////////////////////////////////////////////////////////////////
+			//337:
+			for(int i=0;i<6;i++)
+			{
+				load_bias_from_axi(big_bias[i], bias_port[i+25]);
+				load_weight_conv1x1( wt_buf_big[i], w_port_1x1[i+21]);
+			}
+			//340:
+			for(int i=0;i<6;i++)
+			{
+				load_bias_from_axi(big_bias[i+6], bias_port[i+25+6]);
+
+			}
+			load_dwweight_conv3x3( dwt_buf3_big[0], w_port_3x3[11]);
+			load_dwweight_conv3x3( dwt_buf3_big[1], w_port_3x3[12]);
+			load_dwweight_conv3x3( dwt_buf3_big[2], w_port_3x3[13]);
+			load_dwweight_conv3x3( dwt_buf3_big[3], w_port_3x3[14]);
+			load_dwweight_conv3x3( dwt_buf3_big[4], w_port_3x3[15]);
+			load_dwweight_conv3x3( dwt_buf3_big[5], w_port_3x3[16]);
+			//343:
+			for(int i=0;i<6;i++)
+			{
+
+				load_weight_conv1x1( wt_buf_big[i+6], w_port_1x1[i+27]);
+			}
+			load_bias_from_axi(big_bias[15], bias_port[37]);
+
+			initial_ddr(ddrdebug_2,
+									16,
+									2*((320/8)+2),
+									2*((192/8)+2)
+									);
+			for(int x=0;x<2;x++)
+			{
+				for(int y=0;y<2;y++)
+				{
+					offsetw=2*y+y*80;
+					offseth=2*x+x*48;
+					aload_img_2(fm_buf1, ddrdebug,
+												0,
+												offsetw,
+												offseth,
+
+												82,
+												50,
+												2*((320/4)+2)
+												);
+					set_bias_conv1x1(fm_buf3,big_bias[15],x,y,1,false);
+
+
+						set_bias_conv1x1(fm_buf2,	  big_bias[0],x,y,1,true);     //16  bias is load
+						CONV_1x1(fm_buf1,fm_buf2,	wt_buf_big[0],0);
+						set_dwbias_conv3x3(fm_buf4,   big_bias[6+0]);             //16  bias is load
+						dw_conv_2(fm_buf2,fm_buf4,dwt_buf3_big[0],1);
+						CONV_1x1(fm_buf4,fm_buf3,   wt_buf_big[6+0],1);
+
+						set_bias_conv1x1(fm_buf2,	  big_bias[1],x,y,1,true);     //16  bias is load
+						CONV_1x1(fm_buf1,fm_buf2,	wt_buf_big[1],0);
+						set_dwbias_conv3x3(fm_buf4,   big_bias[6+1]);             //16  bias is load
+						dw_conv_2(fm_buf2,fm_buf4,dwt_buf3_big[1],1);
+						CONV_1x1(fm_buf4,fm_buf3,   wt_buf_big[6+1],1);
+
+						set_bias_conv1x1(fm_buf2,	  big_bias[2],x,y,1,true);     //16  bias is load
+						CONV_1x1(fm_buf1,fm_buf2,	wt_buf_big[2],0);
+						set_dwbias_conv3x3(fm_buf4,   big_bias[6+2]);             //16  bias is load
+						dw_conv_2(fm_buf2,fm_buf4,dwt_buf3_big[2],1);
+						CONV_1x1(fm_buf4,fm_buf3,   wt_buf_big[6+2],1);
+
+						set_bias_conv1x1(fm_buf2,	  big_bias[3],x,y,1,true);     //16  bias is load
+						CONV_1x1(fm_buf1,fm_buf2,	wt_buf_big[3],0);
+						set_dwbias_conv3x3(fm_buf4,   big_bias[6+3]);             //16  bias is load
+						dw_conv_2(fm_buf2,fm_buf4,dwt_buf3_big[3],1);
+						CONV_1x1(fm_buf4,fm_buf3,   wt_buf_big[6+3],1);
+
+						set_bias_conv1x1(fm_buf2,	  big_bias[4],x,y,1,true);     //16  bias is load
+						CONV_1x1(fm_buf1,fm_buf2,	wt_buf_big[4],0);
+						set_dwbias_conv3x3(fm_buf4,   big_bias[6+4]);             //16  bias is load
+						dw_conv_2(fm_buf2,fm_buf4,dwt_buf3_big[4],1);
+						CONV_1x1(fm_buf4,fm_buf3,   wt_buf_big[6+4],1);
+
+						set_bias_conv1x1(fm_buf2,	  big_bias[5],x,y,1,true);     //16  bias is load
+						CONV_1x1(fm_buf1,fm_buf2,	wt_buf_big[5],0);
+						set_dwbias_conv3x3(fm_buf4,   big_bias[6+5]);             //16  bias is load
+						dw_conv_2(fm_buf2,fm_buf4,dwt_buf3_big[5],1);
+						CONV_1x1(fm_buf4,fm_buf3,   wt_buf_big[6+5],1);
+
+
+					deload_img(fm_buf3, ddrdebug_2,
+												0,
+												2*y+y*40+1,
+												2*x+x*24+1,
+
+												40,
+												24,
+												2*((320/8)+2)
+												);
+				}
+			}
+
 }
