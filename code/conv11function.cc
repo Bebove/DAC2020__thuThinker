@@ -268,7 +268,6 @@ void set_bias_conv1x1( fm_type buf[16][50][82], bs_type bias[16], int x, int y,i
 
 }
 
-
 void load_weight_conv1x1( wt_type dest[16][16], uint256 src[16])
 {
 	for(int co = 0; co < 16; co++)
@@ -282,5 +281,19 @@ void load_weight_conv1x1( wt_type dest[16][16], uint256 src[16])
 			dest[co][ci].range(wt_lenth, 0) = DATA.range(wt_lenth + ci*16, ci*16);
 		}
 
+	}
+}
+
+void clear_pad(fm_type buf[16][50][82],int w, int h){
+	for(int c=0;c<16;c++){
+
+		for(int i=0;i<h+2;i++){
+#pragma HLS pipeline
+			buf[c][i][w+1]=0;
+		}
+		for(int j=0;j<w+2;j++){
+#pragma HLS pipeline
+			buf[c][h+1][j]=0;
+		}
 	}
 }
