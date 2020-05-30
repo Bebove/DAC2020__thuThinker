@@ -2,9 +2,9 @@ import numpy as np
 import pdb
 import os
 
-def tran():
-    olocation="./w1/323bs.npy"
-    dlocation="./w1/323bs.bin"
+def tran(a):
+    olocation="./w1/"+a+".npy"
+    dlocation="./w1/"+a+".bin"
 
     weight=np.load(olocation)
     with open(dlocation , 'wb') as fd :
@@ -18,9 +18,22 @@ def get_file(filepath):
                 file_list.append(os.path.join(root,f).replace('\\','/'))
             #file_list.append(f)
     return file_list
+tran("380")
+tran("380bs")
+tran("383")
+tran("383bs")
+tran("386")
+tran("386bs")
+tran("389")
+tran("389bs")
+tran("392")
+tran("392bs")
+tran("395")
+tran("395bs")
+exit()
 pdb.set_trace()
-source_path='E:/npy9-17/npy9-17/11_第十四个卷积层输出' #the folder of your .npy files, one folder contains 4 images
-save_imgpath='C:/Users/f/Desktop/github/DAC2020__thuThinker/test_data/data/conv14.bin' #bin file to be saved
+source_path='C:/Users/f/Desktop/npy(2)/npy/12_第六个卷积层' #the folder of your .npy files, one folder contains 4 images
+save_imgpath='C:/Users/f/Desktop/github/DAC2020__thuThinker/test_data/data/conv23.bin' #bin file to be saved
 
 file_list=get_file(source_path)
 

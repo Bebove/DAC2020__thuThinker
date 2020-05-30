@@ -1,8 +1,8 @@
 //Those are the paths which should be changed according to your env
 
 
-//#define golobal "C:/Users/f/Desktop/github/DAC2020__thuThinker/test_data"
-#define golobal "F:/hls/thinker/code/test_data"
+#define golobal "C:/Users/f/Desktop/github/DAC2020__thuThinker/test_data"
+//#define golobal "F:/hls/thinker/code/test_data"
 
 #define imgpath 		golobal"/data/img.bin"
 #define conv1 			golobal"/data/conv1.bin"
@@ -25,7 +25,7 @@
 #define conv15 			golobal"/data/conv15.bin"
 #define conv16 			golobal"/data/conv16.bin"
 #define conv17 			golobal"/data/conv17.bin"
-
+#define conv23 			golobal"/data/conv23.bin"
 
 #define w3_310 golobal"/w1/310.bin"
 #define w3_315 golobal"/w1/315.bin"
@@ -34,6 +34,7 @@
 #define w3_340 golobal"/w1/340.bin"
 #define w3_348 golobal"/w1/348.bin"
 #define w3_357 golobal"/w1/357.bin"
+#define w3_366 golobal"/w1/366.bin"
 
 #define bs_307 golobal"/w1/307bs.bin"//l1
 #define bs_310 golobal"/w1/310bs.bin"//l2
@@ -55,6 +56,9 @@
 #define bs_354 golobal"/w1/354bs.bin"//l18
 #define bs_357 golobal"/w1/357bs.bin"//l19
 #define bs_360 golobal"/w1/360bs.bin"//l20
+#define bs_363 golobal"/w1/363bs.bin"//l21
+#define bs_366 golobal"/w1/366bs.bin"//l22
+#define bs_369 golobal"/w1/369bs.bin"//l22
 
 #define w1_307 golobal"/w1/307.bin"
 #define w1_313 golobal"/w1/313.bin"
@@ -69,3 +73,5 @@
 #define w1_351 golobal"/w1/351.bin"
 #define w1_354 golobal"/w1/354.bin"
 #define w1_360 golobal"/w1/360.bin"
+#define w1_363 golobal"/w1/363.bin"
+#define w1_369 golobal"/w1/369.bin"

@@ -13,7 +13,7 @@ uint256 w1[500][16];
 uint256 bias_port[500];
 uint16  debug[2];
 uint256 ddrdebug_3 [ddrsize][30];
-
+uint256 ddrdebug_4 [ddrsize][30];
 
 
 //Those are the vars which is not related to Thinker itself and related to debug
@@ -244,6 +244,46 @@ void fold_w1_toport(uint256 w1[500][16])
 			}
 		}
 	}
+	//float temp7[96][16][1][1];//index 57-62
+	std::ifstream ifs_param13(w1_363, std::ios::in | std::ios::binary);
+	ifs_param13.read((char*)(**temp7), 96 * 16 * 1 * sizeof(float));
+	ifs_param13.close();
+	for(int ic = 0; ic< 6;  ic++)
+	{
+		for(int co = 0; co< 16; co++)
+		{
+			for(int ci = 0; ci < 16; ci++)
+			{
+				w1[57+ic][co].range(wt_lenth + ci*16, ci*16)=((wt_type)temp7[co+16*ic][ci][0][0]).range(wt_lenth, 0);
+			}
+		}
+	}
+	float temp12[32][96][1][1];//index 63-68  and  69-54
+	std::ifstream ifs_param14(w1_369, std::ios::in | std::ios::binary);
+	ifs_param14.read((char*)(**temp12), 32 * 96 * 1 * sizeof(float));
+	ifs_param14.close();
+		for(int ci = 0; ci < 16; ci++)
+		{
+			for(int ic = 0; ic< 6;  ic++)
+			{
+				for(int co = 0; co< 16; co++)
+				{
+
+					w1[63+ic][ci].range(wt_lenth + co*16, co*16)=((wt_type)temp12[ci][co+16*ic][0][0]).range(wt_lenth, 0);
+				}
+			}
+		}
+		for(int ci = 0; ci < 16; ci++)
+		{
+			for(int ic = 0; ic< 6;  ic++)
+			{
+				for(int co = 0; co< 16; co++)
+				{
+
+					w1[69+ic][ci].range(wt_lenth + co*16, co*16)=((wt_type)temp12[ci+16][co+16*ic][0][0]).range(wt_lenth, 0);
+				}
+			}
+		}
 }
 
 void fold_BS_toport(uint256 bias_port[500])
@@ -480,6 +520,42 @@ void fold_BS_toport(uint256 bias_port[500])
 	{
 		bias_port[63].range(wt_lenth + ci*16, ci*16)=((bs_type)temp14[ci]).range(wt_lenth, 0);
 	}
+	//363 layer : index 64-69
+	//float temp12[96];
+	std::ifstream ifs_param21(bs_363, std::ios::in | std::ios::binary);
+	ifs_param21.read((char*)(temp12), 96 * sizeof(float));
+	ifs_param21.close();
+	for(int co = 0; co < 6; co++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			bias_port[64+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp12[ci+16*co]).range(wt_lenth, 0);
+		}
+	}
+	//366 layer : index 70-75
+	//float temp13[96];
+	std::ifstream ifs_param22(bs_366, std::ios::in | std::ios::binary);
+	ifs_param22.read((char*)(temp13), 96 * sizeof(float));
+	ifs_param22.close();
+	for(int co = 0; co < 6; co++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			bias_port[70+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp13[ci+16*co]).range(wt_lenth, 0);
+		}
+	}
+	//369 layer : index 76-77
+	float temp20[32];
+	std::ifstream ifs_param23(bs_369, std::ios::in | std::ios::binary);
+	ifs_param23.read((char*)(temp20), 32 * sizeof(float));
+	ifs_param23.close();
+	for(int co = 0; co < 2; co++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			bias_port[76+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp20[ci+16*co]).range(wt_lenth, 0);
+		}
+	}
 }
 
 void fold_w3_toport(uint256 w3[500][3][3])
@@ -616,6 +692,26 @@ void fold_w3_toport(uint256 w3[500][3][3])
 			}
 		}
 	}
+	//366 layer : index 29-34
+	//float temp4[96][96][3][3];
+	std::ifstream ifs_param7(w3_366, std::ios::in | std::ios::binary);
+	ifs_param7.read((char*)(**temp4), 96 * 96 * 9 * sizeof(float));
+	ifs_param7.close();
+	for(int x=0;x<3;x++)
+	{
+		for(int y=0;y<3;y++)
+		{
+			for(int IDX=0;IDX<6;IDX++)
+			{
+				for(int i=0;i<16;i++)
+				{
+					w3[29+IDX][x][y].range(wt_lenth + i*16, i*16)=((wt_type)(temp4[0][i+16*IDX][x][y])).range(wt_lenth, 0);
+				}
+
+			}
+		}
+	}
+
 }
 
 
@@ -698,7 +794,7 @@ int main()
 	fold_w3_toport(w3);
 	fold_BS_toport(bias_port);
 	fold_w1_toport(w1);
-    Thinker(	 IMG ,w3,w1,bias_port,ddrdebug,ddrdebug_2,ddrdebug_3,debug);
+    Thinker(	 IMG ,w3,w1,bias_port,ddrdebug,ddrdebug_2,ddrdebug_3,ddrdebug_4,debug);
     int n=2;
     int h=(192/n+2)*2;
     int w=(320/n+2)*2;
@@ -706,7 +802,7 @@ int main()
     //check_ddr(ddrdebug_2,  conv5,8, (192/n+2)*2,(320/n+2)*2,5);
 
     //check_ddr(ddrdebug, conv6_no_relu,48, (192/n+2)*2,(320/n+2)*2,6);
-    n=8;
+    n=16;
     //check_ddr(ddrdebug, conv7_no_relu,48, (192/n+2)*2,(320/n+2)*2,7);
     //check_ddr(ddrdebug, conv8,16, (192/n+2)*2,(320/n+2)*2,8);
     //check_ddr(ddrdebug, add336,16, (192/n+2)*2,(320/n+2)*2,336);
@@ -715,6 +811,6 @@ int main()
     //check_ddr(ddrdebug_3, conv11,16, (192/n+2)*2,(320/n+2)*2,11);
     //check_ddr(ddrdebug_2, conv14,16, (192/n+2)*2,(320/n+2)*2,343);
     //check_ddr(ddrdebug_3, conv15,96, (192/n+2)*2,(320/n+2)*2,15);
-    check_ddr(ddrdebug_3, conv17,16, (192/n+2)*2,(320/n+2)*2,17);
+    check_ddr(ddrdebug_3, conv23,32, (192/n+2)*2,(320/n+2)*2,17);  //351
     return 0;
 }
