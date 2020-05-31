@@ -297,3 +297,50 @@ void clear_pad(fm_type buf[16][50][82],int w, int h){
 		}
 	}
 }
+void clear_pad2(fm_type buf[16][50][82],int w, int h)
+
+{
+	int h_w=w/2;
+	int h_h=h/2;
+	for(int c=0;c<16;c++){
+
+		for(int i=0;i<h;i++){
+#pragma HLS pipeline
+			buf[c][i][0]=0;
+			buf[c][i][w-1]=0;
+			buf[c][i][h_w]=0;
+			buf[c][i][h_w-1]=0;
+		}
+		for(int j=0;j<w;j++){
+#pragma HLS pipeline
+			buf[c][h-1][j]=0;
+			buf[c][h_h][j]=0;
+			buf[c][h_h-1][j]=0;
+			buf[c][0][j]=0;
+		}
+	}
+}
+void clear_pad3(fm_type buf[16][50][82],int w, int h)
+
+{
+	int h_w=w/2;  //(320/16)+2
+	int h_h=h/2;  //(192/16)+2
+	for(int c=0;c<16;c++){
+
+		for(int i=0;i<h-1;i++){
+#pragma HLS pipeline
+
+			buf[c][i][h_w-1+h_w-1-1+1]=0;
+			buf[c][i][h_w-1]=0;     //320/16+1
+			buf[c][i][h_w-1-1]=0;   //320/16
+		}
+		for(int j=0;j<w-1;j++){
+#pragma HLS pipeline
+
+			buf[c][h_h-1+h_h-1-1+1][j]=0;
+			buf[c][h_h-1][j]=0;
+			buf[c][h_h-1-1][j]=0;
+
+		}
+	}
+}

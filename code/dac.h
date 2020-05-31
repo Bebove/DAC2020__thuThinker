@@ -112,3 +112,5 @@ void initial_ddr(uint256 image_port[ddrsize][30],
 							int allh
 							);
 void clear_pad(fm_type buf[16][50][82],int w, int h);
+void clear_pad2(fm_type buf[16][50][82],int w, int h);
+void clear_pad3(fm_type buf[16][50][82],int w, int h);

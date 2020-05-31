@@ -26,7 +26,13 @@
 #define conv16 			golobal"/data/conv16.bin"
 #define conv17 			golobal"/data/conv17.bin"
 #define conv23 			golobal"/data/conv23.bin"
-
+#define conv24 			golobal"/data/conv24.bin"
+#define conv25 			golobal"/data/conv25.bin"
+#define conv26 			golobal"/data/conv26.bin"
+#define conv26_ADD 		golobal"/data/add26.bin"
+#define conv27 			golobal"/data/conv27.bin"
+#define conv28 			golobal"/data/conv28.bin"
+#define conv29 			golobal"/data/conv29.bin"
 #define w3_310 golobal"/w1/310.bin"
 #define w3_315 golobal"/w1/315.bin"
 #define w3_323 golobal"/w1/323.bin"
@@ -35,7 +41,9 @@
 #define w3_348 golobal"/w1/348.bin"
 #define w3_357 golobal"/w1/357.bin"
 #define w3_366 golobal"/w1/366.bin"
-
+#define w3_374 golobal"/w1/374.bin"
+#define w3_383 golobal"/w1/383.bin"
+#define w3_392 golobal"/w1/392.bin"
 #define bs_307 golobal"/w1/307bs.bin"//l1
 #define bs_310 golobal"/w1/310bs.bin"//l2
 #define bs_313 golobal"/w1/313bs.bin"//l3
@@ -58,7 +66,16 @@
 #define bs_360 golobal"/w1/360bs.bin"//l20
 #define bs_363 golobal"/w1/363bs.bin"//l21
 #define bs_366 golobal"/w1/366bs.bin"//l22
-#define bs_369 golobal"/w1/369bs.bin"//l22
+#define bs_369 golobal"/w1/369bs.bin"//l23
+#define bs_371 golobal"/w1/371bs.bin"//l24
+#define bs_374 golobal"/w1/374bs.bin"//l25
+#define bs_377 golobal"/w1/377bs.bin"//l26
+#define bs_380 golobal"/w1/380bs.bin"//l27
+#define bs_383 golobal"/w1/383bs.bin"//l28
+#define bs_386 golobal"/w1/386bs.bin"//l29
+#define bs_389 golobal"/w1/389bs.bin"//l29
+#define bs_392 golobal"/w1/392bs.bin"//l29
+#define bs_395 golobal"/w1/395bs.bin"//l29
 
 #define w1_307 golobal"/w1/307.bin"
 #define w1_313 golobal"/w1/313.bin"
@@ -75,3 +92,9 @@
 #define w1_360 golobal"/w1/360.bin"
 #define w1_363 golobal"/w1/363.bin"
 #define w1_369 golobal"/w1/369.bin"
+#define w1_371 golobal"/w1/371.bin"
+#define w1_377 golobal"/w1/377.bin"
+#define w1_380 golobal"/w1/380.bin"
+#define w1_386 golobal"/w1/386.bin"
+#define w1_389 golobal"/w1/389.bin"
+#define w1_395 golobal"/w1/395.bin"
