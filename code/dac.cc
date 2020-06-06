@@ -16,6 +16,8 @@ fm_type fm_buf3[16][50][82];
 fm_type fm_buf4[16][50][82];
 fm_type fm_buf5[16][50][82];
 fm_type fm_buf6[16][50][82];
+fm_type fm_buf7[16][50][82];
+fm_type fm_buf8[16][50][82];
 wt_type dwt_buf3[16][3][3];  //33buffer
 wt_type wt_buf1[16][16];     //11buffer
 wt_type wt_buf1a[16][16];
@@ -27,7 +29,7 @@ bs_type bias3[16];
 
 
 bs_type big_bias[60][16];   //big buffer
-wt_type wt_buf_big[60][16][16];
+wt_type wt_buf_big[150][16][16];
 wt_type dwt_buf3_big[30][16][3][3];
 
 
@@ -1393,4 +1395,557 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 											2*((192/16)+2)-1,
 											2*((320/16)+2)
 											);
+
+
+//////////////////////////////////////////////////////////////////////////////	layer 398 401 404 ///////////////////////////////////////////////////////////////////////////////////////
+			//389 weight and bias :
+				//weight
+				for(int i=0;i<12;i++)
+				{
+					load_weight_conv1x1( wt_buf_big[i], w_port_1x1[i+219]);
+				}
+				for(int i=0;i<12;i++)
+				{
+					load_weight_conv1x1( wt_buf_big[i+12], w_port_1x1[i+219+12]);
+				}
+				//bias
+				for(int i=0;i<12;i++)
+				{
+					load_bias_from_axi( big_bias[i], bias_port[i+156]);
+				}
+
+			//401 weight and bias:
+				for(int i=0;i<12;i++)
+				{
+					load_bias_from_axi(big_bias[i+12], bias_port[i+168]);
+				}
+				load_dwweight_conv3x3( dwt_buf3_big[0], w_port_3x3[0+71]);
+				load_dwweight_conv3x3( dwt_buf3_big[1], w_port_3x3[1+71]);
+				load_dwweight_conv3x3( dwt_buf3_big[2], w_port_3x3[2+71]);
+				load_dwweight_conv3x3( dwt_buf3_big[3], w_port_3x3[3+71]);
+				load_dwweight_conv3x3( dwt_buf3_big[4], w_port_3x3[4+71]);
+				load_dwweight_conv3x3( dwt_buf3_big[5], w_port_3x3[5+71]);
+				load_dwweight_conv3x3( dwt_buf3_big[6], w_port_3x3[6+71]);
+				load_dwweight_conv3x3( dwt_buf3_big[7], w_port_3x3[7+71]);
+				load_dwweight_conv3x3( dwt_buf3_big[8], w_port_3x3[8+71]);
+				load_dwweight_conv3x3( dwt_buf3_big[9], w_port_3x3[9+71]);
+				load_dwweight_conv3x3( dwt_buf3_big[10], w_port_3x3[10+71]);
+				load_dwweight_conv3x3( dwt_buf3_big[11], w_port_3x3[11+71]);
+			//404 weight and bias:
+
+				for(int i=0;i<12;i++)
+				{
+
+					load_weight_conv1x1( wt_buf_big[i+12+12], w_port_1x1[i+243]);
+				}
+				for(int i=0;i<12;i++)
+				{
+
+					load_weight_conv1x1( wt_buf_big[i+12+24], w_port_1x1[i+255]);
+				}
+				for(int i=0;i<12;i++)
+				{
+
+					load_weight_conv1x1( wt_buf_big[i+12+36], w_port_1x1[i+267]);
+				}				
+				load_bias_from_axi(big_bias[26], bias_port[180]);
+				load_bias_from_axi(big_bias[27], bias_port[181]);
+				load_bias_from_axi(big_bias[28], bias_port[182]);
+
+				//conv://////////////////////////////////////////////////////////////////////
+				aload_img_2(fm_buf1, ddrdebug_3,
+											0,
+											0,
+											0,
+											2*((320/16)+2),
+											2*((192/16)+2),
+											2*((320/16)+2)
+											);
+				aload_img_2(fm_buf2, ddrdebug_3,
+											1,
+											0,
+											0,
+											2*((320/16)+2),
+											2*((192/16)+2),
+											2*((320/16)+2)
+											);
+
+
+				set_bias_conv1x1(fm_buf5,big_bias[26],1,1,1,false);
+				set_bias_conv1x1(fm_buf6,big_bias[27],1,1,1,false);
+				set_bias_conv1x1(fm_buf7,big_bias[28],1,1,1,false);
+
+				i=-1;
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+12],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[12+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[24+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[12+24+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[12+36+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+12],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[12+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[24+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[12+24+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[12+36+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+12],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[12+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[24+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[12+24+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[12+36+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+12],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[12+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[24+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[12+24+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[12+36+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+12],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[12+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[24+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[12+24+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[12+36+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+12],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[12+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[24+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[12+24+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[12+36+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+12],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[12+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[24+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[12+24+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[12+36+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+12],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[12+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[24+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[12+24+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[12+36+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+12],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[12+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[24+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[12+24+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[12+36+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+12],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[12+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[24+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[12+24+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[12+36+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+12],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[12+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[24+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[12+24+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[12+36+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+12],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[12+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[24+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[12+24+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[12+36+i],1);
+
+				clear_pad3(fm_buf5,2*((320/16)+2),2*((192/16)+2));
+				clear_pad3(fm_buf6,2*((320/16)+2),2*((192/16)+2));
+				clear_pad3(fm_buf7,2*((320/16)+2),2*((192/16)+2));
+				deload_img(fm_buf5, ddrdebug_4,
+											0,
+											1,
+											1,
+											2*((320/16)+2)-1,
+											2*((192/16)+2)-1,
+											2*((320/16)+2)
+											);
+				deload_img(fm_buf6, ddrdebug_4,
+											1,
+											1,
+											1,
+											2*((320/16)+2)-1,
+											2*((192/16)+2)-1,
+											2*((320/16)+2)
+											);
+				deload_img(fm_buf7, ddrdebug_4,
+											2,
+											1,
+											1,
+											2*((320/16)+2)-1,
+											2*((192/16)+2)-1,
+											2*((320/16)+2)
+											);
+
+//////////////////////////////////////////////////////////////////////////////	layer 406 409 412 ///////////////////////////////////////////////////////////////////////////////////////
+			//406 weight and bias :
+				//weight
+				for(int i=0;i<18;i++)
+				{
+					load_weight_conv1x1( wt_buf_big[i], w_port_1x1[i+279]);
+				}
+				for(int i=0;i<18;i++)
+				{
+					load_weight_conv1x1( wt_buf_big[i+18], w_port_1x1[i+279+18]);
+				}
+				for(int i=0;i<18;i++)
+				{
+					load_weight_conv1x1( wt_buf_big[i+36], w_port_1x1[i+279+36]);
+				}				
+				//bias
+				for(int i=0;i<18;i++)
+				{
+					load_bias_from_axi( big_bias[i], bias_port[i+183]);
+				}
+
+			//409 weight and bias:
+				for(int i=0;i<18;i++)
+				{
+					load_bias_from_axi(big_bias[i+18], bias_port[i+201]);
+				}
+				load_dwweight_conv3x3( dwt_buf3_big[0], w_port_3x3[0+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[1], w_port_3x3[1+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[2], w_port_3x3[2+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[3], w_port_3x3[3+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[4], w_port_3x3[4+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[5], w_port_3x3[5+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[6], w_port_3x3[6+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[7], w_port_3x3[7+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[8], w_port_3x3[8+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[9], w_port_3x3[9+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[10], w_port_3x3[10+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[11], w_port_3x3[11+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[12], w_port_3x3[12+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[13], w_port_3x3[13+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[14], w_port_3x3[14+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[15], w_port_3x3[15+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[16], w_port_3x3[16+83]);
+				load_dwweight_conv3x3( dwt_buf3_big[17], w_port_3x3[17+83]);
+			//412 weight and bias:
+
+				for(int i=0;i<18;i++)
+				{
+
+					load_weight_conv1x1( wt_buf_big[i+54], w_port_1x1[i+333]);
+				}
+				for(int i=0;i<18;i++)
+				{
+
+					load_weight_conv1x1( wt_buf_big[i+18+54], w_port_1x1[i+351]);
+				}
+				for(int i=0;i<18;i++)
+				{
+
+					load_weight_conv1x1( wt_buf_big[i+36+54], w_port_1x1[i+369]);
+				}
+				load_bias_from_axi(big_bias[36], bias_port[219]);
+				load_bias_from_axi(big_bias[37], bias_port[220]);
+				load_bias_from_axi(big_bias[38], bias_port[221]);
+
+				//conv://////////////////////////////////////////////////////////////////////
+				aload_img_2(fm_buf1, ddrdebug_4,
+											0,
+											0,
+											0,
+											2*((320/16)+2),
+											2*((192/16)+2),
+											2*((320/16)+2)
+											);
+				aload_img_2(fm_buf2, ddrdebug_4,
+											1,
+											0,
+											0,
+											2*((320/16)+2),
+											2*((192/16)+2),
+											2*((320/16)+2)
+											);
+				aload_img_2(fm_buf8, ddrdebug_4,
+											2,
+											0,
+											0,
+											2*((320/16)+2),
+											2*((192/16)+2),
+											2*((320/16)+2)
+											);
+
+				set_bias_conv1x1(fm_buf5,big_bias[36],1,1,1,false);
+				set_bias_conv1x1(fm_buf6,big_bias[37],1,1,1,false);
+				set_bias_conv1x1(fm_buf7,big_bias[38],1,1,1,false);
+
+				i=-1;
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+				i++;
+					set_bias_conv1x1(fm_buf3,	  big_bias[i],1,1,1,false);     //16  bias is load
+					clear_pad2(fm_buf3,2*((320/16)+2),2*((192/16)+2));
+					CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[i],0);
+					CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[i+18],0);
+					CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[i+36],0);                //get 16/192 output channel of 32 input channel
+					set_dwbias_conv3x3(fm_buf4,   big_bias[18+i]);             //16  bias is load
+					dw_conv_1(fm_buf3,fm_buf4,dwt_buf3_big[i],1);
+					CONV_1x1(fm_buf4,fm_buf5,   wt_buf_big[54+i],1);
+				CONV_1x1(fm_buf4,fm_buf6,   wt_buf_big[18+54+i],1);
+				CONV_1x1(fm_buf4,fm_buf7,   wt_buf_big[36+54+i],1);
+
+				clear_pad3(fm_buf5,2*((320/16)+2),2*((192/16)+2));
+				clear_pad3(fm_buf6,2*((320/16)+2),2*((192/16)+2));
+				clear_pad3(fm_buf7,2*((320/16)+2),2*((192/16)+2));
+				deload_img(fm_buf5, ddrdebug_4,
+											0,
+											1,
+											1,
+											2*((320/16)+2)-1,
+											2*((192/16)+2)-1,
+											2*((320/16)+2)
+											);
+				deload_img(fm_buf6, ddrdebug_4,
+											1,
+											1,
+											1,
+											2*((320/16)+2)-1,
+											2*((192/16)+2)-1,
+											2*((320/16)+2)
+											);
+				deload_img(fm_buf7, ddrdebug_4,
+											2,
+											1,
+											1,
+											2*((320/16)+2)-1,
+											2*((192/16)+2)-1,
+											2*((320/16)+2)
+											);
+											
 }

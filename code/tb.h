@@ -1,8 +1,8 @@
 //Those are the paths which should be changed according to your env
 
 
-#define golobal "C:/Users/f/Desktop/github/DAC2020__thuThinker/test_data"
-//#define golobal "F:/hls/thinker/code/test_data"
+//#define golobal "C:/Users/f/Desktop/github/DAC2020__thuThinker/test_data"
+#define golobal "F:/hls/thinker/code/test_data"
 
 #define imgpath 		golobal"/data/img.bin"
 #define conv1 			golobal"/data/conv1.bin"
@@ -33,6 +33,8 @@
 #define conv27 			golobal"/data/conv27.bin"
 #define conv28 			golobal"/data/conv28.bin"
 #define conv29 			golobal"/data/conv29.bin"
+#define conv404 		golobal"/data/404.bin"
+#define add414 			golobal"/data/add414.bin"
 #define w3_310 golobal"/w1/310.bin"
 #define w3_315 golobal"/w1/315.bin"
 #define w3_323 golobal"/w1/323.bin"
@@ -44,6 +46,9 @@
 #define w3_374 golobal"/w1/374.bin"
 #define w3_383 golobal"/w1/383.bin"
 #define w3_392 golobal"/w1/392.bin"
+#define w3_401 golobal"/w1/401.bin"
+#define w3_409 golobal"/w1/409.bin"
+
 #define bs_307 golobal"/w1/307bs.bin"//l1
 #define bs_310 golobal"/w1/310bs.bin"//l2
 #define bs_313 golobal"/w1/313bs.bin"//l3
@@ -73,9 +78,15 @@
 #define bs_380 golobal"/w1/380bs.bin"//l27
 #define bs_383 golobal"/w1/383bs.bin"//l28
 #define bs_386 golobal"/w1/386bs.bin"//l29
-#define bs_389 golobal"/w1/389bs.bin"//l29
-#define bs_392 golobal"/w1/392bs.bin"//l29
-#define bs_395 golobal"/w1/395bs.bin"//l29
+#define bs_389 golobal"/w1/389bs.bin"//l30
+#define bs_392 golobal"/w1/392bs.bin"//l31
+#define bs_395 golobal"/w1/395bs.bin"//l32
+#define bs_398 golobal"/w1/398bs.bin"//l33
+#define bs_401 golobal"/w1/401bs.bin"//l34
+#define bs_404 golobal"/w1/404bs.bin"//l35
+#define bs_406 golobal"/w1/406bs.bin"//l36
+#define bs_409 golobal"/w1/409bs.bin"//l37
+#define bs_412 golobal"/w1/412bs.bin"//l38
 
 #define w1_307 golobal"/w1/307.bin"
 #define w1_313 golobal"/w1/313.bin"
@@ -98,3 +109,7 @@
 #define w1_386 golobal"/w1/386.bin"
 #define w1_389 golobal"/w1/389.bin"
 #define w1_395 golobal"/w1/395.bin"
+#define w1_398 golobal"/w1/398.bin"
+#define w1_404 golobal"/w1/404.bin"
+#define w1_406 golobal"/w1/406.bin"
+#define w1_412 golobal"/w1/412.bin"
