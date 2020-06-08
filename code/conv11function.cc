@@ -287,11 +287,11 @@ void load_weight_conv1x1( wt_type dest[16][16], uint256 src[16])
 void clear_pad(fm_type buf[16][50][82],int w, int h){
 	for(int c=0;c<16;c++){
 
-		for(int i=0;i<h+2;i++){
+		for(int i=0;i<50;i++){
 #pragma HLS pipeline
 			buf[c][i][w+1]=0;
 		}
-		for(int j=0;j<w+2;j++){
+		for(int j=0;j<82;j++){
 #pragma HLS pipeline
 			buf[c][h+1][j]=0;
 		}

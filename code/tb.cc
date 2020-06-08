@@ -9,7 +9,7 @@ uint16  IMG[imagesize];
 uint256 ddrdebug [ddrsize][30];
 uint256 ddrdebug_2 [ddrsize][30];
 uint256 w3[500][3][3];
-uint256 w1[500][16];
+uint256 w1[1000][16];
 uint256 bias_port[500];
 uint16  debug[2];
 uint256 ddrdebug_3 [ddrsize][30];
@@ -520,6 +520,143 @@ void fold_w1_toport(uint256 w1[500][16])
 		}
 	}
 
+	//float temp15[288][48][1][1];//index 387-404  and  405-422 423-440
+	std::ifstream ifs_param25(w1_415, std::ios::in | std::ios::binary);
+	ifs_param25.read((char*)(**temp15), 288 * 48 * 1 * sizeof(float));
+	ifs_param25.close();
+	ic_max=18;
+	for(int p=0;p<3;p++)
+	{
+		for(int ic = 0; ic< ic_max;  ic++)
+		{
+			for(int co = 0; co< 16; co++)
+			{
+				for(int ci = 0; ci < 16; ci++)
+				{
+					w1[387+ic+p*ic_max][co].range(wt_lenth + ci*16, ci*16)=((wt_type)temp15[co+16*ic][ci+16*p][0][0]).range(wt_lenth, 0);
+				}
+			}
+		}
+	}
+
+	//float temp16[48][288][1][1];//index 441-458 459-476 477-494
+	std::ifstream ifs_param26(w1_421, std::ios::in | std::ios::binary);
+	ifs_param26.read((char*)(**temp16), 48 * 288 * 1 * sizeof(float));
+	ifs_param26.close();
+	ic_max=18;
+	for(int p=0;p<3;p++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			for(int ic = 0; ic< ic_max;  ic++)
+			{
+				for(int co = 0; co< 16; co++)
+				{
+
+					w1[441+ic+p*ic_max][ci].range(wt_lenth + co*16, co*16)=((wt_type)temp16[ci+16*p][co+16*ic][0][0]).range(wt_lenth, 0);
+				}
+			}
+		}
+	}
+
+	//float temp15[288][48][1][1];//index 495-512  and  513-530 531-548
+	std::ifstream ifs_param27(w1_424, std::ios::in | std::ios::binary);
+	ifs_param27.read((char*)(**temp15), 288 * 48 * 1 * sizeof(float));
+	ifs_param27.close();
+	ic_max=18;
+	for(int p=0;p<3;p++)
+	{
+		for(int ic = 0; ic< ic_max;  ic++)
+		{
+			for(int co = 0; co< 16; co++)
+			{
+				for(int ci = 0; ci < 16; ci++)
+				{
+					w1[495+ic+p*ic_max][co].range(wt_lenth + ci*16, ci*16)=((wt_type)temp15[co+16*ic][ci+16*p][0][0]).range(wt_lenth, 0);
+				}
+			}
+		}
+	}
+
+	float temp18[80][288][1][1];//index 549-566 567-584 585-602 603-620 621-638
+	std::ifstream ifs_param28(w1_430, std::ios::in | std::ios::binary);
+	ifs_param28.read((char*)(**temp18), 80 * 288 * 1 * sizeof(float));
+	ifs_param28.close();
+	ic_max=18;
+	for(int p=0;p<5;p++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			for(int ic = 0; ic< ic_max;  ic++)
+			{
+				for(int co = 0; co< 16; co++)
+				{
+
+					w1[549+ic+p*ic_max][ci].range(wt_lenth + co*16, co*16)=((wt_type)temp18[ci+16*p][co+16*ic][0][0]).range(wt_lenth, 0);
+				}
+			}
+		}
+	}
+
+	float temp19[480][80][1][1];//index 639-668  and  669-698 699-728 729-758 759-788
+	std::ifstream ifs_param29(w1_432, std::ios::in | std::ios::binary);
+	ifs_param29.read((char*)(**temp19), 480 * 80 * 1 * sizeof(float));
+	ifs_param29.close();
+	ic_max=30;
+	for(int p=0;p<5;p++)
+	{
+		for(int ic = 0; ic< ic_max;  ic++)
+		{
+			for(int co = 0; co< 16; co++)
+			{
+				for(int ci = 0; ci < 16; ci++)
+				{
+					w1[639+ic+p*ic_max][co].range(wt_lenth + ci*16, ci*16)=((wt_type)temp19[co+16*ic][ci+16*p][0][0]).range(wt_lenth, 0);
+				}
+			}
+		}
+	}
+
+	float temp20[80][480][1][1];//index 789-818 819-848 849-878 879-908 909-938
+	std::ifstream ifs_param30(w1_438, std::ios::in | std::ios::binary);
+	ifs_param30.read((char*)(**temp20), 80 * 480 * 1 * sizeof(float));
+	ifs_param30.close();
+	ic_max=30;
+	for(int p=0;p<5;p++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			for(int ic = 0; ic< ic_max;  ic++)
+			{
+				for(int co = 0; co< 16; co++)
+				{
+
+					w1[789+ic+p*ic_max][ci].range(wt_lenth + co*16, co*16)=((wt_type)temp20[ci+16*p][co+16*ic][0][0]).range(wt_lenth, 0);
+				}
+			}
+		}
+	}
+
+	float temp21[32][80][1][1];//index 939-943 944-948
+	std::ifstream ifs_param31(w1_444, std::ios::in | std::ios::binary);
+	ifs_param31.read((char*)(**temp21), 32 * 80* 1 * sizeof(float));
+	ifs_param31.close();
+	ic_max=5;
+	for(int p=0;p<2;p++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			for(int ic = 0; ic< ic_max;  ic++)
+			{
+				for(int co = 0; co< 16; co++)
+				{
+
+					w1[939+ic+p*ic_max][ci].range(wt_lenth + co*16, co*16)=((wt_type)temp21[ci+16*p][co+16*ic][0][0]).range(wt_lenth, 0);
+				}
+			}
+		}
+	}
+
 }
 
 void fold_BS_toport(uint256 bias_port[500])
@@ -981,6 +1118,136 @@ void fold_BS_toport(uint256 bias_port[500])
 		}
 	}
 
+	//415 layer : index 222-239
+	//float temp23[288];
+	std::ifstream ifs_param39(bs_415, std::ios::in | std::ios::binary);
+	ifs_param39.read((char*)(temp23), 288 * sizeof(float));
+	ifs_param39.close();
+	for(int co = 0; co < 18; co++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			bias_port[222+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp23[ci+16*co]).range(wt_lenth, 0);
+		}
+	}
+
+	//418 layer : index 240-257
+	//float temp23[288];
+	std::ifstream ifs_param40(bs_418, std::ios::in | std::ios::binary);
+	ifs_param40.read((char*)(temp23), 288 * sizeof(float));
+	ifs_param40.close();
+	for(int co = 0; co < 18; co++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			bias_port[240+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp23[ci+16*co]).range(wt_lenth, 0);
+		}
+	}
+
+	//421 layer : index 258-260
+	//float temp22[48];
+	std::ifstream ifs_param41(bs_421, std::ios::in | std::ios::binary);
+	ifs_param41.read((char*)(temp22), 48 * sizeof(float));
+	ifs_param41.close();
+	for(int co = 0; co < 3; co++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			bias_port[258+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp22[ci+16*co]).range(wt_lenth, 0);
+		}
+	}
+
+	//424 layer : index 261-278
+	//float temp23[288];
+	std::ifstream ifs_param42(bs_424, std::ios::in | std::ios::binary);
+	ifs_param42.read((char*)(temp23), 288 * sizeof(float));
+	ifs_param42.close();
+	for(int co = 0; co < 18; co++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			bias_port[261+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp23[ci+16*co]).range(wt_lenth, 0);
+		}
+	}
+
+	//427 layer : index 279-296
+	//float temp23[288];
+	std::ifstream ifs_param43(bs_427, std::ios::in | std::ios::binary);
+	ifs_param43.read((char*)(temp23), 288 * sizeof(float));
+	ifs_param43.close();
+	for(int co = 0; co < 18; co++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			bias_port[279+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp23[ci+16*co]).range(wt_lenth, 0);
+		}
+	}
+
+	//430 layer : index 297-301
+	float temp24[80];
+	std::ifstream ifs_param44(bs_430, std::ios::in | std::ios::binary);
+	ifs_param44.read((char*)(temp24), 80 * sizeof(float));
+	ifs_param44.close();
+	for(int co = 0; co < 5; co++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			bias_port[297+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp24[ci+16*co]).range(wt_lenth, 0);
+		}
+	}
+
+	//432 layer : index 302-331
+	float temp25[480];
+	std::ifstream ifs_param45(bs_432, std::ios::in | std::ios::binary);
+	ifs_param45.read((char*)(temp25), 480 * sizeof(float));
+	ifs_param45.close();
+	for(int co = 0; co < 30; co++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			bias_port[302+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp25[ci+16*co]).range(wt_lenth, 0);
+		}
+	}
+
+	//435 layer : index 332-361
+	//float temp25[480];
+	std::ifstream ifs_param46(bs_435, std::ios::in | std::ios::binary);
+	ifs_param46.read((char*)(temp25), 480 * sizeof(float));
+	ifs_param46.close();
+	for(int co = 0; co < 30; co++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			bias_port[332+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp25[ci+16*co]).range(wt_lenth, 0);
+		}
+	}
+
+	//438 layer : index 362-366
+	//float temp24[80];
+	std::ifstream ifs_param47(bs_438, std::ios::in | std::ios::binary);
+	ifs_param47.read((char*)(temp24), 80 * sizeof(float));
+	ifs_param47.close();
+	for(int co = 0; co < 5; co++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			bias_port[362+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp24[ci+16*co]).range(wt_lenth, 0);
+		}
+	}
+
+	//444 layer : index 367 368
+	//float temp20[32];
+	std::ifstream ifs_param48(bs_444, std::ios::in | std::ios::binary);
+	ifs_param48.read((char*)(temp20), 32 * sizeof(float));
+	ifs_param48.close();
+	for(int co = 0; co < 2; co++)
+	{
+		for(int ci = 0; ci < 16; ci++)
+		{
+			bias_port[367+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp20[ci+16*co]).range(wt_lenth, 0);
+		}
+	}
+
 }
 
 void fold_w3_toport(uint256 w3[500][3][3])
@@ -1234,6 +1501,66 @@ void fold_w3_toport(uint256 w3[500][3][3])
 		}
 	}
 
+	//418 layer : index 101-118
+	//float temp7[288][3][3];
+	std::ifstream ifs_param13(w3_418, std::ios::in | std::ios::binary);
+	ifs_param13.read((char*)(**temp7), 288  * 9 * sizeof(float));
+	ifs_param13.close();
+	for(int x=0;x<3;x++)
+	{
+		for(int y=0;y<3;y++)
+		{
+			for(int IDX=0;IDX<18;IDX++)
+			{
+				for(int i=0;i<16;i++)
+				{
+					w3[101+IDX][x][y].range(wt_lenth + i*16, i*16)=((wt_type)(temp7[i+16*IDX][x][y])).range(wt_lenth, 0);
+				}
+
+			}
+		}
+	}
+
+	//427 layer : index 119-136
+	//float temp7[288][3][3];
+	std::ifstream ifs_param14(w3_427, std::ios::in | std::ios::binary);
+	ifs_param14.read((char*)(**temp7), 288  * 9 * sizeof(float));
+	ifs_param14.close();
+	for(int x=0;x<3;x++)
+	{
+		for(int y=0;y<3;y++)
+		{
+			for(int IDX=0;IDX<18;IDX++)
+			{
+				for(int i=0;i<16;i++)
+				{
+					w3[119+IDX][x][y].range(wt_lenth + i*16, i*16)=((wt_type)(temp7[i+16*IDX][x][y])).range(wt_lenth, 0);
+				}
+
+			}
+		}
+	}
+
+	//435 layer : index 137-166
+	float temp8[480][3][3];
+	std::ifstream ifs_param15(w3_435, std::ios::in | std::ios::binary);
+	ifs_param15.read((char*)(**temp8), 480  * 9 * sizeof(float));
+	ifs_param15.close();
+	for(int x=0;x<3;x++)
+	{
+		for(int y=0;y<3;y++)
+		{
+			for(int IDX=0;IDX<30;IDX++)
+			{
+				for(int i=0;i<16;i++)
+				{
+					w3[137+IDX][x][y].range(wt_lenth + i*16, i*16)=((wt_type)(temp8[i+16*IDX][x][y])).range(wt_lenth, 0);
+				}
+
+			}
+		}
+	}
+
 }
 
 
@@ -1325,7 +1652,7 @@ int main()
     //check_ddr(ddrdebug_2,  conv5,8, (192/n+2)*2,(320/n+2)*2,5);
 
     //check_ddr(ddrdebug, conv6_no_relu,48, (192/n+2)*2,(320/n+2)*2,6);
-    n=16;
+    n=32;
     //check_ddr(ddrdebug, conv7_no_relu,48, (192/n+2)*2,(320/n+2)*2,7);
     //check_ddr(ddrdebug, conv8,16, (192/n+2)*2,(320/n+2)*2,8);
     //check_ddr(ddrdebug, add336,16, (192/n+2)*2,(320/n+2)*2,336);
@@ -1336,6 +1663,9 @@ int main()
     //check_ddr(ddrdebug_3, conv15,96, (192/n+2)*2,(320/n+2)*2,15);
     //check_ddr(ddrdebug_4, conv29,2*16, (192/n+2)*2,(320/n+2)*2,17);  //351
     //check_ddr(ddrdebug_4, conv404,48, (192/n+2)*2,(320/n+2)*2,404);
-    check_ddr(ddrdebug_4, add414,48, (192/n+2)*2,(320/n+2)*2,414);
+    //check_ddr(ddrdebug_3, add414,48, (192/n+2)*2,(320/n+2)*2,414);
+	//check_ddr(ddrdebug_3, add423,48, (192/n+2)*2,(320/n+2)*2,423);
+	//check_ddr(ddrdebug_4, conv430,80, (192/n+2)*2-1,(320/n+2)*2-1,430);
+	check_ddr(ddrdebug_4, add440,80, (192/n+2)*2-1,(320/n+2)*2-1,440);
     return 0;
 }

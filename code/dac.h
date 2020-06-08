@@ -40,7 +40,7 @@ typedef ap_fixed<13, 5, AP_RND, AP_SAT> bs_type;//bias type
 
 void Thinker(	uint16 image_in_raw_pad[imagesize],
 			    uint256	w_port_3x3[500][3][3],
-				uint256     w_port_1x1[500][16],
+				uint256     w_port_1x1[1000][16],
 				uint256     bias_port[500],
 				uint256 ddrdebug [ddrsize][30],
 				uint256 ddrdebug_2 [ddrsize][30],
