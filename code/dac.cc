@@ -3615,6 +3615,11 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 ////////////////////////////////////////////////////////   bilinear the output of 444(in buffer3 and 4) and add to the ddrdebug_3///////////////////////////////////////////////////////
 							//load img1 from buf3 to buf1
 							//load img1 from buf4 to buf2
+							initial_ddr(ddrdebug_3,
+													2,
+													2*((320/16)+2),
+													2*((192/16)+2)
+													);
 							load_oneimageto_ddr(fm_buf3,0,fm_buf1);
 							load_oneimageto_ddr(fm_buf4,0,fm_buf2);
 							//bilinear buf1 to buf7

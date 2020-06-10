@@ -5,7 +5,6 @@
 #include "dac.h"
 
 
-
 void bilinear_1(
 		fm_type fm_input[16][50][82],
 		fm_type fm_output[16][50][82]
@@ -27,6 +26,7 @@ float w_src;
 		int w1;
 		int	u;
 		int	v;
+		for(int ch=0;ch<16;ch++){
 		for(int h_dst=0;h_dst<high_dst;h_dst++){
 			for(int w_dst=0;w_dst<width_dst;w_dst++){
 #pragma HLS pipeline II=1
@@ -38,29 +38,28 @@ float w_src;
 					else if(h_src>high_src-1) h_src=high_src-1;
 				if(w_src<0) w_src=0;
 					else if(w_src>width_src-1) w_src=width_src-1;
-				//目锟斤拷图投影
-
-				h0=h_src;  //tobe opti
-				w0=w_src;  //tobe opti
-				h1=h0+1;
-				w1=w0+1;
-				u=h_src-h0;
-				v=w_src-w0;
-
-				for(int ch=0;ch<16;ch++){
-#pragma HLS unroll
-				fm_output[ch][h_dst][w_dst]=(fm_input[ch][h0][w0]*(1-u)*(1-v)
-						+fm_input[ch][h0][w1]*(1-u)*v
-						+fm_input[ch][h1][w0]*u*(1-v)
-						+fm_input[ch][h1][w1]*u*v);
-				//锟斤拷值锟斤拷锟斤拷图锟斤拷值
-			}
+				 h0=h_src;
+				 w0=w_src;
+				 h1=h0+1;
+				 w1=w0+1;
+				//int debug0=(int)fm_input[ch][h0][w0];
+				//printf("%d ",debug0);
+				//计算投影点周围的四个点
+				float dw=w_src-w0;
+				float dh=h_src-h0;
+				if(dh<=0.5&&dw<=0.5)
+					fm_output[ch][h_dst][w_dst]=fm_input[ch][h0][w0];
+				else if(dh<=0.5&&dw>0.5)
+					fm_output[ch][h_dst][w_dst]=fm_input[ch][h0][w1];
+				else if(dh>0.5&&dw<=0.5)
+					fm_output[ch][h_dst][w_dst]=fm_input[ch][h1][w0];
+				else if(dh>0.5&&dw>0.5)
+					fm_output[ch][h_dst][w_dst]=fm_input[ch][h1][w1];
 		}
 	}
-	printf("\ntest\n");
 
+		}
 }
-
 
 void load_oneimageto_ddr (
 			fm_type fm_buf1[16][50][82],int choose,fm_type fm_buf2[16][50][82]

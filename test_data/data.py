@@ -24,8 +24,8 @@ tran("443")
 tran("443bs")
 exit()
 '''
-source_path='C:/Users/f/Desktop/npy68_conv/npy68_conv/462' #the folder of your .npy files, one folder contains 4 images
-save_imgpath='C:/Users/f/Desktop/DAC2020__thuThinker/test_data/data/462.bin' #bin file to be saved
+source_path='C:/Users/f/Desktop/npy68_conv/npy68_conv/461' #the folder of your .npy files, one folder contains 4 images
+save_imgpath='C:/Users/f/Desktop/DAC2020__thuThinker/test_data/data/461.bin' #bin file to be saved
 
 file_list=get_file(source_path)
 
