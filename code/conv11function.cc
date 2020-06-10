@@ -85,6 +85,13 @@ inline fm_type relu_single( fm_type d ,int relu) {
 		return 6;
 	if( d < 0 )
 		return 0;}
+	else{
+		if(relu==2){
+			if( d < 0 )
+					{return 0;}
+		}
+
+	}
 	return d;
 }
 

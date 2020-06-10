@@ -42,6 +42,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 			    uint256	w_port_3x3[500][3][3],
 				uint256     w_port_1x1[1000][16],
 				uint256     bias_port[500],
+				uint256		w_port_3x3_2[20][16][3][3],
 				uint256 ddrdebug [ddrsize][30],
 				uint256 ddrdebug_2 [ddrsize][30],
 				uint256 ddrdebug_3 [ddrsize][30],
@@ -60,13 +61,13 @@ void dw_conv_2(fm_type in_buf[16][50][82],
 		wt_type weight[16][3][3],int relu);
 
 //function for 3x3:
-void load_weight_conv3x3( wt_type dest[4][8][32][3][3], uint512 src[500][3][3],int ofset);
+void load_weight_conv3x3( wt_type dest[16][16][3][3], uint256 src[16][3][3]);
 void set_bias_conv3x3( fm_type buf[4][8][49][81], bs_type bias[80]);
-void conv3x3(fm_type in_buf[80][49][81],
-		fm_type out_buf[8][49][81],
-		wt_type weight[8][32][3][3]
+void conv3x3_502(fm_type in_buf[16][50][82],
+		fm_type out_buf[16][50][82],
+		wt_type weight[16][16][3][3]
 		);
-
+void clearpad_for_502(fm_type in_buf[16][50][82]);
 
 //function for 1x1:
 void CONV_1x1(fm_type bottom[16][50][82],
@@ -114,3 +115,10 @@ void initial_ddr(uint256 image_port[ddrsize][30],
 void clear_pad(fm_type buf[16][50][82],int w, int h);
 void clear_pad2(fm_type buf[16][50][82],int w, int h);
 void clear_pad3(fm_type buf[16][50][82],int w, int h);
+void bilinear_1(
+		fm_type fm_input[16][50][82],
+		fm_type fm_output[16][50][82]
+	);
+void load_oneimageto_ddr (
+			fm_type fm_buf1[16][50][82],int choose,fm_type fm_buf2[16][50][82]
+		  );

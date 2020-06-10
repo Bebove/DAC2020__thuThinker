@@ -1,8 +1,8 @@
 //Those are the paths which should be changed according to your env
 
 
-//#define golobal "C:/Users/f/Desktop/github/DAC2020__thuThinker/test_data"
-#define golobal "F:/hls/thinker/code/test_data"
+#define golobal "C:/Users/f/Desktop/DAC2020__thuThinker/test_data"
+//#define golobal "F:/hls/thinker/code/test_data"
 
 #define imgpath 		golobal"/data/img.bin"
 #define conv1 			golobal"/data/conv1.bin"
@@ -38,6 +38,14 @@
 #define add423 		    golobal"/data/add423.bin"
 #define conv430 		golobal"/data/430_pad1.bin"
 #define add440 		    golobal"/data/add440_pad1.bin"
+#define cv444 		    golobal"/data/444.bin"
+#define cv502 		    golobal"/data/502.bin"
+#define cv521 		    golobal"/data/521.bin"
+#define cv523 		    golobal"/data/523.bin"
+#define cv525 		    golobal"/data/525.bin"
+#define cv526 		    golobal"/data/526.bin"
+#define cv443 		    golobal"/data/443.bin"
+#define cv462 		    golobal"/data/462.bin"
 #define w3_310 golobal"/w1/310.bin"
 #define w3_315 golobal"/w1/315.bin"
 #define w3_323 golobal"/w1/323.bin"
@@ -54,6 +62,9 @@
 #define w3_418 golobal"/w1/418.bin"
 #define w3_427 golobal"/w1/427.bin"
 #define w3_435 golobal"/w1/435.bin"
+#define w3_502 golobal"/w1/502.bin"
+#define w3_521 golobal"/w1/521.bin"
+#define w3_523 golobal"/w1/523.bin"
 
 #define bs_307 golobal"/w1/307bs.bin"//l1
 #define bs_310 golobal"/w1/310bs.bin"//l2
@@ -103,6 +114,13 @@
 #define bs_435 golobal"/w1/435bs.bin"//l46
 #define bs_438 golobal"/w1/438bs.bin"//l47
 #define bs_444 golobal"/w1/444bs.bin"//l48
+#define bs_502 golobal"/w1/502bs.bin"
+#define bs_521 golobal"/w1/521bs.bin"
+#define bs_523 golobal"/w1/523bs.bin"
+#define bs_525 golobal"/w1/525bs.bin"
+#define bs_526 golobal"/w1/526bs.bin"
+#define bs_443 golobal"/w1/443bs.bin"
+
 
 #define w1_307 golobal"/w1/307.bin"
 #define w1_313 golobal"/w1/313.bin"
@@ -136,3 +154,6 @@
 #define w1_432 golobal"/w1/432.bin"
 #define w1_438 golobal"/w1/438.bin"
 #define w1_444 golobal"/w1/444.bin"
+#define w1_525 golobal"/w1/525.bin"
+#define w1_526 golobal"/w1/526.bin"
+#define w1_443 golobal"/w1/443.bin"

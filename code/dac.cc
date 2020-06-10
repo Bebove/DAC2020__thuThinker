@@ -36,14 +36,14 @@ bs_type big_bias[65][16];   //big buffer
 wt_type wt_buf_big[300][16][16];
 wt_type dwt_buf3_big[30][16][3][3];
 
-
+wt_type     big_w33_buffer[12][16][16][3][3];
  
 
 void Thinker(	uint16 image_in_raw_pad[imagesize],
 				uint256		w_port_3x3[500][3][3],
 				uint256     w_port_1x1[1000][16],
 				uint256     bias_port[500],
-
+				uint256		w_port_3x3_2[20][16][3][3],
 
 				uint256 ddrdebug [ddrsize][30],
 				uint256 ddrdebug_2 [ddrsize][30],
@@ -75,7 +75,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 #pragma HLS ALLOCATION instances=deload_img			 		limit=1 function
 #pragma HLS ALLOCATION instances=load_weight_conv1x1			 		limit=1 function
 #pragma HLS ALLOCATION instances=load_bias_from_axi			 		limit=1 function
-
+	/*
 //////////////////////////////////////////////////////////////////////////////////////////////////layer 307-310//////////////////////////////////////////////////////////////////////////////////
 	//layer 307 310
 	load_weight_conv1x1(wt_buf1, w_port_1x1[0]);   //load  weight for conv1x1 307  		,   	which is store at the index 0
@@ -2251,6 +2251,8 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 				clear_pad3(fm_buf5,2*((320/16)+2),2*((192/16)+2));
 				clear_pad3(fm_buf6,2*((320/16)+2),2*((192/16)+2));
 				clear_pad3(fm_buf7,2*((320/16)+2),2*((192/16)+2));
+
+
 				deload_img(fm_buf5, ddrdebug_3,
 											0,
 											1,
@@ -2275,6 +2277,8 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 											2*((192/16)+2)-1,
 											2*((320/16)+2)
 											);
+
+
 
 //////////////////////////////////////////////////////////////////////////////	layer 424 427 430 ///////////////////////////////////////////////////////////////////////////////////////
 			//424 weight and bias :
@@ -3407,15 +3411,357 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 				clear_pad(fm_buf4,10,6);
 				clear_pad(fm_buf4,21,13);				
 				CONV_1x1(fm_buf1,fm_buf3,	wt_buf_big[0],0);
-				CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[0+2],0);
-				CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[0+4],0);                //get 16/192 output channel of 32 input channel
-				CONV_1x1(fm_buf11,fm_buf3,	wt_buf_big[0+6],0);
-				CONV_1x1(fm_buf12,fm_buf3,	wt_buf_big[0+8],0);
+				CONV_1x1(fm_buf2,fm_buf3,	wt_buf_big[1],0);
+				CONV_1x1(fm_buf8,fm_buf3,	wt_buf_big[2],0);                //get 16/192 output channel of 32 input channel
+				CONV_1x1(fm_buf11,fm_buf3,	wt_buf_big[3],0);
+				CONV_1x1(fm_buf12,fm_buf3,	wt_buf_big[4],0);
 				
-				CONV_1x1(fm_buf1,fm_buf4,	wt_buf_big[1],0);
-				CONV_1x1(fm_buf2,fm_buf4,	wt_buf_big[1+2],0);
-				CONV_1x1(fm_buf8,fm_buf4,	wt_buf_big[1+4],0);                //get 16/192 output channel of 32 input channel
-				CONV_1x1(fm_buf11,fm_buf4,	wt_buf_big[1+6],0);
-				CONV_1x1(fm_buf12,fm_buf4,	wt_buf_big[1+8],0);
+				CONV_1x1(fm_buf1,fm_buf4,	wt_buf_big[5],0);
+				CONV_1x1(fm_buf2,fm_buf4,	wt_buf_big[6],0);
+				CONV_1x1(fm_buf8,fm_buf4,	wt_buf_big[7],0);                //get 16/192 output channel of 32 input channel
+				CONV_1x1(fm_buf11,fm_buf4,	wt_buf_big[8],0);
+				CONV_1x1(fm_buf12,fm_buf4,	wt_buf_big[9],0);
+				*/
+				std::ifstream ifs_param("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/temp1.bin", std::ios::in | std::ios::binary);
+				ifs_param.read((char*)(**fm_buf3), 16 * 50 * 82 * sizeof(fm_type));
+				ifs_param.close();
+				std::ifstream ifs_param2("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/temp2.bin", std::ios::in | std::ios::binary);
+				ifs_param2.read((char*)(**fm_buf4), 16 * 50 * 82 * sizeof(fm_type));
+				ifs_param2.close();
+
+//////////////////////////////////////////////////////////////////////////////	layer 502 523 526 523 525 ///////////////////////////////////////////////////////////////////////////////////////
+								//input : 32channel  size 0.5^5 of 2*imgsize  : 2*((320/32)+2)-1 2*((192/32)+2)-1
+								//ddr_img :ddr4
+
+								//502: weight :32*32:3*3  bias 32 no relu , st=1
+								//LOAD BIAS FOR LAYER 502
+				initial_ddr(ddrdebug_4,
+										30,
+										300,
+										500
+										);
+								int index_502b=369;
+								int index_502w=0;
+								int index_11;
+								load_bias_from_axi(big_bias[0], bias_port[0+index_502b]);  //502
+								load_bias_from_axi(big_bias[1], bias_port[1+index_502b]);  //
+								load_weight_conv3x3( big_w33_buffer[0],w_port_3x3_2[0+index_502w]); //502 opchannel16 inchannel16
+								load_weight_conv3x3( big_w33_buffer[1],w_port_3x3_2[1+index_502w]); //502 opchannel16 inchannel32
+								load_weight_conv3x3( big_w33_buffer[2],w_port_3x3_2[2+index_502w]); //502 opchannel32 inchannel16
+								load_weight_conv3x3( big_w33_buffer[3],w_port_3x3_2[3+index_502w]); //502 opchannel32 inchannel32
+								set_dwbias_conv3x3(fm_buf1,   big_bias[0]);
+								set_dwbias_conv3x3(fm_buf2,   big_bias[1]);
+								conv3x3_502(fm_buf3,fm_buf1,big_w33_buffer[0]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+								conv3x3_502(fm_buf4,fm_buf1,big_w33_buffer[1]);
+								conv3x3_502(fm_buf3,fm_buf2,big_w33_buffer[2]);
+								conv3x3_502(fm_buf4,fm_buf2,big_w33_buffer[3]);
+								clearpad_for_502(fm_buf1);               //clear x=6 y=10
+								clearpad_for_502(fm_buf2);
+								//3,4->1,2
+								load_bias_from_axi(big_bias[2], bias_port[2+index_502b]);  //521
+								load_bias_from_axi(big_bias[3], bias_port[3+index_502b]);  //
+								load_weight_conv3x3( big_w33_buffer[4],w_port_3x3_2[4+index_502w]); // opchannel16 inchannel16
+								load_weight_conv3x3( big_w33_buffer[5],w_port_3x3_2[5+index_502w]); // opchannel16 inchannel32
+								load_weight_conv3x3( big_w33_buffer[6],w_port_3x3_2[6+index_502w]); // opchannel32 inchannel16
+								load_weight_conv3x3( big_w33_buffer[7],w_port_3x3_2[7+index_502w]); // opchannel32 inchannel32
+								set_dwbias_conv3x3(fm_buf5,   big_bias[2]);
+								set_dwbias_conv3x3(fm_buf6,   big_bias[3]);
+								conv3x3_502(fm_buf1,fm_buf5,big_w33_buffer[4]);
+								conv3x3_502(fm_buf2,fm_buf5,big_w33_buffer[5]);
+								conv3x3_502(fm_buf1,fm_buf6,big_w33_buffer[6]);
+								conv3x3_502(fm_buf2,fm_buf6,big_w33_buffer[7]);
+								clearpad_for_502(fm_buf5);               //clear x=6 y=10
+								clearpad_for_502(fm_buf6);
+								//1,2->5,6
+								load_bias_from_axi(big_bias[4], bias_port[4+index_502b]);  //523
+								load_bias_from_axi(big_bias[5], bias_port[5+index_502b]);  //
+								load_weight_conv3x3( big_w33_buffer[8],w_port_3x3_2[8+index_502w]); // opchannel16 inchannel16
+								load_weight_conv3x3( big_w33_buffer[9],w_port_3x3_2[9+index_502w]); // opchannel16 inchannel32
+								load_weight_conv3x3( big_w33_buffer[10],w_port_3x3_2[10+index_502w]); // opchannel32 inchannel16
+								load_weight_conv3x3( big_w33_buffer[11],w_port_3x3_2[11+index_502w]); // opchannel32 inchannel32
+								set_dwbias_conv3x3(fm_buf7,   big_bias[4]);
+								set_dwbias_conv3x3(fm_buf8,   big_bias[5]);
+								conv3x3_502(fm_buf1,fm_buf7,big_w33_buffer[8]);
+								conv3x3_502(fm_buf2,fm_buf7,big_w33_buffer[9]);
+								conv3x3_502(fm_buf1,fm_buf8,big_w33_buffer[10]);
+								conv3x3_502(fm_buf2,fm_buf8,big_w33_buffer[11]);
+								clearpad_for_502(fm_buf7);               //clear x=6 y=10
+								clearpad_for_502(fm_buf8);
+								//1,2->7,8
+								load_bias_from_axi(big_bias[6], bias_port[6+index_502b]);  //525
+								set_bias_conv1x1(fm_buf9,	  big_bias[6],1,1,1,true);     //16  bias is load
+								clear_pad(fm_buf9,10,6);
+								clear_pad(fm_buf9,21,13);
+								load_weight_conv1x1( wt_buf_big[0], w_port_1x1[949]);
+								load_weight_conv1x1( wt_buf_big[1], w_port_1x1[950]);
+								CONV_1x1(fm_buf5,fm_buf9,	wt_buf_big[0],2);
+								CONV_1x1(fm_buf6,fm_buf9,	wt_buf_big[1],2);
+								//5,6->9
+								load_bias_from_axi(big_bias[7], bias_port[7+index_502b]);  //525
+								load_bias_from_axi(big_bias[8], bias_port[8+index_502b]);  //525
+								set_bias_conv1x1(fm_buf5,	  big_bias[7],1,1,1,true);     //16  bias is load
+								set_bias_conv1x1(fm_buf6,	  big_bias[8],1,1,1,true);     //16  bias is load
+								clear_pad(fm_buf5,10,6);
+								clear_pad(fm_buf5,21,13);
+								clear_pad(fm_buf6,10,6);
+								clear_pad(fm_buf6,21,13);
+								load_weight_conv1x1( wt_buf_big[0], w_port_1x1[951]);
+								load_weight_conv1x1( wt_buf_big[1], w_port_1x1[952]);
+								load_weight_conv1x1( wt_buf_big[2], w_port_1x1[953]);
+								load_weight_conv1x1( wt_buf_big[3], w_port_1x1[954]);
+								CONV_1x1(fm_buf7,fm_buf5,	wt_buf_big[0],2);
+								CONV_1x1(fm_buf8,fm_buf5,	wt_buf_big[1],2);
+								CONV_1x1(fm_buf7,fm_buf6,	wt_buf_big[2],2);
+								CONV_1x1(fm_buf8,fm_buf6,	wt_buf_big[3],2);
+								//7,8->5,6
+								deload_img(fm_buf5, ddrdebug_4,
+															0,
+															0,
+															0,
+															2*((320/32)+2)-1,
+															2*((192/32)+2)-1,
+															2*((320/32)+2)-1
+															);
+								deload_img(fm_buf6, ddrdebug_4,
+															1,
+															0,
+															0,
+															2*((320/32)+2)-1,
+															2*((192/32)+2)-1,
+															2*((320/32)+2)-1
+															);                       //526:channel 0,1  525:channel 2 ,两图之间间隔为1
+								deload_img(fm_buf9, ddrdebug_4,
+															2,
+															0,
+															0,
+															2*((320/32)+2)-1,
+															2*((192/32)+2)-1,
+															2*((320/32)+2)-1
+															);                       //526:channel 0,1  525:channel 2, 两图之间间隔为1
+
+///////////////////////////////////////////////////////////////////////  layer 443 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+								std::ifstream ifs_param33("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/ddrdebug_3.bin", std::ios::in | std::ios::binary);
+								ifs_param33.read((char*)(*ddrdebug_3), ddrsize * 30 * sizeof(uint256));
+								ifs_param33.close();
+								aload_img_2(fm_buf1, ddrdebug_3,
+															0,
+															0,
+															0,
+															2*((320/16)+2),
+															2*((192/16)+2),
+															2*((320/16)+2)
+															);
+							aload_img_2(fm_buf2, ddrdebug_3,
+															1,
+															0,
+															0,
+															2*((320/16)+2),
+															2*((192/16)+2),
+															2*((320/16)+2)
+															);
+							aload_img_2(fm_buf5, ddrdebug_3,
+															2,
+															0,
+															0,
+															2*((320/16)+2),
+															2*((192/16)+2),
+															2*((320/16)+2)
+															);
+
+							load_weight_conv1x1( wt_buf_big[0], w_port_1x1[0+955]);
+							load_weight_conv1x1( wt_buf_big[1], w_port_1x1[1+955]);
+							load_weight_conv1x1( wt_buf_big[2], w_port_1x1[2+955]);
+
+							load_weight_conv1x1( wt_buf_big[3], w_port_1x1[3+955]);
+							load_weight_conv1x1( wt_buf_big[4], w_port_1x1[4+955]);
+							load_weight_conv1x1( wt_buf_big[5], w_port_1x1[5+955]);
+
+							//bias
+							for(int i=0;i<2;i++)
+							{
+								load_bias_from_axi( big_bias[i], bias_port[i+378]);
+							}
+							set_bias_conv1x1(fm_buf6,big_bias[0],1,1,1,false);
+							set_bias_conv1x1(fm_buf7,big_bias[1],1,1,1,false);
+							clear_pad2(fm_buf6,2*((320/16)+2),2*((192/16)+2));
+							clear_pad2(fm_buf7,2*((320/16)+2),2*((192/16)+2));
+							CONV_1x1(fm_buf1,fm_buf6,   wt_buf_big[0],0);
+							CONV_1x1(fm_buf2,fm_buf6,   wt_buf_big[1],0);
+							CONV_1x1(fm_buf5,fm_buf6,   wt_buf_big[2],0);
+							CONV_1x1(fm_buf1,fm_buf7,   wt_buf_big[3],0);
+							CONV_1x1(fm_buf2,fm_buf7,   wt_buf_big[4],0);
+							CONV_1x1(fm_buf5,fm_buf7,   wt_buf_big[5],0);
+							initial_ddr(ddrdebug_3,
+													2,
+													2*((320/16)+2),
+													2*((192/16)+2)
+													);
+							deload_img(fm_buf6, ddrdebug_3,
+														0,
+														0,
+														0,
+														2*((320/16)+2),
+														2*((192/16)+2),
+														2*((320/16)+2)
+														);
+							deload_img(fm_buf7, ddrdebug_3,
+														1,
+														0,
+														0,
+														2*((320/16)+2),
+														2*((192/16)+2),
+														2*((320/16)+2)
+														);
+////////////////////////////////////////////////////////   bilinear the output of 444(in buffer3 and 4) and add to the ddrdebug_3///////////////////////////////////////////////////////
+							//load img1 from buf3 to buf1
+							//load img1 from buf4 to buf2
+							load_oneimageto_ddr(fm_buf3,0,fm_buf1);
+							load_oneimageto_ddr(fm_buf4,0,fm_buf2);
+							//bilinear buf1 to buf7
+							//bilinear bug2 to buf8
+							//store to ddr
+							bilinear_1(
+									fm_buf1,
+										fm_buf7
+									);
+							bilinear_1(
+									fm_buf2,
+										fm_buf8
+									);
+							deload_img(fm_buf7, ddrdebug_3,
+														0,
+														1,
+														1,
+														20,
+														12,
+														2*((320/16)+2)
+														);
+							deload_img(fm_buf8, ddrdebug_3,
+														1,
+														1,
+														1,
+														20,
+														12,
+														2*((320/16)+2)
+														);
+
+							/////////////////////////////////////////////////////////////////////
+							//load img1 from buf3 to buf1
+							//load img1 from buf4 to buf2
+							load_oneimageto_ddr(fm_buf3,1,fm_buf1);
+							load_oneimageto_ddr(fm_buf4,1,fm_buf2);
+							//bilinear buf1 to buf7
+							//bilinear bug2 to buf8
+							//store to ddr
+							bilinear_1(
+									fm_buf1,
+										fm_buf7
+									);
+							bilinear_1(
+									fm_buf2,
+										fm_buf8
+									);
+							deload_img(fm_buf7, ddrdebug_3,
+														0,
+														1+2+20,
+														1,
+														20,
+														12,
+														2*((320/16)+2)
+														);
+							deload_img(fm_buf8, ddrdebug_3,
+														1,
+														1+2+20,
+														1,
+														20,
+														12,
+														2*((320/16)+2)
+														);
+
+							/////////////////////////////////////////////////////////////////////
+							//load img1 from buf3 to buf1
+							//load img1 from buf4 to buf2
+							load_oneimageto_ddr(fm_buf3,2,fm_buf1);
+							load_oneimageto_ddr(fm_buf4,2,fm_buf2);
+							//bilinear buf1 to buf7
+							//bilinear bug2 to buf8
+							//store to ddr
+							bilinear_1(
+									fm_buf1,
+										fm_buf7
+									);
+							bilinear_1(
+									fm_buf2,
+										fm_buf8
+									);
+							deload_img(fm_buf7, ddrdebug_3,
+														0,
+														1,
+														1+2+12,
+														20,
+														12,
+														2*((320/16)+2)
+														);
+							deload_img(fm_buf8, ddrdebug_3,
+														1,
+														1,
+														1+2+12,
+														20,
+														12,
+														2*((320/16)+2)
+														);
+
+							/////////////////////////////////////////////////////////////////////
+							//load img1 from buf3 to buf1
+							//load img1 from buf4 to buf2
+							load_oneimageto_ddr(fm_buf3,3,fm_buf1);
+							load_oneimageto_ddr(fm_buf4,3,fm_buf2);
+							//bilinear buf1 to buf7
+							//bilinear bug2 to buf8
+							//store to ddr
+							bilinear_1(
+									fm_buf1,
+										fm_buf7
+									);
+							bilinear_1(
+									fm_buf2,
+										fm_buf8
+									);
+							deload_img(fm_buf7, ddrdebug_3,
+														0,
+														1+2+20,
+														1+2+12,
+														20,
+														12,
+														2*((320/16)+2)
+														);
+							deload_img(fm_buf8, ddrdebug_3,
+														1,
+														1+2+20,
+														1+2+12,
+														20,
+														12,
+														2*((320/16)+2)
+														);
+///////////////////////////////////////////////////////////          layer 501 515 517 519 520 ///////////////////////////////////////////////////////////////
+							//load ddrdebug_3 to buffer1,2
+							aload_img_2(fm_buf1, ddrdebug_3,
+														0,
+														0,
+														0,
+														2*((320/16)+2),
+														2*((192/16)+2),
+														2*((320/16)+2)
+														);
+							aload_img_2(fm_buf2, ddrdebug_3,
+														1,
+														0,
+														0,
+														2*((320/16)+2),
+														2*((192/16)+2),
+														2*((320/16)+2)
+														);
+							//501:
+
 
 }

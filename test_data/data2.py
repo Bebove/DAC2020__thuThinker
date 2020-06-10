@@ -2,9 +2,9 @@ import numpy as np
 import pdb
 import os
 
-def tran(a):
-    olocation="./w1/"+a+".npy"
-    dlocation="./w1/"+a+".bin"
+def tran():
+    olocation="./modle_param/l2b.npy"
+    dlocation="./modle_param/l2b.bin"
 
     weight=np.load(olocation)
     with open(dlocation , 'wb') as fd :
@@ -19,13 +19,8 @@ def get_file(filepath):
             #file_list.append(f)
     return file_list
 
-'''
-tran("443")
-tran("443bs")
-exit()
-'''
-source_path='C:/Users/f/Desktop/npy68_conv/npy68_conv/462' #the folder of your .npy files, one folder contains 4 images
-save_imgpath='C:/Users/f/Desktop/DAC2020__thuThinker/test_data/data/462.bin' #bin file to be saved
+source_path='C:/Users/f/Desktop/npy68_conv/npy68_conv/443' #the folder of your .npy files, one folder contains 4 images
+save_imgpath='C:/Users/f/Desktop/DAC2020__thuThinker/test_data/data/443.bin' #bin file to be saved
 
 file_list=get_file(source_path)
 
@@ -38,15 +33,15 @@ l=len(img1.shape)
 imgsize=(img1.shape[l-3],img1.shape[l-2],img1.shape[l-1])
 
 img1=np.pad(np.reshape(img1,imgsize),((0,0),(1,1),(1,1)),'constant')
-img2=np.pad(np.reshape(img2,imgsize),((0,0),(1,1),(1,1)),'constant')
-img3=np.pad(np.reshape(img3,imgsize),((0,0),(1,1),(1,1)),'constant')
-img4=np.pad(np.reshape(img4,imgsize),((0,0),(1,1),(1,1)),'constant')
+img2=np.pad(np.reshape(img2,imgsize),((0,0),(1,1),(0,1)),'constant')
+img3=np.pad(np.reshape(img3,imgsize),((0,0),(0,1),(1,1)),'constant')
+img4=np.pad(np.reshape(img4,imgsize),((0,0),(0,1),(0,1)),'constant')
 
 channel=img1.shape[0]
 high=img1.shape[1]
 width=img1.shape[2]
 
-img=np.zeros((channel,high*2,width*2))
+img=np.zeros((channel,high*2-1,width*2-1))
 
 for i in range(channel):
     img_t1=np.c_[img1[i],img2[i]]
@@ -55,6 +50,7 @@ for i in range(channel):
 
 img=img.reshape((-1,))
 
+#print(img[99*(162)*2+46])
 
 '''
 print(img[644*90+120])
