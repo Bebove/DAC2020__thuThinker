@@ -15,7 +15,7 @@
 #include <cmath>
 using namespace std;
 #define imagesize 749616//3*(320+2)*(192+2)*4;
-#define ddrsize   150000//3*(320+2)*(192+2)*4;
+#define ddrsize   65600//3*(320+2)*(192+2)*4;
 
 typedef ap_int<8> int8;
 typedef ap_uint<2> uint2;
@@ -68,7 +68,17 @@ void conv3x3_502(fm_type in_buf[16][50][82],
 		wt_type weight[16][16][3][3]
 		);
 void clearpad_for_502(fm_type in_buf[16][50][82]);
-
+void conv3x3_501(fm_type in_buf[16][50][82],
+		fm_type out_buf[16][50][82],
+		wt_type weight[16][16][3][3]
+		);
+void clearpad_for_501(fm_type in_buf[16][50][82]);
+void clearpad_for_500(fm_type in_buf[16][50][82]);
+void conv3x3_499(fm_type in_buf[16][50][82],
+		fm_type out_buf[16][50][82],
+		wt_type weight[16][16][3][3]
+		);
+void clearpad_for_499(fm_type in_buf[16][50][82]);
 //function for 1x1:
 void CONV_1x1(fm_type bottom[16][50][82],
 			  fm_type top[16][50][82],
@@ -119,6 +129,17 @@ void bilinear_1(
 		fm_type fm_input[16][50][82],
 		fm_type fm_output[16][50][82]
 	);
-void load_oneimageto_ddr (
+void bilinear_2(
+		fm_type fm_input[16][50][82],
+		fm_type fm_output[16][50][82]
+	);
+void bilinear_3(
+		fm_type fm_input[16][50][82],
+		fm_type fm_output[16][50][82]
+	);
+void load_oneimageto_ddr_1 (
+			fm_type fm_buf1[16][50][82],int choose,fm_type fm_buf2[16][50][82]
+		  );
+void load_oneimageto_ddr_2 (
 			fm_type fm_buf1[16][50][82],int choose,fm_type fm_buf2[16][50][82]
 		  );

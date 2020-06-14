@@ -27,23 +27,26 @@ void conv3x3_502(fm_type in_buf[16][50][82],
 #pragma HLS array_partition variable=weight dim=1 complete
 #pragma HLS array_partition variable=weight dim=2 complete
 
-
+	fm_type temp;
     for(int y=0;y<3;y++){
         for (int x=0;x<3;x++){
-            for(int h=0; h<12; h++){
-                for(int w=0; w<20; w++){
+            for(int h=0; h<14; h++){
+                for(int w=0; w<22; w++){
 #pragma HLS PIPELINE
                     for(int cho=0; cho<16; cho++){
+                    	temp=0;
                         for(int chi=0;chi<16;chi++){
-#pragma HLS unroll
-                            out_buf[cho][h+1][w+1]+=weight[cho][chi][y][x]*in_buf[chi][h+y][w+x];
+//#pragma HLS unroll
+                        	temp+=weight[cho][chi][y][x]*in_buf[chi][h+y][w+x];
                         }
+                        out_buf[cho][h+1][w+1]+=temp;
                     }
                 }
             }
         }
     }
 }
+
 void clearpad_for_502(fm_type in_buf[16][50][82])
 {
 	for(int c=0;c<16;c++){
@@ -63,7 +66,120 @@ void clearpad_for_502(fm_type in_buf[16][50][82])
 	}
 
 }
+void conv3x3_501(fm_type in_buf[16][50][82],
+		fm_type out_buf[16][50][82],
+		wt_type weight[16][16][3][3]
+		)
+{
+#pragma HLS array_partition variable=in_buf dim=1 complete
+#pragma HLS array_partition variable=out_buf dim=1 complete
+#pragma HLS array_partition variable=weight dim=1 complete
+#pragma HLS array_partition variable=weight dim=2 complete
 
+	fm_type temp;
+    for(int y=0;y<3;y++){
+        for (int x=0;x<3;x++){
+            for(int h=0; h<26; h++){
+                for(int w=0; w<42; w++){
+#pragma HLS PIPELINE
+                    for(int cho=0; cho<16; cho++){
+                    	temp=0;
+                        for(int chi=0;chi<16;chi++){
+//#pragma HLS unroll
+                        	temp+=weight[cho][chi][y][x]*in_buf[chi][h+y][w+x];
+                        }
+                        out_buf[cho][h+1][w+1]+=temp;
+                    }
+                }
+            }
+        }
+    }
+}
+void conv3x3_499(fm_type in_buf[16][50][82],
+		fm_type out_buf[16][50][82],
+		wt_type weight[16][16][3][3]
+		)
+{
+#pragma HLS array_partition variable=in_buf dim=1 complete
+#pragma HLS array_partition variable=out_buf dim=1 complete
+#pragma HLS array_partition variable=weight dim=1 complete
+#pragma HLS array_partition variable=weight dim=2 complete
+
+	fm_type temp;
+
+    for(int y=0;y<3;y++){
+        for (int x=0;x<3;x++){
+            for(int h=0; h<48; h++){
+                for(int w=0; w<80; w++){
+#pragma HLS PIPELINE
+                    for(int cho=0; cho<16; cho++){
+                    	temp=0;
+                        for(int chi=0;chi<16;chi++){
+//#pragma HLS unroll
+                        	temp+=weight[cho][chi][y][x]*in_buf[chi][h+y][w+x];
+                        }
+                        out_buf[cho][h+1][w+1]+=temp;
+                    }
+                }
+            }
+        }
+    }
+}
+void clearpad_for_501(fm_type in_buf[16][50][82])
+{
+	for(int c=0;c<16;c++){
+
+		for(int i=0;i<27;i++){
+#pragma HLS unroll
+			in_buf[c][i][0]=0;
+			in_buf[c][i][21]=0;
+			in_buf[c][i][22]=0;
+			in_buf[c][i][43]=0;
+		}
+		for(int j=0;j<43;j++){
+#pragma HLS unroll
+			in_buf[c][0][j]=0;
+			in_buf[c][13][j]=0;
+			in_buf[c][14][j]=0;
+			in_buf[c][27][j]=0;
+		}
+	}
+
+}
+void clearpad_for_500(fm_type in_buf[16][50][82])
+{
+	for(int c=0;c<16;c++){
+
+		for(int i=0;i<25;i++){
+#pragma HLS unroll
+			in_buf[c][i][0]=0;
+			in_buf[c][i][41]=0;
+		}
+		for(int j=0;j<41;j++){
+#pragma HLS unroll
+			in_buf[c][0][j]=0;
+			in_buf[c][25][j]=0;
+		}
+	}
+
+}
+void clearpad_for_499(fm_type in_buf[16][50][82])
+{
+	for(int c=0;c<16;c++){
+
+		for(int i=0;i<49;i++){
+#pragma HLS unroll
+			in_buf[c][i][0]=0;
+			in_buf[c][i][81]=0;
+		}
+		for(int j=0;j<81;j++){
+#pragma HLS unroll
+			in_buf[c][0][j]=0;
+			in_buf[c][49][j]=0;
+		}
+	}
+
+}
 void set_bias_conv3x3( fm_type buf[4][8][49][81], bs_type bias[80])
 {
 #pragma HLS array_partition variable=buf dim=1 complete

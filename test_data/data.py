@@ -20,12 +20,22 @@ def get_file(filepath):
     return file_list
 
 '''
-tran("443")
-tran("443bs")
+tran("441")
+tran("441bs")
+tran("503")
+tran("503bs")
+tran("505")
+tran("505bs")
+tran("507")
+tran("507bs")
+tran("508")
+tran("508bs")
+tran("499")
+tran("499bs")
 exit()
 '''
-source_path='C:/Users/f/Desktop/npy68_conv/npy68_conv/461' #the folder of your .npy files, one folder contains 4 images
-save_imgpath='C:/Users/f/Desktop/DAC2020__thuThinker/test_data/data/461.bin' #bin file to be saved
+source_path='C:/Users/f/Desktop/npy68_conv/npy68_conv/508' #the folder of your .npy files, one folder contains 4 images
+save_imgpath='C:/Users/f/Desktop/DAC2020__thuThinker/test_data/data/508.bin' #bin file to be saved
 
 file_list=get_file(source_path)
 
