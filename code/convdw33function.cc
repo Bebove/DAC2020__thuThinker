@@ -31,20 +31,22 @@ void dw_conv_2(fm_type in_buf[16][50][82],
 #pragma HLS array_partition variable=in_buf dim=1 complete
 #pragma HLS array_partition variable=out_buf dim=1 complete
 #pragma HLS array_partition variable=weight dim=1 complete
-    for(int y=0;y<3;y++){
-        for (int x=0;x<3;x++){
+	fm_type temp;
             for(int h=0,hi=0; h<24; h++,hi+=2){
                 for(int w=0,wi=0; w<40; w++,wi+=2){
 #pragma HLS pipeline
                     for(int ch=0; ch<16; ch++){
-#pragma HLS unroll
-                        out_buf[ch][h][w]+=weight[ch][y][x]*relu_single(in_buf[ch][hi+y][wi+x],relu);
+                    	temp=0;
+                        for(int y=0;y<3;y++){
+                            for (int x=0;x<3;x++){
+                            	temp+=weight[ch][y][x]*relu_single(in_buf[ch][hi+y][wi+x],relu);
                     }
-                }
+                } out_buf[ch][h][w]+=temp;
             }
         }
     }
 }
+
 
 
 void dw_conv_1(fm_type (&in_buf)[16][50][82],
@@ -53,17 +55,20 @@ void dw_conv_1(fm_type (&in_buf)[16][50][82],
 #pragma HLS array_partition variable=in_buf dim=1 complete
 #pragma HLS array_partition variable=out_buf dim=1 complete
 #pragma HLS array_partition variable=weight dim=1 complete
-    for(int y=0;y<3;y++){
-        for (int x=0;x<3;x++){
+	fm_type temp;
             for(int h=0; h<48; h++){
                 for(int w=0; w<80; w++){
 #pragma HLS PIPELINE
                     for(int ch=0; ch<16; ch++){
-#pragma HLS unroll
-                        out_buf[ch][h][w]+=weight[ch][y][x]*relu_single(in_buf[ch][h+y][w+x],relu);
+                    	temp=0;
+                        for(int y=0;y<3;y++){
+                            for (int x=0;x<3;x++){
+
+                            	temp+=weight[ch][y][x]*relu_single(in_buf[ch][h+y][w+x],relu);
                     }
                 }
-            }
+                        out_buf[ch][h][w]+=temp;
+                    }
         }
     }
 }

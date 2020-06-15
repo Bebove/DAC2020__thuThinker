@@ -138,7 +138,7 @@ void CONV_1x1(fm_type bottom[16][50][82],
 							weights[coo][13],  relu_single(bottom[13][h][w],relu),
 							weights[coo][14],  relu_single(bottom[14][h][w],relu),
 							weights[coo][15],  relu_single(bottom[15][h][w],relu));
-					if((float)top[coo][h][w]+(float)temp>=32) cout<<(float)top[coo][h][w]+(float)temp<<" overflow\n";
+					//if((float)top[coo][h][w]+(float)temp>=32) cout<<(float)top[coo][h][w]+(float)temp<<" overflow\n";
 					top[coo][h][w] +=temp;
 				}
 			}

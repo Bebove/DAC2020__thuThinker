@@ -16,7 +16,7 @@
 using namespace std;
 #define imagesize 749616//3*(320+2)*(192+2)*4;
 #define ddrsize   65600//3*(320+2)*(192+2)*4;
-
+#define ddrsize_dp 6
 typedef ap_int<8> int8;
 typedef ap_uint<2> uint2;
 typedef ap_uint<5> uint5;
@@ -43,10 +43,10 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 				uint256     w_port_1x1[1000][16],
 				uint256     bias_port[500],
 				uint256		w_port_3x3_2[20][16][3][3],
-				uint256 ddrdebug [ddrsize][30],
-				uint256 ddrdebug_2 [ddrsize][30],
-				uint256 ddrdebug_3 [ddrsize][30],
-				uint256 ddrdebug_4 [ddrsize][30],
+				uint256 ddrdebug [ddrsize][ddrsize_dp],
+				uint256 ddrdebug_2 [ddrsize][ddrsize_dp],
+				uint256 ddrdebug_3 [ddrsize][ddrsize_dp],
+				uint256 ddrdebug_4 [ddrsize][ddrsize_dp],
 				uint16 debug[2]);
 
 
@@ -98,7 +98,7 @@ void aload_img(fm_type img_buf[16][50][82], uint16 image_port[imagesize],
 							int all_image_h,
 							int buffer_w,
 							int buffer_h);
-void aload_img_2(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],   //use 30 uint256 to store  480 channel
+void aload_img_2(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][ddrsize_dp],   //use 30 uint256 to store  480 channel
 							int ddr_channelX16_index,
 							int offsetw,
 							int offseth,
@@ -108,7 +108,7 @@ void aload_img_2(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],  
 							int allw
 							);
 
-void deload_img(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],   //use 30 uint256 to store  480 channel
+void deload_img(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][ddrsize_dp],   //use 30 uint256 to store  480 channel
 							int ddr_channelX16_index,
 							int offsetw,
 							int offseth,
@@ -117,11 +117,16 @@ void deload_img(fm_type img_buf[16][50][82], uint256 image_port[ddrsize][30],   
 							int h,    //48
 							int allw
 							);
-void initial_ddr(uint256 image_port[ddrsize][30],
+void initial_ddr(uint256 image_port[ddrsize][ddrsize_dp],
 							int ddr_channelX16_index,
 							int allw,
 							int allh
 							);
+void initial_ddr6(uint256 image_port[ddrsize][ddrsize_dp],
+		int ddr_channelX16_index,
+		int allw,
+		int allh
+		);
 void clear_pad(fm_type buf[16][50][82],int w, int h);
 void clear_pad2(fm_type buf[16][50][82],int w, int h);
 void clear_pad3(fm_type buf[16][50][82],int w, int h);

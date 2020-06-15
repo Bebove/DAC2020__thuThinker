@@ -51,10 +51,10 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 				uint256     bias_port[500],
 				uint256		w_port_3x3_2[20][16][3][3],
 
-				uint256 ddrdebug [ddrsize][30],
-				uint256 ddrdebug_2 [ddrsize][30],
-				uint256 ddrdebug_3 [ddrsize][30],
-				uint256 ddrdebug_4 [ddrsize][30],
+				uint256 ddrdebug [ddrsize][ddrsize_dp],
+				uint256 ddrdebug_2 [ddrsize][ddrsize_dp],
+				uint256 ddrdebug_3 [ddrsize][ddrsize_dp],
+				uint256 ddrdebug_4 [ddrsize][ddrsize_dp],
 				uint16 debug[2])
 {
  	
@@ -66,10 +66,10 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 	//So we use a ddr of size at least 48*(20*8)*(12*8)
 
 
-#pragma HLS INTERFACE m_axi depth=150000	port=ddrdebug			offset=slave	bundle=INPUT
-#pragma HLS INTERFACE m_axi depth=150000	port=ddrdebug_2			offset=slave	bundle=INPUT
-#pragma HLS INTERFACE m_axi depth=150000	port=ddrdebug_3			offset=slave	bundle=INPUT
-#pragma HLS INTERFACE m_axi depth=150000	port=ddrdebug_4			offset=slave	bundle=INPUT
+#pragma HLS INTERFACE m_axi depth=65600	port=ddrdebug			offset=slave	bundle=INPUT
+#pragma HLS INTERFACE m_axi depth=65600	port=ddrdebug_2			offset=slave	bundle=INPUT
+#pragma HLS INTERFACE m_axi depth=65600	port=ddrdebug_3			offset=slave	bundle=INPUT
+#pragma HLS INTERFACE m_axi depth=65600	port=ddrdebug_4			offset=slave	bundle=INPUT
 #pragma HLS INTERFACE s_axilite register	port=return
 #pragma HLS INTERFACE m_axi depth=2			port=debug				offset=slave	bundle=OUTPUT
 
@@ -3447,9 +3447,9 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 								//502: weight :32*32:3*3  bias 32 no relu , st=1
 								//LOAD BIAS FOR LAYER 502
 				initial_ddr(ddrdebug_4,
-										6,
-										320+2,
-										192+2
+										3,
+										2*((320/32)+2)-1,
+										2*((192/32)+2)-1
 										);
 								int index_502b=369;
 								int index_502w=0;
@@ -3774,10 +3774,10 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 														2*((320/16)+2)
 														);
 							//load for 501 and conv to buffer3,4:
-							initial_ddr(ddrdebug_3,
+							initial_ddr6(ddrdebug_3,
 													6,
-													320+2,
-													192+2
+													2*((320/8)+2),
+													2*((192/8)+2)
 													);
 
 							index_502b=381;

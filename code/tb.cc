@@ -6,14 +6,14 @@
 
 // Those are the ports which should not be changed unless the Thinker IO is changed
 uint16  IMG[imagesize];
-uint256 ddrdebug [ddrsize][30];
-uint256 ddrdebug_2 [ddrsize][30];
+uint256 ddrdebug [ddrsize][ddrsize_dp];
+uint256 ddrdebug_2 [ddrsize][ddrsize_dp];
 uint256 w3[500][3][3];
 uint256 w1[1000][16];
 uint256 bias_port[500];
 uint16  debug[2];
-uint256 ddrdebug_3 [ddrsize][30];
-uint256 ddrdebug_4 [ddrsize][30];
+uint256 ddrdebug_3 [ddrsize][ddrsize_dp];
+uint256 ddrdebug_4 [ddrsize][ddrsize_dp];
 uint256		w_port_3x3_2[20][16][3][3];
 
 //Those are the vars which is not related to Thinker itself and related to debug
@@ -2568,7 +2568,7 @@ void fold_w3_2_toport(uint256 w_port_3x3_2[20][16][3][3])
 
 
 //this is debug function
-void check_ddr(uint256 ddr [ddrsize][30],const char *filepath, int allch, int allh, int allw, int level){
+void check_ddr(uint256 ddr [ddrsize][ddrsize_dp],const char *filepath, int allch, int allh, int allw, int level){
 	int fm_size=allh*allw;
 	int ip1=allch*fm_size;
 	double error=0;
