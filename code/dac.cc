@@ -46,38 +46,37 @@ wt_type     big_w33_buffer[12][16][16][3][3];
  
 
 void Thinker(	uint16 image_in_raw_pad[imagesize],
-				uint256		w_port_3x3[500][3][3],
+				uint256		w_port_3x3[170][3][3],
 				uint256     w_port_1x1[1000][16],
 				uint256     bias_port[500],
-				uint256		w_port_3x3_2[20][16][3][3],
+				uint256		w_port_3x3_2[13*4][16][3][3],
 
 				uint256 ddrdebug [ddrsize][ddrsize_dp],
 				uint256 ddrdebug_2 [ddrsize][ddrsize_dp],
 				uint256 ddrdebug_3 [ddrsize][ddrsize_dp],
-				uint256 ddrdebug_4 [ddrsize][ddrsize_dp],
-				uint16 debug[2])
+				uint256 ddrdebug_4 [ddrsize][ddrsize_dp])
 {
  	
 #pragma HLS INTERFACE m_axi depth=3*(320+2)*(192+2) 	port=image_in_raw_pad			offset=slave	bundle=INPUT
-#pragma HLS INTERFACE m_axi depth=500*3*3 	port=w_port_3x3			offset=slave	bundle=INPUT
+#pragma HLS INTERFACE m_axi depth=170*3*3 	port=w_port_3x3			offset=slave	bundle=INPUT
 #pragma HLS INTERFACE m_axi depth=1000 	port=w_port_1x1			offset=slave	bundle=INPUT
 	//every uint256 store 16 number, so 1 index is a full 16x16x1x1 data
 #pragma HLS INTERFACE m_axi depth=500 	port=bias_port			offset=slave	bundle=INPUT
 	//So we use a ddr of size at least 48*(20*8)*(12*8)
-
+#pragma HLS INTERFACE m_axi depth=13*4*16*9 	port=w_port_3x3_2			offset=slave	bundle=INPUT
 
 #pragma HLS INTERFACE m_axi depth=65600	port=ddrdebug			offset=slave	bundle=INPUT
 #pragma HLS INTERFACE m_axi depth=65600	port=ddrdebug_2			offset=slave	bundle=INPUT
 #pragma HLS INTERFACE m_axi depth=65600	port=ddrdebug_3			offset=slave	bundle=INPUT
 #pragma HLS INTERFACE m_axi depth=65600	port=ddrdebug_4			offset=slave	bundle=INPUT
 #pragma HLS INTERFACE s_axilite register	port=return
-#pragma HLS INTERFACE m_axi depth=2			port=debug				offset=slave	bundle=OUTPUT
+
 
 
 
 #pragma HLS ALLOCATION instances=CONV_1x1			 		limit=1 function
-#pragma HLS ALLOCATION instances=dw_conv_2			 		limit=3 function
-#pragma HLS ALLOCATION instances=dw_conv_1			 		limit=3 function
+#pragma HLS ALLOCATION instances=dw_conv_2			 		limit=1 function
+#pragma HLS ALLOCATION instances=dw_conv_1			 		limit=1 function
 #pragma HLS ALLOCATION instances=deload_img			 		limit=1 function
 #pragma HLS ALLOCATION instances=load_weight_conv1x1			 		limit=1 function
 #pragma HLS ALLOCATION instances=load_bias_from_axi			 		limit=1 function

@@ -8,13 +8,14 @@
 uint16  IMG[imagesize];
 uint256 ddrdebug [ddrsize][ddrsize_dp];
 uint256 ddrdebug_2 [ddrsize][ddrsize_dp];
-uint256 w3[500][3][3];
+uint256 w3[170][3][3];   //170
 uint256 w1[1000][16];
-uint256 bias_port[500];
+uint256 bias_port[500];   //420
+uint256		w_port_3x3_2[13*4][16][3][3];   //13*4
 uint16  debug[2];
 uint256 ddrdebug_3 [ddrsize][ddrsize_dp];
 uint256 ddrdebug_4 [ddrsize][ddrsize_dp];
-uint256		w_port_3x3_2[20][16][3][3];
+
 
 //Those are the vars which is not related to Thinker itself and related to debug
 double temp_img[imagesize];
@@ -1790,7 +1791,7 @@ void fold_BS_toport(uint256 bias_port[500])
 	}
 }
 
-void fold_w3_toport(uint256 w3[500][3][3])
+void fold_w3_toport(uint256 w3[170][3][3])
 {
 	//310 layer : index 0,1,2
 	float temp[6][6][3][3];
@@ -2105,7 +2106,7 @@ void fold_w3_toport(uint256 w3[500][3][3])
 
 
 
-void fold_w3_2_toport(uint256 w_port_3x3_2[20][16][3][3])
+void fold_w3_2_toport(uint256 w_port_3x3_2[13*4][16][3][3])
 {
 	//502 layer : index 0,1,2,3
 	float temp[32][32][3][3];
@@ -2648,7 +2649,28 @@ int main()
 	fold_BS_toport(bias_port);
 	fold_w1_toport(w1);
 	fold_w3_2_toport(w_port_3x3_2);
-    Thinker(	 IMG ,w3,w1,bias_port,w_port_3x3_2,ddrdebug,ddrdebug_2,ddrdebug_3,ddrdebug_4,debug);
+			/////
+			//uint256 w3[500][3][3];
+			//uint256 w1[1000][16];
+			//uint256 bias_port[500];
+			//uint256		w_port_3x3_2[20][16][3][3];
+			std::ofstream ifs_param133("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/w3.bin", std::ios::out | std::ios::binary);
+			ifs_param133.write((char*)(**w3), 170 * 9 * sizeof(uint256));
+			ifs_param133.close();
+
+			std::ofstream ifs_param1331("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/w1.bin", std::ios::out | std::ios::binary);
+			ifs_param1331.write((char*)(*w1), 1000 * 16 * sizeof(uint256));
+			ifs_param1331.close();
+
+			std::ofstream ifs_param13311("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/bs.bin", std::ios::out | std::ios::binary);
+			ifs_param13311.write((char*)(bias_port), 500  * sizeof(uint256));
+			ifs_param13311.close();
+
+			std::ofstream ifs_param133111("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/w_port_3x3_2.bin", std::ios::out | std::ios::binary);
+			ifs_param133111.write((char*)(***w_port_3x3_2), 13*4*16*3*3  * sizeof(uint256));
+			ifs_param133111.close();
+			/////
+    Thinker(	 IMG ,w3,w1,bias_port,w_port_3x3_2,ddrdebug,ddrdebug_2,ddrdebug_3,ddrdebug_4);
     int n=2;
     int h=(192/n+2)*2;
     int w=(320/n+2)*2;

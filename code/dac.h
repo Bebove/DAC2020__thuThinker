@@ -39,15 +39,14 @@ typedef ap_fixed<13, 5, AP_RND, AP_SAT> bs_type;//bias type
 
 
 void Thinker(	uint16 image_in_raw_pad[imagesize],
-			    uint256	w_port_3x3[500][3][3],
+			    uint256	w_port_3x3[170][3][3],
 				uint256     w_port_1x1[1000][16],
 				uint256     bias_port[500],
-				uint256		w_port_3x3_2[20][16][3][3],
+				uint256		w_port_3x3_2[13*4][16][3][3],
 				uint256 ddrdebug [ddrsize][ddrsize_dp],
 				uint256 ddrdebug_2 [ddrsize][ddrsize_dp],
 				uint256 ddrdebug_3 [ddrsize][ddrsize_dp],
-				uint256 ddrdebug_4 [ddrsize][ddrsize_dp],
-				uint16 debug[2]);
+				uint256 ddrdebug_4 [ddrsize][ddrsize_dp]);
 
 
 //function for dw3x3:
