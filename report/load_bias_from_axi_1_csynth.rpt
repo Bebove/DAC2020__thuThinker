@@ -1,0 +1,166 @@
+
+
+================================================================
+== Vivado HLS Report for 'load_bias_from_axi_1'
+================================================================
+* Date:           Tue Jun 16 15:39:51 2020
+
+* Version:        2019.2 (Build 2704478 on Wed Nov 06 22:10:23 MST 2019)
+* Project:        final
+* Solution:       solution1
+* Product family: zynquplus
+* Target device:  xczu3eg-sbva484-1-e
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  | 10.00 ns | 0.790 ns |   1.25 ns  |
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+---------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval | Pipeline|
+    |   min   |   max   |    min   |    max   | min | max |   Type  |
+    +---------+---------+----------+----------+-----+-----+---------+
+    |        0|        0|   0 ns   |   0 ns   |    0|    0|   none  |
+    +---------+---------+----------+----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+-------+--------+-------+-----+
+|       Name      | BRAM_18K| DSP48E|   FF   |  LUT  | URAM|
++-----------------+---------+-------+--------+-------+-----+
+|DSP              |        -|      -|       -|      -|    -|
+|Expression       |        -|      -|       -|      -|    -|
+|FIFO             |        -|      -|       -|      -|    -|
+|Instance         |        -|      -|       -|      -|    -|
+|Memory           |        -|      -|       -|      -|    -|
+|Multiplexer      |        -|      -|       -|      -|    -|
+|Register         |        -|      -|       -|      -|    -|
++-----------------+---------+-------+--------+-------+-----+
+|Total            |        0|      0|       0|      0|    0|
++-----------------+---------+-------+--------+-------+-----+
+|Available        |      432|    360|  141120|  70560|    0|
++-----------------+---------+-------+--------+-------+-----+
+|Utilization (%)  |        0|      0|       0|      0|    0|
++-----------------+---------+-------+--------+-------+-----+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * DSP48E: 
+    N/A
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    N/A
+
+    * Multiplexer: 
+    N/A
+
+    * Register: 
+    N/A
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++------------------------+-----+-----+------------+----------------------+--------------+
+|        RTL Ports       | Dir | Bits|  Protocol  |     Source Object    |    C Type    |
++------------------------+-----+-----+------------+----------------------+--------------+
+|ap_start                |  in |    1| ap_ctrl_hs | load_bias_from_axi.1 | return value |
+|ap_ready                | out |    1| ap_ctrl_hs | load_bias_from_axi.1 | return value |
+|dest_V_offset           |  in |    8|   ap_none  |     dest_V_offset    |    scalar    |
+|src_V                   |  in |  256|   ap_none  |         src_V        |    scalar    |
+|big_bias_V_0_address0   | out |    7|  ap_memory |     big_bias_V_0     |     array    |
+|big_bias_V_0_ce0        | out |    1|  ap_memory |     big_bias_V_0     |     array    |
+|big_bias_V_0_we0        | out |    1|  ap_memory |     big_bias_V_0     |     array    |
+|big_bias_V_0_d0         | out |   13|  ap_memory |     big_bias_V_0     |     array    |
+|big_bias_V_1_address0   | out |    7|  ap_memory |     big_bias_V_1     |     array    |
+|big_bias_V_1_ce0        | out |    1|  ap_memory |     big_bias_V_1     |     array    |
+|big_bias_V_1_we0        | out |    1|  ap_memory |     big_bias_V_1     |     array    |
+|big_bias_V_1_d0         | out |   13|  ap_memory |     big_bias_V_1     |     array    |
+|big_bias_V_2_address0   | out |    7|  ap_memory |     big_bias_V_2     |     array    |
+|big_bias_V_2_ce0        | out |    1|  ap_memory |     big_bias_V_2     |     array    |
+|big_bias_V_2_we0        | out |    1|  ap_memory |     big_bias_V_2     |     array    |
+|big_bias_V_2_d0         | out |   13|  ap_memory |     big_bias_V_2     |     array    |
+|big_bias_V_3_address0   | out |    7|  ap_memory |     big_bias_V_3     |     array    |
+|big_bias_V_3_ce0        | out |    1|  ap_memory |     big_bias_V_3     |     array    |
+|big_bias_V_3_we0        | out |    1|  ap_memory |     big_bias_V_3     |     array    |
+|big_bias_V_3_d0         | out |   13|  ap_memory |     big_bias_V_3     |     array    |
+|big_bias_V_4_address0   | out |    7|  ap_memory |     big_bias_V_4     |     array    |
+|big_bias_V_4_ce0        | out |    1|  ap_memory |     big_bias_V_4     |     array    |
+|big_bias_V_4_we0        | out |    1|  ap_memory |     big_bias_V_4     |     array    |
+|big_bias_V_4_d0         | out |   13|  ap_memory |     big_bias_V_4     |     array    |
+|big_bias_V_5_address0   | out |    7|  ap_memory |     big_bias_V_5     |     array    |
+|big_bias_V_5_ce0        | out |    1|  ap_memory |     big_bias_V_5     |     array    |
+|big_bias_V_5_we0        | out |    1|  ap_memory |     big_bias_V_5     |     array    |
+|big_bias_V_5_d0         | out |   13|  ap_memory |     big_bias_V_5     |     array    |
+|big_bias_V_6_address0   | out |    7|  ap_memory |     big_bias_V_6     |     array    |
+|big_bias_V_6_ce0        | out |    1|  ap_memory |     big_bias_V_6     |     array    |
+|big_bias_V_6_we0        | out |    1|  ap_memory |     big_bias_V_6     |     array    |
+|big_bias_V_6_d0         | out |   13|  ap_memory |     big_bias_V_6     |     array    |
+|big_bias_V_7_address0   | out |    7|  ap_memory |     big_bias_V_7     |     array    |
+|big_bias_V_7_ce0        | out |    1|  ap_memory |     big_bias_V_7     |     array    |
+|big_bias_V_7_we0        | out |    1|  ap_memory |     big_bias_V_7     |     array    |
+|big_bias_V_7_d0         | out |   13|  ap_memory |     big_bias_V_7     |     array    |
+|big_bias_V_8_address0   | out |    7|  ap_memory |     big_bias_V_8     |     array    |
+|big_bias_V_8_ce0        | out |    1|  ap_memory |     big_bias_V_8     |     array    |
+|big_bias_V_8_we0        | out |    1|  ap_memory |     big_bias_V_8     |     array    |
+|big_bias_V_8_d0         | out |   13|  ap_memory |     big_bias_V_8     |     array    |
+|big_bias_V_9_address0   | out |    7|  ap_memory |     big_bias_V_9     |     array    |
+|big_bias_V_9_ce0        | out |    1|  ap_memory |     big_bias_V_9     |     array    |
+|big_bias_V_9_we0        | out |    1|  ap_memory |     big_bias_V_9     |     array    |
+|big_bias_V_9_d0         | out |   13|  ap_memory |     big_bias_V_9     |     array    |
+|big_bias_V_10_address0  | out |    7|  ap_memory |     big_bias_V_10    |     array    |
+|big_bias_V_10_ce0       | out |    1|  ap_memory |     big_bias_V_10    |     array    |
+|big_bias_V_10_we0       | out |    1|  ap_memory |     big_bias_V_10    |     array    |
+|big_bias_V_10_d0        | out |   13|  ap_memory |     big_bias_V_10    |     array    |
+|big_bias_V_11_address0  | out |    7|  ap_memory |     big_bias_V_11    |     array    |
+|big_bias_V_11_ce0       | out |    1|  ap_memory |     big_bias_V_11    |     array    |
+|big_bias_V_11_we0       | out |    1|  ap_memory |     big_bias_V_11    |     array    |
+|big_bias_V_11_d0        | out |   13|  ap_memory |     big_bias_V_11    |     array    |
+|big_bias_V_12_address0  | out |    7|  ap_memory |     big_bias_V_12    |     array    |
+|big_bias_V_12_ce0       | out |    1|  ap_memory |     big_bias_V_12    |     array    |
+|big_bias_V_12_we0       | out |    1|  ap_memory |     big_bias_V_12    |     array    |
+|big_bias_V_12_d0        | out |   13|  ap_memory |     big_bias_V_12    |     array    |
+|big_bias_V_13_address0  | out |    7|  ap_memory |     big_bias_V_13    |     array    |
+|big_bias_V_13_ce0       | out |    1|  ap_memory |     big_bias_V_13    |     array    |
+|big_bias_V_13_we0       | out |    1|  ap_memory |     big_bias_V_13    |     array    |
+|big_bias_V_13_d0        | out |   13|  ap_memory |     big_bias_V_13    |     array    |
+|big_bias_V_14_address0  | out |    7|  ap_memory |     big_bias_V_14    |     array    |
+|big_bias_V_14_ce0       | out |    1|  ap_memory |     big_bias_V_14    |     array    |
+|big_bias_V_14_we0       | out |    1|  ap_memory |     big_bias_V_14    |     array    |
+|big_bias_V_14_d0        | out |   13|  ap_memory |     big_bias_V_14    |     array    |
+|big_bias_V_15_address0  | out |    7|  ap_memory |     big_bias_V_15    |     array    |
+|big_bias_V_15_ce0       | out |    1|  ap_memory |     big_bias_V_15    |     array    |
+|big_bias_V_15_we0       | out |    1|  ap_memory |     big_bias_V_15    |     array    |
+|big_bias_V_15_d0        | out |   13|  ap_memory |     big_bias_V_15    |     array    |
++------------------------+-----+-----+------------+----------------------+--------------+
+

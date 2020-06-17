@@ -1,0 +1,223 @@
+
+
+================================================================
+== Vivado HLS Report for 'set_dwbias_conv3x3_1'
+================================================================
+* Date:           Tue Jun 16 15:34:55 2020
+
+* Version:        2019.2 (Build 2704478 on Wed Nov 06 22:10:23 MST 2019)
+* Project:        final
+* Solution:       solution1
+* Product family: zynquplus
+* Target device:  xczu3eg-sbva484-1-e
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  | 10.00 ns | 5.526 ns |   1.25 ns  |
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+-----------+-----------+------+------+---------+
+    |  Latency (cycles) |   Latency (absolute)  |   Interval  | Pipeline|
+    |   min   |   max   |    min    |    max    |  min |  max |   Type  |
+    +---------+---------+-----------+-----------+------+------+---------+
+    |     4102|     4102| 41.020 us | 41.020 us |  4102|  4102|   none  |
+    +---------+---------+-----------+-----------+------+------+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +----------+---------+---------+----------+-----------+-----------+------+----------+
+        |          |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        | Loop Name|   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +----------+---------+---------+----------+-----------+-----------+------+----------+
+        |- Loop 1  |     4100|     4100|         1|          1|          1|  4100|    yes   |
+        +----------+---------+---------+----------+-----------+-----------+------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+-------+--------+-------+-----+
+|       Name      | BRAM_18K| DSP48E|   FF   |  LUT  | URAM|
++-----------------+---------+-------+--------+-------+-----+
+|DSP              |        -|      1|       -|      -|    -|
+|Expression       |        -|      -|       0|     87|    -|
+|FIFO             |        -|      -|       -|      -|    -|
+|Instance         |        -|      -|       -|      -|    -|
+|Memory           |        -|      -|       -|      -|    -|
+|Multiplexer      |        -|      -|       -|     48|    -|
+|Register         |        -|      -|      29|      -|    -|
++-----------------+---------+-------+--------+-------+-----+
+|Total            |        0|      1|      29|    135|    0|
++-----------------+---------+-------+--------+-------+-----+
+|Available        |      432|    360|  141120|  70560|    0|
++-----------------+---------+-------+--------+-------+-----+
+|Utilization (%)  |        0|   ~0  |   ~0   |   ~0  |    0|
++-----------------+---------+-------+--------+-------+-----+
+
++ Detail: 
+    * Instance: 
+    N/A
+
+    * DSP48E: 
+    +----------------------------+----------------------+--------------+
+    |          Instance          |        Module        |  Expression  |
+    +----------------------------+----------------------+--------------+
+    |Thinker_mac_muladibs_U1207  |Thinker_mac_muladibs  | i0 * i1 + i2 |
+    +----------------------------+----------------------+--------------+
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +--------------------------+----------+-------+---+----+------------+------------+
+    |       Variable Name      | Operation| DSP48E| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +--------------------------+----------+-------+---+----+------------+------------+
+    |add_ln105_fu_449_p2       |     +    |      0|  0|  20|          13|           1|
+    |h_fu_455_p2               |     +    |      0|  0|  15|           6|           1|
+    |w_fu_510_p2               |     +    |      0|  0|  15|           7|           1|
+    |icmp_ln105_fu_443_p2      |   icmp   |      0|  0|  13|          13|          13|
+    |icmp_ln106_fu_461_p2      |   icmp   |      0|  0|  11|           7|           7|
+    |select_ln110_1_fu_475_p3  |  select  |      0|  0|   6|           1|           6|
+    |select_ln110_fu_467_p3    |  select  |      0|  0|   7|           1|           1|
+    +--------------------------+----------+-------+---+----+------------+------------+
+    |Total                     |          |      0|  0|  87|          48|          30|
+    +--------------------------+----------+-------+---+----+------------+------------+
+
+    * Multiplexer: 
+    +------------------------+----+-----------+-----+-----------+
+    |          Name          | LUT| Input Size| Bits| Total Bits|
+    +------------------------+----+-----------+-----+-----------+
+    |ap_NS_fsm               |  21|          4|    1|          4|
+    |h_0_reg_421             |   9|          2|    6|         12|
+    |indvar_flatten_reg_410  |   9|          2|   13|         26|
+    |w_0_reg_432             |   9|          2|    7|         14|
+    +------------------------+----+-----------+-----+-----------+
+    |Total                   |  48|         10|   27|         56|
+    +------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +------------------------+----+----+-----+-----------+
+    |          Name          | FF | LUT| Bits| Const Bits|
+    +------------------------+----+----+-----+-----------+
+    |ap_CS_fsm               |   3|   0|    3|          0|
+    |h_0_reg_421             |   6|   0|    6|          0|
+    |indvar_flatten_reg_410  |  13|   0|   13|          0|
+    |w_0_reg_432             |   7|   0|    7|          0|
+    +------------------------+----+----+-----+-----------+
+    |Total                   |  29|   0|   29|          0|
+    +------------------------+----+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++-------------------+-----+-----+------------+----------------------+--------------+
+|     RTL Ports     | Dir | Bits|  Protocol  |     Source Object    |    C Type    |
++-------------------+-----+-----+------------+----------------------+--------------+
+|ap_clk             |  in |    1| ap_ctrl_hs | set_dwbias_conv3x3.1 | return value |
+|ap_rst             |  in |    1| ap_ctrl_hs | set_dwbias_conv3x3.1 | return value |
+|ap_start           |  in |    1| ap_ctrl_hs | set_dwbias_conv3x3.1 | return value |
+|ap_done            | out |    1| ap_ctrl_hs | set_dwbias_conv3x3.1 | return value |
+|ap_idle            | out |    1| ap_ctrl_hs | set_dwbias_conv3x3.1 | return value |
+|ap_ready           | out |    1| ap_ctrl_hs | set_dwbias_conv3x3.1 | return value |
+|buf_0_V_address0   | out |   13|  ap_memory |        buf_0_V       |     array    |
+|buf_0_V_ce0        | out |    1|  ap_memory |        buf_0_V       |     array    |
+|buf_0_V_we0        | out |    1|  ap_memory |        buf_0_V       |     array    |
+|buf_0_V_d0         | out |   13|  ap_memory |        buf_0_V       |     array    |
+|buf_1_V_address0   | out |   13|  ap_memory |        buf_1_V       |     array    |
+|buf_1_V_ce0        | out |    1|  ap_memory |        buf_1_V       |     array    |
+|buf_1_V_we0        | out |    1|  ap_memory |        buf_1_V       |     array    |
+|buf_1_V_d0         | out |   13|  ap_memory |        buf_1_V       |     array    |
+|buf_2_V_address0   | out |   13|  ap_memory |        buf_2_V       |     array    |
+|buf_2_V_ce0        | out |    1|  ap_memory |        buf_2_V       |     array    |
+|buf_2_V_we0        | out |    1|  ap_memory |        buf_2_V       |     array    |
+|buf_2_V_d0         | out |   13|  ap_memory |        buf_2_V       |     array    |
+|buf_3_V_address0   | out |   13|  ap_memory |        buf_3_V       |     array    |
+|buf_3_V_ce0        | out |    1|  ap_memory |        buf_3_V       |     array    |
+|buf_3_V_we0        | out |    1|  ap_memory |        buf_3_V       |     array    |
+|buf_3_V_d0         | out |   13|  ap_memory |        buf_3_V       |     array    |
+|buf_4_V_address0   | out |   13|  ap_memory |        buf_4_V       |     array    |
+|buf_4_V_ce0        | out |    1|  ap_memory |        buf_4_V       |     array    |
+|buf_4_V_we0        | out |    1|  ap_memory |        buf_4_V       |     array    |
+|buf_4_V_d0         | out |   13|  ap_memory |        buf_4_V       |     array    |
+|buf_5_V_address0   | out |   13|  ap_memory |        buf_5_V       |     array    |
+|buf_5_V_ce0        | out |    1|  ap_memory |        buf_5_V       |     array    |
+|buf_5_V_we0        | out |    1|  ap_memory |        buf_5_V       |     array    |
+|buf_5_V_d0         | out |   13|  ap_memory |        buf_5_V       |     array    |
+|buf_6_V_address0   | out |   13|  ap_memory |        buf_6_V       |     array    |
+|buf_6_V_ce0        | out |    1|  ap_memory |        buf_6_V       |     array    |
+|buf_6_V_we0        | out |    1|  ap_memory |        buf_6_V       |     array    |
+|buf_6_V_d0         | out |   13|  ap_memory |        buf_6_V       |     array    |
+|buf_7_V_address0   | out |   13|  ap_memory |        buf_7_V       |     array    |
+|buf_7_V_ce0        | out |    1|  ap_memory |        buf_7_V       |     array    |
+|buf_7_V_we0        | out |    1|  ap_memory |        buf_7_V       |     array    |
+|buf_7_V_d0         | out |   13|  ap_memory |        buf_7_V       |     array    |
+|buf_8_V_address0   | out |   13|  ap_memory |        buf_8_V       |     array    |
+|buf_8_V_ce0        | out |    1|  ap_memory |        buf_8_V       |     array    |
+|buf_8_V_we0        | out |    1|  ap_memory |        buf_8_V       |     array    |
+|buf_8_V_d0         | out |   13|  ap_memory |        buf_8_V       |     array    |
+|buf_9_V_address0   | out |   13|  ap_memory |        buf_9_V       |     array    |
+|buf_9_V_ce0        | out |    1|  ap_memory |        buf_9_V       |     array    |
+|buf_9_V_we0        | out |    1|  ap_memory |        buf_9_V       |     array    |
+|buf_9_V_d0         | out |   13|  ap_memory |        buf_9_V       |     array    |
+|buf_10_V_address0  | out |   13|  ap_memory |       buf_10_V       |     array    |
+|buf_10_V_ce0       | out |    1|  ap_memory |       buf_10_V       |     array    |
+|buf_10_V_we0       | out |    1|  ap_memory |       buf_10_V       |     array    |
+|buf_10_V_d0        | out |   13|  ap_memory |       buf_10_V       |     array    |
+|buf_11_V_address0  | out |   13|  ap_memory |       buf_11_V       |     array    |
+|buf_11_V_ce0       | out |    1|  ap_memory |       buf_11_V       |     array    |
+|buf_11_V_we0       | out |    1|  ap_memory |       buf_11_V       |     array    |
+|buf_11_V_d0        | out |   13|  ap_memory |       buf_11_V       |     array    |
+|buf_12_V_address0  | out |   13|  ap_memory |       buf_12_V       |     array    |
+|buf_12_V_ce0       | out |    1|  ap_memory |       buf_12_V       |     array    |
+|buf_12_V_we0       | out |    1|  ap_memory |       buf_12_V       |     array    |
+|buf_12_V_d0        | out |   13|  ap_memory |       buf_12_V       |     array    |
+|buf_13_V_address0  | out |   13|  ap_memory |       buf_13_V       |     array    |
+|buf_13_V_ce0       | out |    1|  ap_memory |       buf_13_V       |     array    |
+|buf_13_V_we0       | out |    1|  ap_memory |       buf_13_V       |     array    |
+|buf_13_V_d0        | out |   13|  ap_memory |       buf_13_V       |     array    |
+|buf_14_V_address0  | out |   13|  ap_memory |       buf_14_V       |     array    |
+|buf_14_V_ce0       | out |    1|  ap_memory |       buf_14_V       |     array    |
+|buf_14_V_we0       | out |    1|  ap_memory |       buf_14_V       |     array    |
+|buf_14_V_d0        | out |   13|  ap_memory |       buf_14_V       |     array    |
+|buf_15_V_address0  | out |   13|  ap_memory |       buf_15_V       |     array    |
+|buf_15_V_ce0       | out |    1|  ap_memory |       buf_15_V       |     array    |
+|buf_15_V_we0       | out |    1|  ap_memory |       buf_15_V       |     array    |
+|buf_15_V_d0        | out |   13|  ap_memory |       buf_15_V       |     array    |
+|bias_0_V_read      |  in |   13|   ap_none  |     bias_0_V_read    |    scalar    |
+|bias_1_V_read      |  in |   13|   ap_none  |     bias_1_V_read    |    scalar    |
+|bias_2_V_read      |  in |   13|   ap_none  |     bias_2_V_read    |    scalar    |
+|bias_3_V_read      |  in |   13|   ap_none  |     bias_3_V_read    |    scalar    |
+|bias_4_V_read      |  in |   13|   ap_none  |     bias_4_V_read    |    scalar    |
+|bias_5_V_read      |  in |   13|   ap_none  |     bias_5_V_read    |    scalar    |
+|bias_6_V_read      |  in |   13|   ap_none  |     bias_6_V_read    |    scalar    |
+|bias_7_V_read      |  in |   13|   ap_none  |     bias_7_V_read    |    scalar    |
+|bias_8_V_read      |  in |   13|   ap_none  |     bias_8_V_read    |    scalar    |
+|bias_9_V_read      |  in |   13|   ap_none  |     bias_9_V_read    |    scalar    |
+|bias_10_V_read     |  in |   13|   ap_none  |    bias_10_V_read    |    scalar    |
+|bias_11_V_read     |  in |   13|   ap_none  |    bias_11_V_read    |    scalar    |
+|bias_12_V_read     |  in |   13|   ap_none  |    bias_12_V_read    |    scalar    |
+|bias_13_V_read     |  in |   13|   ap_none  |    bias_13_V_read    |    scalar    |
+|bias_14_V_read     |  in |   13|   ap_none  |    bias_14_V_read    |    scalar    |
+|bias_15_V_read     |  in |   13|   ap_none  |    bias_15_V_read    |    scalar    |
++-------------------+-----+-----+------------+----------------------+--------------+
+

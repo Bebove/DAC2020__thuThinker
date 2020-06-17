@@ -1,0 +1,276 @@
+
+
+================================================================
+== Vivado HLS Report for 'load_oneimageto_ddr_s'
+================================================================
+* Date:           Tue Jun 16 15:58:28 2020
+
+* Version:        2019.2 (Build 2704478 on Wed Nov 06 22:10:23 MST 2019)
+* Project:        final
+* Solution:       solution1
+* Product family: zynquplus
+* Target device:  xczu3eg-sbva484-1-e
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  | 10.00 ns | 5.913 ns |   1.25 ns  |
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+---------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval | Pipeline|
+    |   min   |   max   |    min   |    max   | min | max |   Type  |
+    +---------+---------+----------+----------+-----+-----+---------+
+    |      242|      242| 2.420 us | 2.420 us |  242|  242|   none  |
+    +---------+---------+----------+----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +----------+---------+---------+----------+-----------+-----------+------+----------+
+        |          |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        | Loop Name|   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +----------+---------+---------+----------+-----------+-----------+------+----------+
+        |- Loop 1  |      240|      240|         2|          1|          1|   240|    yes   |
+        +----------+---------+---------+----------+-----------+-----------+------+----------+
+
+
+
+================================================================
+== Utilization Estimates
+================================================================
+* Summary: 
++-----------------+---------+-------+--------+-------+-----+
+|       Name      | BRAM_18K| DSP48E|   FF   |  LUT  | URAM|
++-----------------+---------+-------+--------+-------+-----+
+|DSP              |        -|      2|       -|      -|    -|
+|Expression       |        -|      -|       0|     96|    -|
+|FIFO             |        -|      -|       -|      -|    -|
+|Instance         |        -|      -|       0|     42|    -|
+|Memory           |        -|      -|       -|      -|    -|
+|Multiplexer      |        -|      -|       -|     72|    -|
+|Register         |        -|      -|      96|      -|    -|
++-----------------+---------+-------+--------+-------+-----+
+|Total            |        0|      2|      96|    210|    0|
++-----------------+---------+-------+--------+-------+-----+
+|Available        |      432|    360|  141120|  70560|    0|
++-----------------+---------+-------+--------+-------+-----+
+|Utilization (%)  |        0|   ~0  |   ~0   |   ~0  |    0|
++-----------------+---------+-------+--------+-------+-----+
+
++ Detail: 
+    * Instance: 
+    +----------------------------+----------------------+---------+-------+---+----+-----+
+    |          Instance          |        Module        | BRAM_18K| DSP48E| FF| LUT| URAM|
+    +----------------------------+----------------------+---------+-------+---+----+-----+
+    |Thinker_mux_42_32rcU_U4272  |Thinker_mux_42_32rcU  |        0|      0|  0|  21|    0|
+    |Thinker_mux_42_32rcU_U4273  |Thinker_mux_42_32rcU  |        0|      0|  0|  21|    0|
+    +----------------------------+----------------------+---------+-------+---+----+-----+
+    |Total                       |                      |        0|      0|  0|  42|    0|
+    +----------------------------+----------------------+---------+-------+---+----+-----+
+
+    * DSP48E: 
+    +----------------------------+----------------------+---------------------+
+    |          Instance          |        Module        |      Expression     |
+    +----------------------------+----------------------+---------------------+
+    |Thinker_ama_addmuvdy_U4274  |Thinker_ama_addmuvdy  | i0 + i1 * (i2 + i3) |
+    |Thinker_mac_muladqcK_U4275  |Thinker_mac_muladqcK  |     i0 + i1 * i2    |
+    +----------------------------+----------------------+---------------------+
+
+    * Memory: 
+    N/A
+
+    * FIFO: 
+    N/A
+
+    * Expression: 
+    +-------------------------+----------+-------+---+----+------------+------------+
+    |      Variable Name      | Operation| DSP48E| FF| LUT| Bitwidth P0| Bitwidth P1|
+    +-------------------------+----------+-------+---+----+------------+------------+
+    |add_ln76_fu_625_p2       |     +    |      0|  0|  15|           8|           1|
+    |grp_fu_729_p3            |     +    |      0|  0|  21|          14|          14|
+    |x_fu_631_p2              |     +    |      0|  0|  15|           1|           5|
+    |y_fu_698_p2              |     +    |      0|  0|  12|           1|           4|
+    |icmp_ln76_fu_619_p2      |   icmp   |      0|  0|  11|           8|           6|
+    |icmp_ln77_fu_637_p2      |   icmp   |      0|  0|   9|           4|           4|
+    |select_ln76_1_fu_651_p3  |  select  |      0|  0|   5|           1|           5|
+    |select_ln76_fu_643_p3    |  select  |      0|  0|   4|           1|           1|
+    |ap_enable_pp0            |    xor   |      0|  0|   2|           1|           2|
+    |ap_enable_reg_pp0_iter1  |    xor   |      0|  0|   2|           2|           1|
+    +-------------------------+----------+-------+---+----+------------+------------+
+    |Total                    |          |      0|  0|  96|          41|          43|
+    +-------------------------+----------+-------+---+----+------------+------------+
+
+    * Multiplexer: 
+    +------------------------------+----+-----------+-----+-----------+
+    |             Name             | LUT| Input Size| Bits| Total Bits|
+    +------------------------------+----+-----------+-----+-----------+
+    |ap_NS_fsm                     |  21|          4|    1|          4|
+    |ap_enable_reg_pp0_iter1       |  15|          3|    1|          3|
+    |ap_phi_mux_x_0_phi_fu_569_p4  |   9|          2|    5|         10|
+    |indvar_flatten_reg_554        |   9|          2|    8|         16|
+    |x_0_reg_565                   |   9|          2|    5|         10|
+    |y_0_reg_576                   |   9|          2|    4|          8|
+    +------------------------------+----+-----------+-----+-----------+
+    |Total                         |  72|         15|   24|         51|
+    +------------------------------+----+-----------+-----+-----------+
+
+    * Register: 
+    +-------------------------+----+----+-----+-----------+
+    |           Name          | FF | LUT| Bits| Const Bits|
+    +-------------------------+----+----+-----+-----------+
+    |ap_CS_fsm                |   3|   0|    3|          0|
+    |ap_enable_reg_pp0_iter0  |   1|   0|    1|          0|
+    |ap_enable_reg_pp0_iter1  |   1|   0|    1|          0|
+    |h_reg_754                |  32|   0|   32|          0|
+    |icmp_ln76_reg_759        |   1|   0|    1|          0|
+    |indvar_flatten_reg_554   |   8|   0|    8|          0|
+    |select_ln76_1_reg_773    |   5|   0|    5|          0|
+    |select_ln76_reg_768      |   4|   0|    4|          0|
+    |w_reg_749                |  32|   0|   32|          0|
+    |x_0_reg_565              |   5|   0|    5|          0|
+    |y_0_reg_576              |   4|   0|    4|          0|
+    +-------------------------+----+----+-----+-----------+
+    |Total                    |  96|   0|   96|          0|
+    +-------------------------+----+----+-----+-----------+
+
+
+
+================================================================
+== Interface
+================================================================
+* Summary: 
++-----------------------+-----+-----+------------+----------------------+--------------+
+|       RTL Ports       | Dir | Bits|  Protocol  |     Source Object    |    C Type    |
++-----------------------+-----+-----+------------+----------------------+--------------+
+|ap_clk                 |  in |    1| ap_ctrl_hs | load_oneimageto_ddr_ | return value |
+|ap_rst                 |  in |    1| ap_ctrl_hs | load_oneimageto_ddr_ | return value |
+|ap_start               |  in |    1| ap_ctrl_hs | load_oneimageto_ddr_ | return value |
+|ap_done                | out |    1| ap_ctrl_hs | load_oneimageto_ddr_ | return value |
+|ap_idle                | out |    1| ap_ctrl_hs | load_oneimageto_ddr_ | return value |
+|ap_ready               | out |    1| ap_ctrl_hs | load_oneimageto_ddr_ | return value |
+|fm_buf1_0_V_address0   | out |   13|  ap_memory |      fm_buf1_0_V     |     array    |
+|fm_buf1_0_V_ce0        | out |    1|  ap_memory |      fm_buf1_0_V     |     array    |
+|fm_buf1_0_V_q0         |  in |   13|  ap_memory |      fm_buf1_0_V     |     array    |
+|fm_buf1_1_V_address0   | out |   13|  ap_memory |      fm_buf1_1_V     |     array    |
+|fm_buf1_1_V_ce0        | out |    1|  ap_memory |      fm_buf1_1_V     |     array    |
+|fm_buf1_1_V_q0         |  in |   13|  ap_memory |      fm_buf1_1_V     |     array    |
+|fm_buf1_2_V_address0   | out |   13|  ap_memory |      fm_buf1_2_V     |     array    |
+|fm_buf1_2_V_ce0        | out |    1|  ap_memory |      fm_buf1_2_V     |     array    |
+|fm_buf1_2_V_q0         |  in |   13|  ap_memory |      fm_buf1_2_V     |     array    |
+|fm_buf1_3_V_address0   | out |   13|  ap_memory |      fm_buf1_3_V     |     array    |
+|fm_buf1_3_V_ce0        | out |    1|  ap_memory |      fm_buf1_3_V     |     array    |
+|fm_buf1_3_V_q0         |  in |   13|  ap_memory |      fm_buf1_3_V     |     array    |
+|fm_buf1_4_V_address0   | out |   13|  ap_memory |      fm_buf1_4_V     |     array    |
+|fm_buf1_4_V_ce0        | out |    1|  ap_memory |      fm_buf1_4_V     |     array    |
+|fm_buf1_4_V_q0         |  in |   13|  ap_memory |      fm_buf1_4_V     |     array    |
+|fm_buf1_5_V_address0   | out |   13|  ap_memory |      fm_buf1_5_V     |     array    |
+|fm_buf1_5_V_ce0        | out |    1|  ap_memory |      fm_buf1_5_V     |     array    |
+|fm_buf1_5_V_q0         |  in |   13|  ap_memory |      fm_buf1_5_V     |     array    |
+|fm_buf1_6_V_address0   | out |   13|  ap_memory |      fm_buf1_6_V     |     array    |
+|fm_buf1_6_V_ce0        | out |    1|  ap_memory |      fm_buf1_6_V     |     array    |
+|fm_buf1_6_V_q0         |  in |   13|  ap_memory |      fm_buf1_6_V     |     array    |
+|fm_buf1_7_V_address0   | out |   13|  ap_memory |      fm_buf1_7_V     |     array    |
+|fm_buf1_7_V_ce0        | out |    1|  ap_memory |      fm_buf1_7_V     |     array    |
+|fm_buf1_7_V_q0         |  in |   13|  ap_memory |      fm_buf1_7_V     |     array    |
+|fm_buf1_8_V_address0   | out |   13|  ap_memory |      fm_buf1_8_V     |     array    |
+|fm_buf1_8_V_ce0        | out |    1|  ap_memory |      fm_buf1_8_V     |     array    |
+|fm_buf1_8_V_q0         |  in |   13|  ap_memory |      fm_buf1_8_V     |     array    |
+|fm_buf1_9_V_address0   | out |   13|  ap_memory |      fm_buf1_9_V     |     array    |
+|fm_buf1_9_V_ce0        | out |    1|  ap_memory |      fm_buf1_9_V     |     array    |
+|fm_buf1_9_V_q0         |  in |   13|  ap_memory |      fm_buf1_9_V     |     array    |
+|fm_buf1_10_V_address0  | out |   13|  ap_memory |     fm_buf1_10_V     |     array    |
+|fm_buf1_10_V_ce0       | out |    1|  ap_memory |     fm_buf1_10_V     |     array    |
+|fm_buf1_10_V_q0        |  in |   13|  ap_memory |     fm_buf1_10_V     |     array    |
+|fm_buf1_11_V_address0  | out |   13|  ap_memory |     fm_buf1_11_V     |     array    |
+|fm_buf1_11_V_ce0       | out |    1|  ap_memory |     fm_buf1_11_V     |     array    |
+|fm_buf1_11_V_q0        |  in |   13|  ap_memory |     fm_buf1_11_V     |     array    |
+|fm_buf1_12_V_address0  | out |   13|  ap_memory |     fm_buf1_12_V     |     array    |
+|fm_buf1_12_V_ce0       | out |    1|  ap_memory |     fm_buf1_12_V     |     array    |
+|fm_buf1_12_V_q0        |  in |   13|  ap_memory |     fm_buf1_12_V     |     array    |
+|fm_buf1_13_V_address0  | out |   13|  ap_memory |     fm_buf1_13_V     |     array    |
+|fm_buf1_13_V_ce0       | out |    1|  ap_memory |     fm_buf1_13_V     |     array    |
+|fm_buf1_13_V_q0        |  in |   13|  ap_memory |     fm_buf1_13_V     |     array    |
+|fm_buf1_14_V_address0  | out |   13|  ap_memory |     fm_buf1_14_V     |     array    |
+|fm_buf1_14_V_ce0       | out |    1|  ap_memory |     fm_buf1_14_V     |     array    |
+|fm_buf1_14_V_q0        |  in |   13|  ap_memory |     fm_buf1_14_V     |     array    |
+|fm_buf1_15_V_address0  | out |   13|  ap_memory |     fm_buf1_15_V     |     array    |
+|fm_buf1_15_V_ce0       | out |    1|  ap_memory |     fm_buf1_15_V     |     array    |
+|fm_buf1_15_V_q0        |  in |   13|  ap_memory |     fm_buf1_15_V     |     array    |
+|choose                 |  in |    4|   ap_none  |        choose        |    scalar    |
+|fm_buf2_0_V_address0   | out |   13|  ap_memory |      fm_buf2_0_V     |     array    |
+|fm_buf2_0_V_ce0        | out |    1|  ap_memory |      fm_buf2_0_V     |     array    |
+|fm_buf2_0_V_we0        | out |    1|  ap_memory |      fm_buf2_0_V     |     array    |
+|fm_buf2_0_V_d0         | out |   13|  ap_memory |      fm_buf2_0_V     |     array    |
+|fm_buf2_1_V_address0   | out |   13|  ap_memory |      fm_buf2_1_V     |     array    |
+|fm_buf2_1_V_ce0        | out |    1|  ap_memory |      fm_buf2_1_V     |     array    |
+|fm_buf2_1_V_we0        | out |    1|  ap_memory |      fm_buf2_1_V     |     array    |
+|fm_buf2_1_V_d0         | out |   13|  ap_memory |      fm_buf2_1_V     |     array    |
+|fm_buf2_2_V_address0   | out |   13|  ap_memory |      fm_buf2_2_V     |     array    |
+|fm_buf2_2_V_ce0        | out |    1|  ap_memory |      fm_buf2_2_V     |     array    |
+|fm_buf2_2_V_we0        | out |    1|  ap_memory |      fm_buf2_2_V     |     array    |
+|fm_buf2_2_V_d0         | out |   13|  ap_memory |      fm_buf2_2_V     |     array    |
+|fm_buf2_3_V_address0   | out |   13|  ap_memory |      fm_buf2_3_V     |     array    |
+|fm_buf2_3_V_ce0        | out |    1|  ap_memory |      fm_buf2_3_V     |     array    |
+|fm_buf2_3_V_we0        | out |    1|  ap_memory |      fm_buf2_3_V     |     array    |
+|fm_buf2_3_V_d0         | out |   13|  ap_memory |      fm_buf2_3_V     |     array    |
+|fm_buf2_4_V_address0   | out |   13|  ap_memory |      fm_buf2_4_V     |     array    |
+|fm_buf2_4_V_ce0        | out |    1|  ap_memory |      fm_buf2_4_V     |     array    |
+|fm_buf2_4_V_we0        | out |    1|  ap_memory |      fm_buf2_4_V     |     array    |
+|fm_buf2_4_V_d0         | out |   13|  ap_memory |      fm_buf2_4_V     |     array    |
+|fm_buf2_5_V_address0   | out |   13|  ap_memory |      fm_buf2_5_V     |     array    |
+|fm_buf2_5_V_ce0        | out |    1|  ap_memory |      fm_buf2_5_V     |     array    |
+|fm_buf2_5_V_we0        | out |    1|  ap_memory |      fm_buf2_5_V     |     array    |
+|fm_buf2_5_V_d0         | out |   13|  ap_memory |      fm_buf2_5_V     |     array    |
+|fm_buf2_6_V_address0   | out |   13|  ap_memory |      fm_buf2_6_V     |     array    |
+|fm_buf2_6_V_ce0        | out |    1|  ap_memory |      fm_buf2_6_V     |     array    |
+|fm_buf2_6_V_we0        | out |    1|  ap_memory |      fm_buf2_6_V     |     array    |
+|fm_buf2_6_V_d0         | out |   13|  ap_memory |      fm_buf2_6_V     |     array    |
+|fm_buf2_7_V_address0   | out |   13|  ap_memory |      fm_buf2_7_V     |     array    |
+|fm_buf2_7_V_ce0        | out |    1|  ap_memory |      fm_buf2_7_V     |     array    |
+|fm_buf2_7_V_we0        | out |    1|  ap_memory |      fm_buf2_7_V     |     array    |
+|fm_buf2_7_V_d0         | out |   13|  ap_memory |      fm_buf2_7_V     |     array    |
+|fm_buf2_8_V_address0   | out |   13|  ap_memory |      fm_buf2_8_V     |     array    |
+|fm_buf2_8_V_ce0        | out |    1|  ap_memory |      fm_buf2_8_V     |     array    |
+|fm_buf2_8_V_we0        | out |    1|  ap_memory |      fm_buf2_8_V     |     array    |
+|fm_buf2_8_V_d0         | out |   13|  ap_memory |      fm_buf2_8_V     |     array    |
+|fm_buf2_9_V_address0   | out |   13|  ap_memory |      fm_buf2_9_V     |     array    |
+|fm_buf2_9_V_ce0        | out |    1|  ap_memory |      fm_buf2_9_V     |     array    |
+|fm_buf2_9_V_we0        | out |    1|  ap_memory |      fm_buf2_9_V     |     array    |
+|fm_buf2_9_V_d0         | out |   13|  ap_memory |      fm_buf2_9_V     |     array    |
+|fm_buf2_10_V_address0  | out |   13|  ap_memory |     fm_buf2_10_V     |     array    |
+|fm_buf2_10_V_ce0       | out |    1|  ap_memory |     fm_buf2_10_V     |     array    |
+|fm_buf2_10_V_we0       | out |    1|  ap_memory |     fm_buf2_10_V     |     array    |
+|fm_buf2_10_V_d0        | out |   13|  ap_memory |     fm_buf2_10_V     |     array    |
+|fm_buf2_11_V_address0  | out |   13|  ap_memory |     fm_buf2_11_V     |     array    |
+|fm_buf2_11_V_ce0       | out |    1|  ap_memory |     fm_buf2_11_V     |     array    |
+|fm_buf2_11_V_we0       | out |    1|  ap_memory |     fm_buf2_11_V     |     array    |
+|fm_buf2_11_V_d0        | out |   13|  ap_memory |     fm_buf2_11_V     |     array    |
+|fm_buf2_12_V_address0  | out |   13|  ap_memory |     fm_buf2_12_V     |     array    |
+|fm_buf2_12_V_ce0       | out |    1|  ap_memory |     fm_buf2_12_V     |     array    |
+|fm_buf2_12_V_we0       | out |    1|  ap_memory |     fm_buf2_12_V     |     array    |
+|fm_buf2_12_V_d0        | out |   13|  ap_memory |     fm_buf2_12_V     |     array    |
+|fm_buf2_13_V_address0  | out |   13|  ap_memory |     fm_buf2_13_V     |     array    |
+|fm_buf2_13_V_ce0       | out |    1|  ap_memory |     fm_buf2_13_V     |     array    |
+|fm_buf2_13_V_we0       | out |    1|  ap_memory |     fm_buf2_13_V     |     array    |
+|fm_buf2_13_V_d0        | out |   13|  ap_memory |     fm_buf2_13_V     |     array    |
+|fm_buf2_14_V_address0  | out |   13|  ap_memory |     fm_buf2_14_V     |     array    |
+|fm_buf2_14_V_ce0       | out |    1|  ap_memory |     fm_buf2_14_V     |     array    |
+|fm_buf2_14_V_we0       | out |    1|  ap_memory |     fm_buf2_14_V     |     array    |
+|fm_buf2_14_V_d0        | out |   13|  ap_memory |     fm_buf2_14_V     |     array    |
+|fm_buf2_15_V_address0  | out |   13|  ap_memory |     fm_buf2_15_V     |     array    |
+|fm_buf2_15_V_ce0       | out |    1|  ap_memory |     fm_buf2_15_V     |     array    |
+|fm_buf2_15_V_we0       | out |    1|  ap_memory |     fm_buf2_15_V     |     array    |
+|fm_buf2_15_V_d0        | out |   13|  ap_memory |     fm_buf2_15_V     |     array    |
++-----------------------+-----+-----+------------+----------------------+--------------+
+
