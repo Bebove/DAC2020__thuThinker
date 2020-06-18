@@ -19,8 +19,8 @@ def get_file(filepath):
             #file_list.append(f)
     return file_list
 
-source_path='C:/Users/f/Desktop/npy68_conv/npy68_conv/443' #the folder of your .npy files, one folder contains 4 images
-save_imgpath='C:/Users/f/Desktop/DAC2020__thuThinker/test_data/data/443.bin' #bin file to be saved
+source_path='C:/Users/f/Desktop/npy68_conv/npy68_conv/525' #the folder of your .npy files, one folder contains 4 images
+save_imgpath='C:/Users/f/Desktop/DAC2020__thuThinker/test_data/data/525.bin' #bin file to be saved
 
 file_list=get_file(source_path)
 

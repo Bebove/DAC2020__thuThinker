@@ -2569,7 +2569,7 @@ void fold_w3_2_toport(uint256 w_port_3x3_2[13*4][16][3][3])
 
 
 //this is debug function
-void check_ddr(uint256 ddr [ddrsize][ddrsize_dp],const char *filepath, int allch, int allh, int allw, int level){
+void check_ddr(uint256 ddr [ddrsize][ddrsize_dp],const char *filepath, int allch, int allh, int allw, int level,int m){
 	int fm_size=allh*allw;
 	int ip1=allch*fm_size;
 	double error=0;
@@ -2602,7 +2602,7 @@ void check_ddr(uint256 ddr [ddrsize][ddrsize_dp],const char *filepath, int allch
 			int p=ch%16;
 			int c=ch/16;
 			//fm_type temp_data=(fm_type)ddrimg[ch*fm_size+h*allw+w];
-			temp_data.range(fm_lenth,0)=ddr[i][c].range(16*p+fm_lenth,16*p);
+			temp_data.range(fm_lenth,0)=ddr[i][c+m].range(16*p+fm_lenth,16*p);
 			//temp_data=temp_data/2;
 			RMSD+=(ddrimg[ch*fm_size+h*allw+w]-((double)temp_data)) * (ddrimg[ch*fm_size+h*allw+w]-((double)temp_data));
 			allbin+=ddrimg[ch*fm_size+h*allw+w] * ddrimg[ch*fm_size+h*allw+w];
@@ -2633,10 +2633,6 @@ void check_ddr(uint256 ddr [ddrsize][ddrsize_dp],const char *filepath, int allch
 }
 
 
-
-
-
-
 int main()
 {
 
@@ -2654,6 +2650,7 @@ int main()
 			//uint256 w1[1000][16];
 			//uint256 bias_port[500];
 			//uint256		w_port_3x3_2[20][16][3][3];
+	/*
 			std::ofstream ifs_param133("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/w3.bin", std::ios::out | std::ios::binary);
 			ifs_param133.write((char*)(**w3), 170 * 9 * sizeof(uint256));
 			ifs_param133.close();
@@ -2668,33 +2665,29 @@ int main()
 
 			std::ofstream ifs_param133111("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/w_port_3x3_2.bin", std::ios::out | std::ios::binary);
 			ifs_param133111.write((char*)(***w_port_3x3_2), 13*4*16*3*3  * sizeof(uint256));
-			ifs_param133111.close();
+			ifs_param133111.close();*/
 			/////
     Thinker(	 IMG ,w3,w1,bias_port,w_port_3x3_2,ddrdebug,ddrdebug_2,ddrdebug_3,ddrdebug_4);
     int n=2;
     int h=(192/n+2)*2;
     int w=(320/n+2)*2;
-    //check_ddr(ddrdebug,    conv2_no_relu,6, (192/n+2)*2,(320/n+2)*2,2);
-    //check_ddr(ddrdebug_2,  conv5,8, (192/n+2)*2,(320/n+2)*2,5);
 
-    //check_ddr(ddrdebug, conv6_no_relu,48, (192/n+2)*2,(320/n+2)*2,6);
     n=32;
-    //check_ddr(ddrdebug, conv7_no_relu,48, (192/n+2)*2,(320/n+2)*2,7);
-    //check_ddr(ddrdebug, conv8,16, (192/n+2)*2,(320/n+2)*2,8);
-    //check_ddr(ddrdebug, add336,16, (192/n+2)*2,(320/n+2)*2,336);
-    //check_ddr(ddrdebug_3, conv9,96, (192/n+2)*2,(320/n+2)*2,9);
-    //check_ddr(ddrdebug_3, conv10,96, (192/n+2)*2,(320/n+2)*2,10);
-    //check_ddr(ddrdebug_3, conv11,16, (192/n+2)*2,(320/n+2)*2,11);
-    //check_ddr(ddrdebug_2, conv14,16, (192/n+2)*2,(320/n+2)*2,343);
-    //check_ddr(ddrdebug_3, conv15,96, (192/n+2)*2,(320/n+2)*2,15);
-    //check_ddr(ddrdebug_4, conv29,2*16, (192/n+2)*2,(320/n+2)*2,17);  //351
-    //check_ddr(ddrdebug_4, conv404,48, (192/n+2)*2,(320/n+2)*2,404);
-    //check_ddr(ddrdebug_3, add414,48, (192/n+2)*2,(320/n+2)*2,414);
-	//check_ddr(ddrdebug_3, add423,48, (192/n+2)*2,(320/n+2)*2,423);
-	//check_ddr(ddrdebug_4, conv430,80, (192/n+2)*2-1,(320/n+2)*2-1,430);
-	check_ddr(ddrdebug_4, cv526,24, 2*((320/32)+2)-1,2*((192/32)+2)-1,526);
-	check_ddr(ddrdebug_3, cv520,24, 2*((320/16)+2),2*((192/16)+2),520);
-	//check_ddr(ddrdebug_2, cv514,24, 2*((320/8)+2),2*((192/8)+2),461);
-	check_ddr(ddrdebug, cv508,24, 2*((320/4)+2),2*((192/4)+2),508);
+
+
+	check_ddr(ddrdebug_4, 		cv526,	24, 	2*((320/32)+2)-1,2*((192/32)+2)-1,	526,0);
+	check_ddr(ddrdebug_4, 		cv525,	 6, 	2*((320/32)+2)-1,2*((192/32)+2)-1,	525,2);
+
+
+	check_ddr(ddrdebug_3, 		cv520,  24, 	2*((320/16)+2),	 2*((192/16)+2),	520,0);
+	check_ddr(ddrdebug_3,	 	cv519,   6, 	2*((320/16)+2),	 2*((192/16)+2),	519,2);
+
+
+	check_ddr(ddrdebug_2, 		cv514,  24, 	2*((320/8)+2),	 2*((192/8)+2),		514,0);
+	check_ddr(ddrdebug_2,	 	cv513,   6, 	2*((320/8)+2),	 2*((192/8)+2),		513,2);
+
+
+	check_ddr(ddrdebug_2, 		cv508,	24, 	2*((320/4)+2),	 2*((192/4)+2),		508,3);
+	check_ddr(ddrdebug_2, 		cv507,	 6, 	2*((320/4)+2),	 2*((192/4)+2),		507,5);
     return 0;
 }
