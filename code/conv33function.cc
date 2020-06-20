@@ -129,14 +129,14 @@ void clearpad_for_501(fm_type in_buf[16][50][82])
 {
 	for(int c=0;c<16;c++){
 
-		for(int i=0;i<27;i++){
+		for(int i=0;i<28;i++){
 #pragma HLS unroll
 			in_buf[c][i][0]=0;
 			in_buf[c][i][21]=0;
 			in_buf[c][i][22]=0;
 			in_buf[c][i][43]=0;
 		}
-		for(int j=0;j<43;j++){
+		for(int j=0;j<44;j++){
 #pragma HLS unroll
 			in_buf[c][0][j]=0;
 			in_buf[c][13][j]=0;
@@ -150,12 +150,12 @@ void clearpad_for_500(fm_type in_buf[16][50][82])
 {
 	for(int c=0;c<16;c++){
 
-		for(int i=0;i<25;i++){
+		for(int i=0;i<28;i++){
 #pragma HLS unroll
 			in_buf[c][i][0]=0;
 			in_buf[c][i][41]=0;
 		}
-		for(int j=0;j<41;j++){
+		for(int j=0;j<44;j++){
 #pragma HLS unroll
 			in_buf[c][0][j]=0;
 			in_buf[c][25][j]=0;
@@ -183,7 +183,6 @@ void clearpad_for_499(fm_type in_buf[16][50][82])
 void set_bias_conv3x3( fm_type buf[4][8][49][81], bs_type bias[80])
 {
 #pragma HLS array_partition variable=buf dim=1 complete
-//#pragma HLS array_partition variable=bias dim=1 complete
 	for(int h = 1; h <= 49; h+=1) {
 		for(int w = 1; w <= 81; w++) {
 #pragma HLS pipeline

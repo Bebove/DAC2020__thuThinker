@@ -15,7 +15,7 @@ uint256		w_port_3x3_2[13*4][16][3][3];   //13*4
 uint16  debug[2];
 uint256 ddrdebug_3 [ddrsize][ddrsize_dp];
 uint256 ddrdebug_4 [ddrsize][ddrsize_dp];
-
+uint256 temp1 [ddrsize][ddrsize_dp];
 
 //Those are the vars which is not related to Thinker itself and related to debug
 double temp_img[imagesize];
@@ -2667,7 +2667,7 @@ int main()
 			ifs_param133111.write((char*)(***w_port_3x3_2), 13*4*16*3*3  * sizeof(uint256));
 			ifs_param133111.close();*/
 			/////
-    Thinker(	 IMG ,w3,w1,bias_port,w_port_3x3_2,ddrdebug,ddrdebug_2,ddrdebug_3,ddrdebug_4);
+    Thinker(	 IMG ,w3,w1,bias_port,w_port_3x3_2,ddrdebug,ddrdebug_2,ddrdebug_3,ddrdebug_4,temp1);
     int n=2;
     int h=(192/n+2)*2;
     int w=(320/n+2)*2;
@@ -2678,16 +2678,21 @@ int main()
 	check_ddr(ddrdebug_4, 		cv526,	24, 	2*((320/32)+2)-1,2*((192/32)+2)-1,	526,0);
 	check_ddr(ddrdebug_4, 		cv525,	 6, 	2*((320/32)+2)-1,2*((192/32)+2)-1,	525,2);
 
+	//check_ddr(ddrdebug_3, 		cv501,  32, 	2*((320/16)+2),	 2*((192/16)+2),	520,0);
 
 	check_ddr(ddrdebug_3, 		cv520,  24, 	2*((320/16)+2),	 2*((192/16)+2),	520,0);
 	check_ddr(ddrdebug_3,	 	cv519,   6, 	2*((320/16)+2),	 2*((192/16)+2),	519,2);
 
 
-	check_ddr(ddrdebug_2, 		cv514,  24, 	2*((320/8)+2),	 2*((192/8)+2),		514,0);
+
+	//check_ddr(ddrdebug_2, 		cv500,  32, 	2*((320/8)+2),	 2*((192/8)+2),		500,4);
+	check_ddr(ddrdebug_2,	 	cv514,   24, 	2*((320/8)+2),	 2*((192/8)+2),		514,0);
 	check_ddr(ddrdebug_2,	 	cv513,   6, 	2*((320/8)+2),	 2*((192/8)+2),		513,2);
 
 
-	check_ddr(ddrdebug_2, 		cv508,	24, 	2*((320/4)+2),	 2*((192/4)+2),		508,3);
-	check_ddr(ddrdebug_2, 		cv507,	 6, 	2*((320/4)+2),	 2*((192/4)+2),		507,5);
+
+
+	check_ddr(ddrdebug, 		cv508,	24, 	2*((320/4)+2),	 2*((192/4)+2),		508,0);
+	check_ddr(ddrdebug, 		cv507,	 6, 	2*((320/4)+2),	 2*((192/4)+2),		507,2);
     return 0;
 }

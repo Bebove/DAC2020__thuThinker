@@ -153,7 +153,7 @@ for(int j=0;j<allh;j++)
 for(int i=0;i<allw;i++)
 {
 #pragma HLS pipeline
-for(int c=0;c<3;c++)
+for(int c=0;c<ddr_channelX16_index;c++)
 {
 #pragma HLS unroll
 image_port[j*allw+i][c]=0;

@@ -29,13 +29,13 @@ typedef ap_uint<512> uint512;
 typedef ap_uint<256> uint256;
 typedef ap_fixed<32, 1, AP_RND, AP_SAT> fix_32_1;
 
-#define wt_lenth 12//
-#define fm_lenth 12//
-#define bs_lenth 12//
+#define wt_lenth 13//
+#define fm_lenth 13//
+#define bs_lenth 13//
 
-typedef ap_fixed<13, 5, AP_RND, AP_SAT> wt_type;//weight type
-typedef ap_fixed<13, 5, AP_RND, AP_SAT> fm_type;//feature map data type
-typedef ap_fixed<13, 5, AP_RND, AP_SAT> bs_type;//bias type
+typedef ap_fixed<14, 6, AP_RND, AP_SAT> wt_type;//weight type
+typedef ap_fixed<14, 6, AP_RND, AP_SAT> fm_type;//feature map data type
+typedef ap_fixed<14, 6, AP_RND, AP_SAT> bs_type;//bias type
 
 
 void Thinker(	uint16 image_in_raw_pad[imagesize],
@@ -46,7 +46,8 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 				uint256 ddrdebug [ddrsize][ddrsize_dp],
 				uint256 ddrdebug_2 [ddrsize][ddrsize_dp],
 				uint256 ddrdebug_3 [ddrsize][ddrsize_dp],
-				uint256 ddrdebug_4 [ddrsize][ddrsize_dp]);
+				uint256 ddrdebug_4 [ddrsize][ddrsize_dp],
+				uint256 temp1 [ddrsize][ddrsize_dp]);
 
 
 //function for dw3x3:
