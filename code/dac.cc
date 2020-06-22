@@ -1,6 +1,6 @@
 //layer 2
 //layer3version
-
+//version of only 424 modify
 #include "dac.h"
 #include <stdio.h>
 #include <ap_int.h>
@@ -14,6 +14,11 @@ fm_type fm_buf1[16][50][82];
 fm_type fm_buf2[16][50][82];
 fm_type fm_buf3[16][50][82];
 fm_type fm_buf4[16][50][82];
+fm_type fm_buf5[16][50][82];
+fm_type fm_buf6[16][50][82];
+fm_type fm_buf7[16][50][82];
+fm_type fm_buf8[16][50][82];
+
 
 
 bs_type big_bias[14][16];   //big buffer 0-13

@@ -187,4 +187,242 @@ image_port[j*allw+i][c]=0;
 }
 }
 
+void findmax1(fm_type img_buf[16][50][82],
+			 int  hwc_img1[3],
+			 int  hwc_img2[3],
+			 int  hwc_img3[3],
+			 int  hwc_img4[3])//最小，一下找4张图
+{
+	fm_type max=img_buf[0][1][1];
+	hwc_img1[0]=1;
+	hwc_img1[1]=1;		
+	hwc_img1[2]=0;	
+	for(int j=0;j<10;j++)
+	{
 
+		for(int i=0;i<6;i++)
+		{
+			for(int c=0;c<6;c++)
+			{ 
+				if(max<img_buf[c][i+1][j+1])
+				{
+					max = img_buf[c][i+1][j+1];
+					hwc_img1[0]=j;
+					hwc_img1[1]=i;		
+					hwc_img1[2]=c;
+				}
+			}
+		}
+	}
+
+	max=img_buf[0][1][12];
+	hwc_img2[0]=1;
+	hwc_img2[1]=1;		
+	hwc_img2[2]=0;	
+	for(int j=0;j<10;j++)
+	{
+
+		for(int i=0;i<6;i++)
+		{
+			for(int c=0;c<6;c++)
+			{ 
+				if(max<img_buf[c][i+1][j+12])
+				{
+					max = img_buf[c][i+1][j+12];
+					hwc_img2[0]=j;
+					hwc_img2[1]=i;		
+					hwc_img2[2]=c;
+				}
+			}
+		}
+	}
+
+	max=img_buf[0][8][1];
+	hwc_img3[0]=1;
+	hwc_img3[1]=1;		
+	hwc_img3[2]=0;	
+	for(int j=0;j<10;j++)
+	{
+
+		for(int i=0;i<6;i++)
+		{
+			for(int c=0;c<6;c++)
+			{ 
+				if(max<img_buf[c][i+8][j+1])
+				{
+					max = img_buf[c][i+8][j+1];
+					hwc_img3[0]=j;
+					hwc_img3[1]=i;		
+					hwc_img3[2]=c;
+				}
+			}
+		}
+	}	
+
+	max=img_buf[0][8][12];
+	hwc_img4[0]=1;
+	hwc_img4[1]=1;		
+	hwc_img4[2]=0;	
+	for(int j=0;j<10;j++)
+	{
+
+		for(int i=0;i<6;i++)
+		{
+			for(int c=0;c<6;c++)
+			{ 
+				if(max<img_buf[c][i+8][j+12])
+				{
+					max = img_buf[c][i+8][j+12];
+					hwc_img4[0]=j;
+					hwc_img4[1]=i;		
+					hwc_img4[2]=c;
+				}
+			}
+		}
+	}	
+}
+void findmax2(fm_type img_buf[16][50][82],
+			 int  hwc_img1[3],
+			 int  hwc_img2[3],
+			 int  hwc_img3[3],
+			 int  hwc_img4[3])
+{
+	fm_type max=img_buf[0][1][1];
+	hwc_img1[0]=1;
+	hwc_img1[1]=1;		
+	hwc_img1[2]=0;	
+	for(int j=0;j<20;j++)
+	{
+
+		for(int i=0;i<12;i++)
+		{
+			for(int c=0;c<6;c++)
+			{ 
+				if(max<img_buf[c][i+1][j+1])
+				{
+					max = img_buf[c][i+1][j+1];
+					hwc_img1[0]=j;
+					hwc_img1[1]=i;		
+					hwc_img1[2]=c;
+				}
+			}
+		}
+	}
+
+
+ 	max=img_buf[0][1][23];
+	hwc_img2[0]=1;
+	hwc_img2[1]=1;		
+	hwc_img2[2]=0;	
+	for(int j=0;j<20;j++)
+	{
+
+		for(int i=0;i<12;i++)
+		{
+			for(int c=0;c<6;c++)
+			{ 
+				if(max<img_buf[c][i+1][j+23])
+				{
+					max = img_buf[c][i+1][j+23];
+					hwc_img2[0]=j;
+					hwc_img2[1]=i;		
+					hwc_img2[2]=c;
+				}
+			}
+		}
+	}
+
+ 	max=img_buf[0][15][1];
+	hwc_img3[0]=1;
+	hwc_img3[1]=1;		
+	hwc_img3[2]=0;	
+	for(int j=0;j<20;j++)
+	{
+
+		for(int i=0;i<12;i++)
+		{
+			for(int c=0;c<6;c++)
+			{ 
+				if(max<img_buf[c][i+15][j+1])
+				{
+					max = img_buf[c][i+15][j+1];
+					hwc_img3[0]=j;
+					hwc_img3[1]=i;		
+					hwc_img3[2]=c;
+				}
+			}
+		}
+	}
+
+ 	max=img_buf[0][15][23];
+	hwc_img4[0]=1;
+	hwc_img4[1]=1;		
+	hwc_img4[2]=0;	
+	for(int j=0;j<20;j++)
+	{
+
+		for(int i=0;i<12;i++)
+		{
+			for(int c=0;c<6;c++)
+			{ 
+				if(max<img_buf[c][i+15][j+23])
+				{
+					max = img_buf[c][i+15][j+23];
+					hwc_img4[0]=j;
+					hwc_img4[1]=i;		
+					hwc_img4[2]=c;
+				}
+			}
+		}
+	}	
+}
+void findmax3(fm_type img_buf[16][50][82],
+			  int hwc_img1[3])
+{
+	fm_type max=img_buf[0][1][1];
+	hwc_img1[0]=1;
+	hwc_img1[1]=1;		
+	hwc_img1[2]=0;	
+	for(int j=0;j<40;j++)
+	{
+
+		for(int i=0;i<24;i++)
+		{
+			for(int c=0;c<6;c++)
+			{ 
+				if(max<img_buf[c][i+1][j+1])
+				{
+					max = img_buf[c][i+1][j+1];
+					hwc_img1[0]=j;
+					hwc_img1[1]=i;		
+					hwc_img1[2]=c;
+				}
+			}
+		}
+	}	
+}
+void findmax4(fm_type img_buf[16][50][82],
+			  int hwc_img1[3])
+{
+	fm_type max=img_buf[0][1][1];
+	hwc_img1[0]=1;
+	hwc_img1[1]=1;		
+	hwc_img1[2]=0;	
+	for(int j=0;j<80;j++)
+	{
+
+		for(int i=0;i<48;i++)
+		{
+			for(int c=0;c<6;c++)
+			{ 
+				if(max<img_buf[c][i+1][j+1])
+				{
+					max = img_buf[c][i+1][j+1];
+					hwc_img1[0]=j;
+					hwc_img1[1]=i;		
+					hwc_img1[2]=c;
+				}
+			}
+		}
+	}	
+}
