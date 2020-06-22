@@ -180,21 +180,7 @@ void clearpad_for_499(fm_type in_buf[16][50][82])
 	}
 
 }
-void set_bias_conv3x3( fm_type buf[4][8][49][81], bs_type bias[80])
-{
-#pragma HLS array_partition variable=buf dim=1 complete
-	for(int h = 1; h <= 49; h+=1) {
-		for(int w = 1; w <= 81; w++) {
-#pragma HLS pipeline
-			for(int c = 0; c < 4; c++) {
-				for(int cd = 0; cd < 8; cd++) {
-#pragma HLS unroll
-				buf[c][cd][h  ][w] = bias[c*8+cd];
-				}
-			}
-		}
-	}
-}
+
 
 void load_weight_conv3x3( wt_type dest[16][16][3][3], uint256 src[16][3][3])
 {

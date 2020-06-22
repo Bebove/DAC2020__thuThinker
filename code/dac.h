@@ -62,7 +62,6 @@ void dw_conv_2(fm_type in_buf[16][50][82],
 
 //function for 3x3:
 void load_weight_conv3x3( wt_type dest[16][16][3][3], uint256 src[16][3][3]);
-void set_bias_conv3x3( fm_type buf[4][8][49][81], bs_type bias[80]);
 void conv3x3_502(fm_type in_buf[16][50][82],
 		fm_type out_buf[16][50][82],
 		wt_type weight[16][16][3][3]

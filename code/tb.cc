@@ -1789,6 +1789,15 @@ void fold_BS_toport(uint256 bias_port[500])
 			bias_port[413+co].range(wt_lenth + ci*16, ci*16)=((bs_type)temp27[ci+16]).range(wt_lenth, 0);
 		}
 	}
+
+
+
+	//zero:
+	for(int ci = 0; ci < 16; ci++)
+		{
+			bias_port[420].range(wt_lenth + ci*16, ci*16)=((bs_type)0).range(wt_lenth, 0);
+		}
+
 }
 
 void fold_w3_toport(uint256 w3[170][3][3])
@@ -2673,7 +2682,7 @@ int main()
     int w=(320/n+2)*2;
 
     n=32;
-
+    //check_ddr(ddrdebug_4, 		add440,	80, 	2*((320/32)+2)-1,2*((192/32)+2)-1,	526,0);
 
 	check_ddr(ddrdebug_4, 		cv526,	24, 	2*((320/32)+2)-1,2*((192/32)+2)-1,	526,0);
 	check_ddr(ddrdebug_4, 		cv525,	 6, 	2*((320/32)+2)-1,2*((192/32)+2)-1,	525,2);
@@ -2694,5 +2703,11 @@ int main()
 
 	check_ddr(ddrdebug, 		cv508,	24, 	2*((320/4)+2),	 2*((192/4)+2),		508,0);
 	check_ddr(ddrdebug, 		cv507,	 6, 	2*((320/4)+2),	 2*((192/4)+2),		507,2);
+	/*the NRMSE  of layer 526 is 0.00967133
+ the worst data point is
+channel: 12 h: 22 w: 14
+real_value: 0 compute value: 0.292969
+**********************525
+the NRMSE  of layer 525 is 0.000518878*/
     return 0;
 }

@@ -186,3 +186,5 @@ image_port[j*allw+i][c]=0;
 
 }
 }
+
+
