@@ -2676,7 +2676,8 @@ int main()
 			ifs_param133111.write((char*)(***w_port_3x3_2), 13*4*16*3*3  * sizeof(uint256));
 			ifs_param133111.close();*/
 			/////
-    Thinker(	 IMG ,w3,w1,bias_port,w_port_3x3_2,ddrdebug,ddrdebug_2,ddrdebug_3,ddrdebug_4,temp1);
+	float boxs[4][5];
+    Thinker(	 IMG ,w3,w1,bias_port,w_port_3x3_2,ddrdebug,ddrdebug_2,ddrdebug_3,ddrdebug_4,temp1,boxs);
     int n=2;
     int h=(192/n+2)*2;
     int w=(320/n+2)*2;

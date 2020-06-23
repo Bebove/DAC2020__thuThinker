@@ -207,8 +207,8 @@ void findmax1(fm_type img_buf[16][50][82],
 				if(max<img_buf[c][i+1][j+1])
 				{
 					max = img_buf[c][i+1][j+1];
-					hwc_img1[0]=j;
-					hwc_img1[1]=i;		
+					hwc_img1[0]=j+1;
+					hwc_img1[1]=i+1;		
 					hwc_img1[2]=c;
 				}
 			}
@@ -216,7 +216,7 @@ void findmax1(fm_type img_buf[16][50][82],
 	}
 
 	max=img_buf[0][1][12];
-	hwc_img2[0]=1;
+	hwc_img2[0]=12;
 	hwc_img2[1]=1;		
 	hwc_img2[2]=0;	
 	for(int j=0;j<10;j++)
@@ -229,8 +229,8 @@ void findmax1(fm_type img_buf[16][50][82],
 				if(max<img_buf[c][i+1][j+12])
 				{
 					max = img_buf[c][i+1][j+12];
-					hwc_img2[0]=j;
-					hwc_img2[1]=i;		
+					hwc_img2[0]=j+12;
+					hwc_img2[1]=i+1;		
 					hwc_img2[2]=c;
 				}
 			}
@@ -239,7 +239,7 @@ void findmax1(fm_type img_buf[16][50][82],
 
 	max=img_buf[0][8][1];
 	hwc_img3[0]=1;
-	hwc_img3[1]=1;		
+	hwc_img3[1]=8;		
 	hwc_img3[2]=0;	
 	for(int j=0;j<10;j++)
 	{
@@ -251,8 +251,8 @@ void findmax1(fm_type img_buf[16][50][82],
 				if(max<img_buf[c][i+8][j+1])
 				{
 					max = img_buf[c][i+8][j+1];
-					hwc_img3[0]=j;
-					hwc_img3[1]=i;		
+					hwc_img3[0]=j+1;
+					hwc_img3[1]=i+8;		
 					hwc_img3[2]=c;
 				}
 			}
@@ -260,8 +260,8 @@ void findmax1(fm_type img_buf[16][50][82],
 	}	
 
 	max=img_buf[0][8][12];
-	hwc_img4[0]=1;
-	hwc_img4[1]=1;		
+	hwc_img4[0]=12;
+	hwc_img4[1]=8;		
 	hwc_img4[2]=0;	
 	for(int j=0;j<10;j++)
 	{
@@ -273,14 +273,43 @@ void findmax1(fm_type img_buf[16][50][82],
 				if(max<img_buf[c][i+8][j+12])
 				{
 					max = img_buf[c][i+8][j+12];
-					hwc_img4[0]=j;
-					hwc_img4[1]=i;		
+					hwc_img4[0]=j+12;
+					hwc_img4[1]=i+8;		
 					hwc_img4[2]=c;
 				}
 			}
 		}
 	}	
 }
+
+
+void findbox1(fm_type img_buf[16][50][82],
+			fm_type img_buf2[16][50][82],
+			int imgmax_index[3],
+			int which,
+			float box[5])
+{
+	box[4]=which;
+	int w=imgmax_index[0];
+	int h=imgmax_index[1];
+	int c=4*imgmax_index[2];
+	if(c<16)
+	{
+		box[0]=(float)(img_buf[c][h][w]  );
+		box[1]=(float)(img_buf[c+1][h][w]);
+		box[2]=(float)(img_buf[c+2][h][w]);
+		box[3]=(float)(img_buf[c+3][h][w]);
+	}
+	else
+	{
+		c=c-16;
+		box[0]=(float)(img_buf2[c][h][w]  );
+		box[1]=(float)(img_buf2[c+1][h][w]);
+		box[2]=(float)(img_buf2[c+2][h][w]);
+		box[3]=(float)(img_buf2[c+3][h][w]);		
+	}
+}
+
 void findmax2(fm_type img_buf[16][50][82],
 			 int  hwc_img1[3],
 			 int  hwc_img2[3],
@@ -301,8 +330,8 @@ void findmax2(fm_type img_buf[16][50][82],
 				if(max<img_buf[c][i+1][j+1])
 				{
 					max = img_buf[c][i+1][j+1];
-					hwc_img1[0]=j;
-					hwc_img1[1]=i;		
+					hwc_img1[0]=j+1;
+					hwc_img1[1]=i+1;		
 					hwc_img1[2]=c;
 				}
 			}
@@ -311,7 +340,7 @@ void findmax2(fm_type img_buf[16][50][82],
 
 
  	max=img_buf[0][1][23];
-	hwc_img2[0]=1;
+	hwc_img2[0]=23;
 	hwc_img2[1]=1;		
 	hwc_img2[2]=0;	
 	for(int j=0;j<20;j++)
@@ -324,8 +353,8 @@ void findmax2(fm_type img_buf[16][50][82],
 				if(max<img_buf[c][i+1][j+23])
 				{
 					max = img_buf[c][i+1][j+23];
-					hwc_img2[0]=j;
-					hwc_img2[1]=i;		
+					hwc_img2[0]=j+23;
+					hwc_img2[1]=i+1;		
 					hwc_img2[2]=c;
 				}
 			}
@@ -334,7 +363,7 @@ void findmax2(fm_type img_buf[16][50][82],
 
  	max=img_buf[0][15][1];
 	hwc_img3[0]=1;
-	hwc_img3[1]=1;		
+	hwc_img3[1]=15;		
 	hwc_img3[2]=0;	
 	for(int j=0;j<20;j++)
 	{
@@ -346,8 +375,8 @@ void findmax2(fm_type img_buf[16][50][82],
 				if(max<img_buf[c][i+15][j+1])
 				{
 					max = img_buf[c][i+15][j+1];
-					hwc_img3[0]=j;
-					hwc_img3[1]=i;		
+					hwc_img3[0]=j+1;
+					hwc_img3[1]=i+15;		
 					hwc_img3[2]=c;
 				}
 			}
@@ -355,8 +384,8 @@ void findmax2(fm_type img_buf[16][50][82],
 	}
 
  	max=img_buf[0][15][23];
-	hwc_img4[0]=1;
-	hwc_img4[1]=1;		
+	hwc_img4[0]=23;
+	hwc_img4[1]=15;		
 	hwc_img4[2]=0;	
 	for(int j=0;j<20;j++)
 	{
@@ -368,8 +397,8 @@ void findmax2(fm_type img_buf[16][50][82],
 				if(max<img_buf[c][i+15][j+23])
 				{
 					max = img_buf[c][i+15][j+23];
-					hwc_img4[0]=j;
-					hwc_img4[1]=i;		
+					hwc_img4[0]=j+23;
+					hwc_img4[1]=i+15;		
 					hwc_img4[2]=c;
 				}
 			}
@@ -393,8 +422,8 @@ void findmax3(fm_type img_buf[16][50][82],
 				if(max<img_buf[c][i+1][j+1])
 				{
 					max = img_buf[c][i+1][j+1];
-					hwc_img1[0]=j;
-					hwc_img1[1]=i;		
+					hwc_img1[0]=j+1;
+					hwc_img1[1]=i+1;		
 					hwc_img1[2]=c;
 				}
 			}
@@ -418,11 +447,28 @@ void findmax4(fm_type img_buf[16][50][82],
 				if(max<img_buf[c][i+1][j+1])
 				{
 					max = img_buf[c][i+1][j+1];
-					hwc_img1[0]=j;
-					hwc_img1[1]=i;		
+					hwc_img1[0]=j+1;
+					hwc_img1[1]=i+1;		
 					hwc_img1[2]=c;
 				}
 			}
 		}
 	}	
+}
+
+int findmax(float score[4])
+{
+	int index;
+	float max=score[0];
+	index =0;
+	for(int i=0;i<4;i++)
+	{
+		if(score[i]>max)
+		{
+			max=score[i];
+
+			index = i;
+		}
+	}
+	return index;
 }

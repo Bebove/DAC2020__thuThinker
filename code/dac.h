@@ -47,7 +47,8 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 				uint256 ddrdebug_2 [ddrsize][ddrsize_dp],
 				uint256 ddrdebug_3 [ddrsize][ddrsize_dp],
 				uint256 ddrdebug_4 [ddrsize][ddrsize_dp],
-				uint256 temp1 [ddrsize][ddrsize_dp]);
+				uint256 temp1 [ddrsize][ddrsize_dp],
+				float boxs[4][5]);
 
 
 //function for dw3x3:
@@ -147,3 +148,24 @@ void load_oneimageto_ddr_1 (
 void load_oneimageto_ddr_2 (
 			fm_type fm_buf1[16][50][82],int choose,fm_type fm_buf2[16][50][82]
 		  );
+////////////////////////
+void findmax1(fm_type img_buf[16][50][82],
+			 int  hwc_img1[3],
+			 int  hwc_img2[3],
+			 int  hwc_img3[3],
+			 int  hwc_img4[3]);//�?小，�?下找4张图
+void findbox1(fm_type img_buf[16][50][82],
+			fm_type img_buf2[16][50][82],
+			int imgmax_index[3],
+			int which,
+			float box[5]);			 
+void findmax2(fm_type img_buf[16][50][82],
+			 int  hwc_img1[3],
+			 int  hwc_img2[3],
+			 int  hwc_img3[3],
+			 int  hwc_img4[3]);
+void findmax3(fm_type img_buf[16][50][82],
+			  int hwc_img1[3]);		
+void findmax4(fm_type img_buf[16][50][82],
+			  int hwc_img1[3]);		
+int findmax(float score[4]);  	 			
