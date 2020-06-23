@@ -21,8 +21,8 @@ bs_type big_bias[14][16];   //big buffer 0-13
 wt_type wt_buf_big[18][16][16];//0-17
 wt_type dwt_buf3_big[6][16][3][3];//0-5
 
-wt_type     big_w33_buffer[12][16][16][3][3];
- 
+
+wt_type     big_w33_buffer1[16][16][3][3]; 
 
 void Thinker(	float image_in_raw_pad[imagesize],
 				uint256		w_port_3x3[170][3][3],
@@ -5089,7 +5089,7 @@ void Thinker(	float image_in_raw_pad[imagesize],
 													ifs_param13321.close(); 	
 						std::ifstream ifs_param13331("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/ddrdebug_3.bin", std::ios::in | std::ios::binary);
 													ifs_param13331.read((char*)(*ddrdebug_3), ddrsize * 30 * sizeof(uint256));
-													ifs_param13331.close();			*/																																	
+													ifs_param13331.close();		*/																																		
 //////////////////////////////////////////////////////////////////////////////	layer 502 523 526 523 525 ///////////////////////////////////////////////////////////////////////////////////////
 								//input : 32channel  size 0.5^5 of 2*imgsize  : 2*((320/32)+2)-1 2*((192/32)+2)-1
 				initial_ddr6(ddrdebug_4,
@@ -5120,16 +5120,16 @@ void Thinker(	float image_in_raw_pad[imagesize],
 								int index_11;
 								load_bias_from_axi(big_bias[0], bias_port[0+index_502b]);  //502
 								load_bias_from_axi(big_bias[1], bias_port[1+index_502b]);  //
-								load_weight_conv3x3( big_w33_buffer[0],w_port_3x3_2[0+index_502w]); //502 opchannel16 inchannel16
-								load_weight_conv3x3( big_w33_buffer[1],w_port_3x3_2[1+index_502w]); //502 opchannel16 inchannel32
-								load_weight_conv3x3( big_w33_buffer[2],w_port_3x3_2[2+index_502w]); //502 opchannel32 inchannel16
-								load_weight_conv3x3( big_w33_buffer[3],w_port_3x3_2[3+index_502w]); //502 opchannel32 inchannel32
 								set_dwbias_conv3x3(fm_buf1,   big_bias[0]);
 								set_dwbias_conv3x3(fm_buf2,   big_bias[1]);
-								conv3x3_502(fm_buf3,fm_buf1,big_w33_buffer[0]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-								conv3x3_502(fm_buf4,fm_buf1,big_w33_buffer[1]);
-								conv3x3_502(fm_buf3,fm_buf2,big_w33_buffer[2]);
-								conv3x3_502(fm_buf4,fm_buf2,big_w33_buffer[3]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[0+index_502w]);
+								conv3x3_502(fm_buf3,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[1+index_502w]);
+								conv3x3_502(fm_buf4,fm_buf1,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[2+index_502w]);
+								conv3x3_502(fm_buf3,fm_buf2,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[3+index_502w]);
+								conv3x3_502(fm_buf4,fm_buf2,big_w33_buffer1);
 								clearpad_for_502(fm_buf1);               //clear x=6 y=10
 								clearpad_for_502(fm_buf2);
 								//3,4->1,2
@@ -5156,16 +5156,16 @@ void Thinker(	float image_in_raw_pad[imagesize],
 				//521: branch 2:
 								load_bias_from_axi(big_bias[2], bias_port[2+index_502b]);  //521
 								load_bias_from_axi(big_bias[3], bias_port[3+index_502b]);  //
-								load_weight_conv3x3( big_w33_buffer[4],w_port_3x3_2[4+index_502w]); // opchannel16 inchannel16
-								load_weight_conv3x3( big_w33_buffer[5],w_port_3x3_2[5+index_502w]); // opchannel16 inchannel32
-								load_weight_conv3x3( big_w33_buffer[6],w_port_3x3_2[6+index_502w]); // opchannel32 inchannel16
-								load_weight_conv3x3( big_w33_buffer[7],w_port_3x3_2[7+index_502w]); // opchannel32 inchannel32
 								set_dwbias_conv3x3(fm_buf3,   big_bias[2]);
 								set_dwbias_conv3x3(fm_buf4,   big_bias[3]);
-								conv3x3_502(fm_buf1,fm_buf3,big_w33_buffer[4]);
-								conv3x3_502(fm_buf2,fm_buf3,big_w33_buffer[5]);
-								conv3x3_502(fm_buf1,fm_buf4,big_w33_buffer[6]);
-								conv3x3_502(fm_buf2,fm_buf4,big_w33_buffer[7]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[4+index_502w]);
+								conv3x3_502(fm_buf1,fm_buf3,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[5+index_502w]);
+								conv3x3_502(fm_buf2,fm_buf3,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[6+index_502w]);
+								conv3x3_502(fm_buf1,fm_buf4,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[7+index_502w]);
+								conv3x3_502(fm_buf2,fm_buf4,big_w33_buffer1);
 								clearpad_for_502(fm_buf3);               //clear x=6 y=10
 								clearpad_for_502(fm_buf4);
 								//3,4->1,2
@@ -5226,16 +5226,16 @@ void Thinker(	float image_in_raw_pad[imagesize],
 				//523: branch 1
 								load_bias_from_axi(big_bias[4], bias_port[4+index_502b]);  //523
 								load_bias_from_axi(big_bias[5], bias_port[5+index_502b]);  //
-								load_weight_conv3x3( big_w33_buffer[8],w_port_3x3_2[8+index_502w]); // opchannel16 inchannel16
-								load_weight_conv3x3( big_w33_buffer[9],w_port_3x3_2[9+index_502w]); // opchannel16 inchannel32
-								load_weight_conv3x3( big_w33_buffer[10],w_port_3x3_2[10+index_502w]); // opchannel32 inchannel16
-								load_weight_conv3x3( big_w33_buffer[11],w_port_3x3_2[11+index_502w]); // opchannel32 inchannel32
 								set_dwbias_conv3x3(fm_buf1,   big_bias[4]);
 								set_dwbias_conv3x3(fm_buf2,   big_bias[5]);
-								conv3x3_502(fm_buf3,fm_buf1,big_w33_buffer[8]);
-								conv3x3_502(fm_buf4,fm_buf1,big_w33_buffer[9]);
-								conv3x3_502(fm_buf3,fm_buf2,big_w33_buffer[10]);
-								conv3x3_502(fm_buf4,fm_buf2,big_w33_buffer[11]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[8+index_502w]);
+								conv3x3_502(fm_buf3,fm_buf1,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[9+index_502w]);
+								conv3x3_502(fm_buf4,fm_buf1,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[10+index_502w]);
+								conv3x3_502(fm_buf3,fm_buf2,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[11+index_502w]);
+								conv3x3_502(fm_buf4,fm_buf2,big_w33_buffer1);
 								clearpad_for_502(fm_buf1);               //clear x=6 y=10
 								clearpad_for_502(fm_buf2);
 								//1,2->3,4		
@@ -5541,16 +5541,16 @@ void Thinker(	float image_in_raw_pad[imagesize],
 								index_502w=12;
 								load_bias_from_axi(big_bias[0], bias_port[0+index_502b]);  //501
 								load_bias_from_axi(big_bias[1], bias_port[1+index_502b]);  //
-								load_weight_conv3x3( big_w33_buffer[0],w_port_3x3_2[0+index_502w]); //502 opchannel16 inchannel16
-								load_weight_conv3x3( big_w33_buffer[1],w_port_3x3_2[1+index_502w]); //502 opchannel16 inchannel32
-								load_weight_conv3x3( big_w33_buffer[2],w_port_3x3_2[2+index_502w]); //502 opchannel32 inchannel16
-								load_weight_conv3x3( big_w33_buffer[3],w_port_3x3_2[3+index_502w]); //502 opchannel32 inchannel32
 								set_dwbias_conv3x3(fm_buf3,   big_bias[0]);
 								set_dwbias_conv3x3(fm_buf4,   big_bias[1]);
-								conv3x3_501(fm_buf1,fm_buf3,big_w33_buffer[0]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-								conv3x3_501(fm_buf2,fm_buf3,big_w33_buffer[1]);
-								conv3x3_501(fm_buf1,fm_buf4,big_w33_buffer[2]);
-								conv3x3_501(fm_buf2,fm_buf4,big_w33_buffer[3]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[0+index_502w]);
+								conv3x3_501(fm_buf1,fm_buf3,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[1+index_502w]);
+								conv3x3_501(fm_buf2,fm_buf3,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[2+index_502w]);
+								conv3x3_501(fm_buf1,fm_buf4,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[3+index_502w]);
+								conv3x3_501(fm_buf2,fm_buf4,big_w33_buffer1);
 								clearpad_for_501(fm_buf3);               //clear x=6 y=10
 								clearpad_for_501(fm_buf4);
 								//deload for 501 to 3,2
@@ -5573,16 +5573,16 @@ void Thinker(	float image_in_raw_pad[imagesize],
 							//515: 1,2->3,4
 								load_bias_from_axi(big_bias[2], bias_port[2+index_502b]);  //521
 								load_bias_from_axi(big_bias[3], bias_port[3+index_502b]);  //
-								load_weight_conv3x3( big_w33_buffer[4],w_port_3x3_2[4+index_502w]); // opchannel16 inchannel16
-								load_weight_conv3x3( big_w33_buffer[5],w_port_3x3_2[5+index_502w]); // opchannel16 inchannel32
-								load_weight_conv3x3( big_w33_buffer[6],w_port_3x3_2[6+index_502w]); // opchannel32 inchannel16
-								load_weight_conv3x3( big_w33_buffer[7],w_port_3x3_2[7+index_502w]); // opchannel32 inchannel32
 								set_dwbias_conv3x3(fm_buf1,   big_bias[2]);
 								set_dwbias_conv3x3(fm_buf2,   big_bias[3]);
-								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer[4]);
-								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer[5]);
-								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer[6]);
-								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer[7]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[4+index_502w]);
+								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[5+index_502w]);
+								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[6+index_502w]);
+								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[7+index_502w]);
+								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer1);
 								clearpad_for_501(fm_buf1);               //clear x=6 y=10
 								clearpad_for_501(fm_buf2);
 							//519 3,4->1
@@ -5639,16 +5639,16 @@ void Thinker(	float image_in_raw_pad[imagesize],
 								//3,4->1,2
 								load_bias_from_axi(big_bias[4], bias_port[4+index_502b]);  //523
 								load_bias_from_axi(big_bias[5], bias_port[5+index_502b]);  //
-								load_weight_conv3x3( big_w33_buffer[8],w_port_3x3_2[8+index_502w]); // opchannel16 inchannel16
-								load_weight_conv3x3( big_w33_buffer[9],w_port_3x3_2[9+index_502w]); // opchannel16 inchannel32
-								load_weight_conv3x3( big_w33_buffer[10],w_port_3x3_2[10+index_502w]); // opchannel32 inchannel16
-								load_weight_conv3x3( big_w33_buffer[11],w_port_3x3_2[11+index_502w]); // opchannel32 inchannel32
 								set_dwbias_conv3x3(fm_buf3,   big_bias[4]);
 								set_dwbias_conv3x3(fm_buf4,   big_bias[5]);
-								conv3x3_501(fm_buf1,fm_buf3,big_w33_buffer[8]);
-								conv3x3_501(fm_buf2,fm_buf3,big_w33_buffer[9]);
-								conv3x3_501(fm_buf1,fm_buf4,big_w33_buffer[10]);
-								conv3x3_501(fm_buf2,fm_buf4,big_w33_buffer[11]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[8+index_502w]);
+								conv3x3_501(fm_buf1,fm_buf3,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[9+index_502w]);
+								conv3x3_501(fm_buf2,fm_buf3,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[10+index_502w]);
+								conv3x3_501(fm_buf1,fm_buf4,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[11+index_502w]);
+								conv3x3_501(fm_buf2,fm_buf4,big_w33_buffer1);
 								clearpad_for_501(fm_buf3);               //clear x=6 y=10
 								clearpad_for_501(fm_buf4);
 
@@ -6024,25 +6024,16 @@ void Thinker(	float image_in_raw_pad[imagesize],
 							index_502w=24;
 							load_bias_from_axi(big_bias[0], bias_port[0+index_502b]);  //500
 							load_bias_from_axi(big_bias[1], bias_port[1+index_502b]);  //
-							load_weight_conv3x3( big_w33_buffer[0],w_port_3x3_2[0+index_502w]); 
-							load_weight_conv3x3( big_w33_buffer[1],w_port_3x3_2[1+index_502w]); 
-							load_weight_conv3x3( big_w33_buffer[2],w_port_3x3_2[2+index_502w]); 
-							load_weight_conv3x3( big_w33_buffer[3],w_port_3x3_2[3+index_502w]); 
+
 							load_bias_from_axi(big_bias[2], bias_port[2+index_502b]);  //509
 							load_bias_from_axi(big_bias[3], bias_port[3+index_502b]);  //
-							load_weight_conv3x3( big_w33_buffer[4],w_port_3x3_2[4+index_502w]); 
-							load_weight_conv3x3( big_w33_buffer[5],w_port_3x3_2[5+index_502w]); 
-							load_weight_conv3x3( big_w33_buffer[6],w_port_3x3_2[6+index_502w]); 
-							load_weight_conv3x3( big_w33_buffer[7],w_port_3x3_2[7+index_502w]);	
+
 							load_bias_from_axi(big_bias[4], bias_port[4+index_502b]);  //513
 							load_weight_conv1x1( wt_buf_big[0], w_port_1x1[971]);
 							load_weight_conv1x1( wt_buf_big[1], w_port_1x1[972]);	
 							load_bias_from_axi(big_bias[5], bias_port[397]);  			//511
 							load_bias_from_axi(big_bias[6], bias_port[397+1]);  //
-							load_weight_conv3x3( big_w33_buffer[8],w_port_3x3_2[8+index_502w]); 
-							load_weight_conv3x3( big_w33_buffer[9],w_port_3x3_2[9+index_502w]); 
-							load_weight_conv3x3( big_w33_buffer[10],w_port_3x3_2[10+index_502w]); 
-							load_weight_conv3x3( big_w33_buffer[11],w_port_3x3_2[11+index_502w]);	
+
 							load_bias_from_axi(big_bias[7], bias_port[400]);  			//514
 							load_bias_from_axi(big_bias[8], bias_port[401]);  //
 
@@ -6071,10 +6062,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 																);     //load image 1 to buffer1
 								set_dwbias_conv3x3(fm_buf3,   big_bias[0]);
 								set_dwbias_conv3x3(fm_buf4,   big_bias[1]);
-								conv3x3_501(fm_buf1,fm_buf3,big_w33_buffer[0]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-								conv3x3_501(fm_buf2,fm_buf3,big_w33_buffer[1]);
-								conv3x3_501(fm_buf1,fm_buf4,big_w33_buffer[2]);
-								conv3x3_501(fm_buf2,fm_buf4,big_w33_buffer[3]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[0+index_502w]);  								
+								conv3x3_501(fm_buf1,fm_buf3,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[1+index_502w]); 								
+								conv3x3_501(fm_buf2,fm_buf3,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[2+index_502w]);								
+								conv3x3_501(fm_buf1,fm_buf4,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[3+index_502w]);								
+								conv3x3_501(fm_buf2,fm_buf4,big_w33_buffer1);
 								clearpad_for_500(fm_buf3);               //clear x=6 y=10
 								clearpad_for_500(fm_buf4);
 								deload_img(fm_buf3, ddrdebug_2,
@@ -6113,10 +6108,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 																);     //load image 1 to buffer1
 								set_dwbias_conv3x3(fm_buf3,   big_bias[0]);
 								set_dwbias_conv3x3(fm_buf4,   big_bias[1]);
-								conv3x3_501(fm_buf1,fm_buf3,big_w33_buffer[0]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-								conv3x3_501(fm_buf2,fm_buf3,big_w33_buffer[1]);
-								conv3x3_501(fm_buf1,fm_buf4,big_w33_buffer[2]);
-								conv3x3_501(fm_buf2,fm_buf4,big_w33_buffer[3]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[0+index_502w]);  								
+								conv3x3_501(fm_buf1,fm_buf3,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[1+index_502w]); 								
+								conv3x3_501(fm_buf2,fm_buf3,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[2+index_502w]);								
+								conv3x3_501(fm_buf1,fm_buf4,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[3+index_502w]);								
+								conv3x3_501(fm_buf2,fm_buf4,big_w33_buffer1);
 								clearpad_for_500(fm_buf3);               //clear x=6 y=10
 								clearpad_for_500(fm_buf4);
 								deload_img(fm_buf3, ddrdebug_2,
@@ -6155,10 +6154,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 																);     //load image 1 to buffer1
 								set_dwbias_conv3x3(fm_buf3,   big_bias[0]);
 								set_dwbias_conv3x3(fm_buf4,   big_bias[1]);
-								conv3x3_501(fm_buf1,fm_buf3,big_w33_buffer[0]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-								conv3x3_501(fm_buf2,fm_buf3,big_w33_buffer[1]);
-								conv3x3_501(fm_buf1,fm_buf4,big_w33_buffer[2]);
-								conv3x3_501(fm_buf2,fm_buf4,big_w33_buffer[3]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[0+index_502w]);  								
+								conv3x3_501(fm_buf1,fm_buf3,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[1+index_502w]); 								
+								conv3x3_501(fm_buf2,fm_buf3,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[2+index_502w]);								
+								conv3x3_501(fm_buf1,fm_buf4,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[3+index_502w]);								
+								conv3x3_501(fm_buf2,fm_buf4,big_w33_buffer1);
 								clearpad_for_500(fm_buf3);               //clear x=6 y=10
 								clearpad_for_500(fm_buf4);
 								deload_img(fm_buf3, ddrdebug_2,
@@ -6197,10 +6200,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 																);     //load image 1 to buffer1
 								set_dwbias_conv3x3(fm_buf3,   big_bias[0]);
 								set_dwbias_conv3x3(fm_buf4,   big_bias[1]);
-								conv3x3_501(fm_buf1,fm_buf3,big_w33_buffer[0]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-								conv3x3_501(fm_buf2,fm_buf3,big_w33_buffer[1]);
-								conv3x3_501(fm_buf1,fm_buf4,big_w33_buffer[2]);
-								conv3x3_501(fm_buf2,fm_buf4,big_w33_buffer[3]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[0+index_502w]);  								
+								conv3x3_501(fm_buf1,fm_buf3,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[1+index_502w]); 								
+								conv3x3_501(fm_buf2,fm_buf3,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[2+index_502w]);								
+								conv3x3_501(fm_buf1,fm_buf4,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[3+index_502w]);								
+								conv3x3_501(fm_buf2,fm_buf4,big_w33_buffer1);
 								clearpad_for_500(fm_buf3);               //clear x=6 y=10
 								clearpad_for_500(fm_buf4);
 								deload_img(fm_buf3, ddrdebug_2,
@@ -6244,10 +6251,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 								//layer 509: img 3,4 -> 1,2
 								set_dwbias_conv3x3(fm_buf1,   big_bias[2]);
 								set_dwbias_conv3x3(fm_buf2,   big_bias[3]);
-								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer[4]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer[5]);
-								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer[6]);
-								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer[7]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[4+index_502w]); 									
+								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[5+index_502w]); 								
+								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[6+index_502w]); 								
+								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[7+index_502w]);								
+								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer1);
 								clearpad_for_500(fm_buf1);               //clear x=6 y=10
 								clearpad_for_500(fm_buf2);
 								//layer 513: 1,2->4				
@@ -6290,10 +6301,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 								//layer 509: img 3,4 -> 1,2
 								set_dwbias_conv3x3(fm_buf1,   big_bias[2]);
 								set_dwbias_conv3x3(fm_buf2,   big_bias[3]);
-								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer[4]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer[5]);
-								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer[6]);
-								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer[7]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[4+index_502w]); 									
+								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[5+index_502w]); 								
+								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[6+index_502w]); 								
+								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[7+index_502w]);								
+								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer1);
 								clearpad_for_500(fm_buf1);               //clear x=6 y=10
 								clearpad_for_500(fm_buf2);
 								//layer 513: 1,2->4				
@@ -6335,10 +6350,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 								//layer 509: img 3,4 -> 1,2
 								set_dwbias_conv3x3(fm_buf1,   big_bias[2]);
 								set_dwbias_conv3x3(fm_buf2,   big_bias[3]);
-								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer[4]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer[5]);
-								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer[6]);
-								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer[7]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[4+index_502w]); 									
+								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[5+index_502w]); 								
+								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[6+index_502w]); 								
+								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[7+index_502w]);								
+								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer1);
 								clearpad_for_500(fm_buf1);               //clear x=6 y=10
 								clearpad_for_500(fm_buf2);
 								//layer 513: 1,2->4				
@@ -6380,10 +6399,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 								//layer 509: img 3,4 -> 1,2
 								set_dwbias_conv3x3(fm_buf1,   big_bias[2]);
 								set_dwbias_conv3x3(fm_buf2,   big_bias[3]);
-								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer[4]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer[5]);
-								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer[6]);
-								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer[7]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[4+index_502w]); 									
+								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[5+index_502w]); 								
+								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[6+index_502w]); 								
+								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[7+index_502w]);								
+								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer1);
 								clearpad_for_500(fm_buf1);               //clear x=6 y=10
 								clearpad_for_500(fm_buf2);
 								//layer 513: 1,2->4				
@@ -6429,10 +6452,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 																);     //load image 1 to buffer1								
 								set_dwbias_conv3x3(fm_buf1,   big_bias[5]);
 								set_dwbias_conv3x3(fm_buf2,   big_bias[6]);
-								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer[8]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer[9]);
-								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer[10]);
-								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer[11]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[8+index_502w]); 					
+								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[9+index_502w]); 								
+								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[10+index_502w]);								
+								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[11+index_502w]);								
+								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer1);
 								clearpad_for_500(fm_buf1);               //clear x=6 y=10
 								clearpad_for_500(fm_buf2);						
 								// layer 514 1,2->3,4
@@ -6488,10 +6515,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 																);     //load image 1 to buffer1								
 								set_dwbias_conv3x3(fm_buf1,   big_bias[5]);
 								set_dwbias_conv3x3(fm_buf2,   big_bias[6]);
-								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer[8]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer[9]);
-								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer[10]);
-								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer[11]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[8+index_502w]); 					
+								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[9+index_502w]); 								
+								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[10+index_502w]);								
+								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[11+index_502w]);								
+								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer1);
 								clearpad_for_500(fm_buf1);               //clear x=6 y=10
 								clearpad_for_500(fm_buf2);						
 								// layer 514 1,2->3,4
@@ -6546,10 +6577,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 																);     //load image 1 to buffer1								
 								set_dwbias_conv3x3(fm_buf1,   big_bias[5]);
 								set_dwbias_conv3x3(fm_buf2,   big_bias[6]);
-								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer[8]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer[9]);
-								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer[10]);
-								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer[11]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[8+index_502w]); 					
+								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[9+index_502w]); 								
+								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[10+index_502w]);								
+								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[11+index_502w]);								
+								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer1);
 								clearpad_for_500(fm_buf1);               //clear x=6 y=10
 								clearpad_for_500(fm_buf2);						
 								// layer 514 1,2->3,4
@@ -6604,10 +6639,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 																);     //load image 1 to buffer1								
 								set_dwbias_conv3x3(fm_buf1,   big_bias[5]);
 								set_dwbias_conv3x3(fm_buf2,   big_bias[6]);
-								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer[8]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer[9]);
-								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer[10]);
-								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer[11]);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[8+index_502w]); 					
+								conv3x3_501(fm_buf3,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[9+index_502w]); 								
+								conv3x3_501(fm_buf4,fm_buf1,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[10+index_502w]);								
+								conv3x3_501(fm_buf3,fm_buf2,big_w33_buffer1);
+								load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[11+index_502w]);								
+								conv3x3_501(fm_buf4,fm_buf2,big_w33_buffer1);
 								clearpad_for_500(fm_buf1);               //clear x=6 y=10
 								clearpad_for_500(fm_buf2);						
 								// layer 514 1,2->3,4
@@ -6979,17 +7018,11 @@ void Thinker(	float image_in_raw_pad[imagesize],
 									index_502w=36;
 									load_bias_from_axi(big_bias[0], bias_port[0+index_502b]);  
 									load_bias_from_axi(big_bias[1], bias_port[1+index_502b]);  
-									load_weight_conv3x3( big_w33_buffer[0],w_port_3x3_2[0+index_502w]); 
-									load_weight_conv3x3( big_w33_buffer[1],w_port_3x3_2[1+index_502w]); 
-									load_weight_conv3x3( big_w33_buffer[2],w_port_3x3_2[2+index_502w]); 
-									load_weight_conv3x3( big_w33_buffer[3],w_port_3x3_2[3+index_502w]); 	
+	
 									//503
 									load_bias_from_axi(big_bias[2], bias_port[2+index_502b]);  //500
 									load_bias_from_axi(big_bias[3], bias_port[3+index_502b]);  //
-									load_weight_conv3x3( big_w33_buffer[4],w_port_3x3_2[4+index_502w]); //502 opchannel16 inchannel16
-									load_weight_conv3x3( big_w33_buffer[5],w_port_3x3_2[5+index_502w]); //502 opchannel16 inchannel32
-									load_weight_conv3x3( big_w33_buffer[6],w_port_3x3_2[6+index_502w]); //502 opchannel32 inchannel16
-									load_weight_conv3x3( big_w33_buffer[7],w_port_3x3_2[7+index_502w]);									
+								
 									//507
 									load_bias_from_axi(big_bias[4], bias_port[4+index_502b]);  //525
 									load_weight_conv1x1( wt_buf_big[0], w_port_1x1[981]);
@@ -6997,10 +7030,7 @@ void Thinker(	float image_in_raw_pad[imagesize],
 									//505								
 									load_bias_from_axi(big_bias[5], bias_port[410]);  //500
 									load_bias_from_axi(big_bias[6], bias_port[410+1]);  //
-									load_weight_conv3x3( big_w33_buffer[8],w_port_3x3_2[8+index_502w]); //502 opchannel16 inchannel16
-									load_weight_conv3x3( big_w33_buffer[9],w_port_3x3_2[9+index_502w]); //502 opchannel16 inchannel32
-									load_weight_conv3x3( big_w33_buffer[10],w_port_3x3_2[10+index_502w]); //502 opchannel32 inchannel16
-									load_weight_conv3x3( big_w33_buffer[11],w_port_3x3_2[11+index_502w]);
+
 									//508
 									load_bias_from_axi(big_bias[7], bias_port[412]);  //525
 									load_bias_from_axi(big_bias[8], bias_port[413]);  //525
@@ -7035,10 +7065,16 @@ void Thinker(	float image_in_raw_pad[imagesize],
 								//499 1,4->2,3	 fix
 									set_dwbias_conv3x3(fm_buf2,   big_bias[0]);
 									set_dwbias_conv3x3(fm_buf3,   big_bias[1]);
-									conv3x3_499(fm_buf1,fm_buf2,big_w33_buffer[0]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-									conv3x3_499(fm_buf4,fm_buf2,big_w33_buffer[1]);
-									conv3x3_499(fm_buf1,fm_buf3,big_w33_buffer[2]);
-									conv3x3_499(fm_buf4,fm_buf3,big_w33_buffer[3]);
+
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[0+index_502w]); 
+									conv3x3_499(fm_buf1,fm_buf2,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[1+index_502w]); 									
+									conv3x3_499(fm_buf4,fm_buf2,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[2+index_502w]); 									
+									conv3x3_499(fm_buf1,fm_buf3,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[3+index_502w]); 									
+									conv3x3_499(fm_buf4,fm_buf3,big_w33_buffer1);
+
 									clearpad_for_499(fm_buf2);               //clear x=6 y=10
 									clearpad_for_499(fm_buf3);
 								//deload for 499
@@ -7061,10 +7097,18 @@ void Thinker(	float image_in_raw_pad[imagesize],
 								//503 2,3->1,4
 									set_dwbias_conv3x3(fm_buf1,   big_bias[2]);
 									set_dwbias_conv3x3(fm_buf4,   big_bias[3]);
-									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer[4]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer[5]);
-									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer[6]);
-									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer[7]);
+
+
+
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[4+index_502w]); //502 opchannel16 inchannel16
+									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[5+index_502w]); //502 opchannel16 inchannel32									
+									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[6+index_502w]); //502 opchannel32 inchannel16									
+									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[7+index_502w]);									
+									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer1);
+
 									clearpad_for_499(fm_buf1);               //clear x=6 y=10
 									clearpad_for_499(fm_buf4);
 								//507 1,4->2
@@ -7105,10 +7149,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 																	);     //load image 1 to buffer1								
 									set_dwbias_conv3x3(fm_buf1,   big_bias[5]);
 									set_dwbias_conv3x3(fm_buf4,   big_bias[6]);
-									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer[8]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer[9]);
-									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer[10]);
-									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer[11]);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[8+index_502w]); //502 opchannel16 inchannel16
+									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[9+index_502w]); //502 opchannel16 inchannel32									
+									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[10+index_502w]); //502 opchannel32 inchannel16									
+									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[11+index_502w]);										
+									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer1);
 									clearpad_for_499(fm_buf1);               //clear x=6 y=10
 									clearpad_for_499(fm_buf4);							
 								//508 1,4->2,3
@@ -7165,10 +7213,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 								//499 1,4->2,3	 fix
 									set_dwbias_conv3x3(fm_buf2,   big_bias[0]);
 									set_dwbias_conv3x3(fm_buf3,   big_bias[1]);
-									conv3x3_499(fm_buf1,fm_buf2,big_w33_buffer[0]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-									conv3x3_499(fm_buf4,fm_buf2,big_w33_buffer[1]);
-									conv3x3_499(fm_buf1,fm_buf3,big_w33_buffer[2]);
-									conv3x3_499(fm_buf4,fm_buf3,big_w33_buffer[3]);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[0+index_502w]); 
+									conv3x3_499(fm_buf1,fm_buf2,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[1+index_502w]); 									
+									conv3x3_499(fm_buf4,fm_buf2,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[2+index_502w]); 									
+									conv3x3_499(fm_buf1,fm_buf3,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[3+index_502w]); 									
+									conv3x3_499(fm_buf4,fm_buf3,big_w33_buffer1);
 									clearpad_for_499(fm_buf2);               //clear x=6 y=10
 									clearpad_for_499(fm_buf3);
 								//deload for 499
@@ -7191,10 +7243,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 								//503 2,3->1,4
 									set_dwbias_conv3x3(fm_buf1,   big_bias[2]);
 									set_dwbias_conv3x3(fm_buf4,   big_bias[3]);
-									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer[4]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer[5]);
-									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer[6]);
-									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer[7]);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[4+index_502w]); //502 opchannel16 inchannel16
+									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[5+index_502w]); //502 opchannel16 inchannel32									
+									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[6+index_502w]); //502 opchannel32 inchannel16									
+									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[7+index_502w]);									
+									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer1);
 									clearpad_for_499(fm_buf1);               //clear x=6 y=10
 									clearpad_for_499(fm_buf4);
 								//507 1,4->2
@@ -7234,10 +7290,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 																	);     //load image 1 to buffer1								
 									set_dwbias_conv3x3(fm_buf1,   big_bias[5]);
 									set_dwbias_conv3x3(fm_buf4,   big_bias[6]);
-									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer[8]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer[9]);
-									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer[10]);
-									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer[11]);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[8+index_502w]); //502 opchannel16 inchannel16
+									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[9+index_502w]); //502 opchannel16 inchannel32									
+									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[10+index_502w]); //502 opchannel32 inchannel16									
+									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[11+index_502w]);										
+									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer1);
 									clearpad_for_499(fm_buf1);               //clear x=6 y=10
 									clearpad_for_499(fm_buf4);							
 								//508 1,4->2,3
@@ -7293,10 +7353,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 								//499 1,4->2,3	 fix
 									set_dwbias_conv3x3(fm_buf2,   big_bias[0]);
 									set_dwbias_conv3x3(fm_buf3,   big_bias[1]);
-									conv3x3_499(fm_buf1,fm_buf2,big_w33_buffer[0]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-									conv3x3_499(fm_buf4,fm_buf2,big_w33_buffer[1]);
-									conv3x3_499(fm_buf1,fm_buf3,big_w33_buffer[2]);
-									conv3x3_499(fm_buf4,fm_buf3,big_w33_buffer[3]);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[0+index_502w]); 
+									conv3x3_499(fm_buf1,fm_buf2,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[1+index_502w]); 									
+									conv3x3_499(fm_buf4,fm_buf2,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[2+index_502w]); 									
+									conv3x3_499(fm_buf1,fm_buf3,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[3+index_502w]); 									
+									conv3x3_499(fm_buf4,fm_buf3,big_w33_buffer1);
 									clearpad_for_499(fm_buf2);               //clear x=6 y=10
 									clearpad_for_499(fm_buf3);
 								//deload for 499
@@ -7319,10 +7383,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 								//503 2,3->1,4
 									set_dwbias_conv3x3(fm_buf1,   big_bias[2]);
 									set_dwbias_conv3x3(fm_buf4,   big_bias[3]);
-									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer[4]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer[5]);
-									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer[6]);
-									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer[7]);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[4+index_502w]); //502 opchannel16 inchannel16
+									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[5+index_502w]); //502 opchannel16 inchannel32									
+									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[6+index_502w]); //502 opchannel32 inchannel16									
+									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[7+index_502w]);									
+									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer1);
 									clearpad_for_499(fm_buf1);               //clear x=6 y=10
 									clearpad_for_499(fm_buf4);
 								//507 1,4->2
@@ -7362,10 +7430,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 																	);     //load image 1 to buffer1								
 									set_dwbias_conv3x3(fm_buf1,   big_bias[5]);
 									set_dwbias_conv3x3(fm_buf4,   big_bias[6]);
-									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer[8]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer[9]);
-									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer[10]);
-									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer[11]);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[8+index_502w]); //502 opchannel16 inchannel16
+									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[9+index_502w]); //502 opchannel16 inchannel32									
+									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[10+index_502w]); //502 opchannel32 inchannel16									
+									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[11+index_502w]);										
+									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer1);
 									clearpad_for_499(fm_buf1);               //clear x=6 y=10
 									clearpad_for_499(fm_buf4);							
 								//508 1,4->2,3
@@ -7421,10 +7493,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 								//499 1,4->2,3	 fix
 									set_dwbias_conv3x3(fm_buf2,   big_bias[0]);
 									set_dwbias_conv3x3(fm_buf3,   big_bias[1]);
-									conv3x3_499(fm_buf1,fm_buf2,big_w33_buffer[0]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-									conv3x3_499(fm_buf4,fm_buf2,big_w33_buffer[1]);
-									conv3x3_499(fm_buf1,fm_buf3,big_w33_buffer[2]);
-									conv3x3_499(fm_buf4,fm_buf3,big_w33_buffer[3]);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[0+index_502w]); 
+									conv3x3_499(fm_buf1,fm_buf2,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[1+index_502w]); 									
+									conv3x3_499(fm_buf4,fm_buf2,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[2+index_502w]); 									
+									conv3x3_499(fm_buf1,fm_buf3,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[3+index_502w]); 									
+									conv3x3_499(fm_buf4,fm_buf3,big_w33_buffer1);
 									clearpad_for_499(fm_buf2);               //clear x=6 y=10
 									clearpad_for_499(fm_buf3);
 								//deload for 499
@@ -7447,10 +7523,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 								//503 2,3->1,4
 									set_dwbias_conv3x3(fm_buf1,   big_bias[2]);
 									set_dwbias_conv3x3(fm_buf4,   big_bias[3]);
-									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer[4]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer[5]);
-									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer[6]);
-									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer[7]);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[4+index_502w]); //502 opchannel16 inchannel16
+									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[5+index_502w]); //502 opchannel16 inchannel32									
+									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[6+index_502w]); //502 opchannel32 inchannel16									
+									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[7+index_502w]);									
+									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer1);
 									clearpad_for_499(fm_buf1);               //clear x=6 y=10
 									clearpad_for_499(fm_buf4);
 								//507 1,4->2
@@ -7490,10 +7570,14 @@ void Thinker(	float image_in_raw_pad[imagesize],
 																	);     //load image 1 to buffer1								
 									set_dwbias_conv3x3(fm_buf1,   big_bias[5]);
 									set_dwbias_conv3x3(fm_buf4,   big_bias[6]);
-									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer[8]);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
-									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer[9]);
-									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer[10]);
-									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer[11]);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[8+index_502w]); //502 opchannel16 inchannel16
+									conv3x3_499(fm_buf2,fm_buf1,big_w33_buffer1);  //in buffer1,2, index [c][x][y]  y 1-10 12-21 is data, 11 should be 0 ;  x 1-6  8-13 is data ,7 should be 0
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[9+index_502w]); //502 opchannel16 inchannel32									
+									conv3x3_499(fm_buf3,fm_buf1,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[10+index_502w]); //502 opchannel32 inchannel16									
+									conv3x3_499(fm_buf2,fm_buf4,big_w33_buffer1);
+									load_weight_conv3x3( big_w33_buffer1,w_port_3x3_2[11+index_502w]);										
+									conv3x3_499(fm_buf3,fm_buf4,big_w33_buffer1);
 									clearpad_for_499(fm_buf1);               //clear x=6 y=10
 									clearpad_for_499(fm_buf4);							
 								//508 1,4->2,3

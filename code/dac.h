@@ -153,7 +153,7 @@ void findmax1(fm_type img_buf[16][50][82],
 			 int  hwc_img1[3],
 			 int  hwc_img2[3],
 			 int  hwc_img3[3],
-			 int  hwc_img4[3]);//�?小，�?下找4张图
+			 int  hwc_img4[3]);//�??小，�??下找4张图
 void findbox1(fm_type img_buf[16][50][82],
 			fm_type img_buf2[16][50][82],
 			int imgmax_index[3],
