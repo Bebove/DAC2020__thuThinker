@@ -24,7 +24,7 @@ wt_type dwt_buf3_big[6][16][3][3];//0-5
 wt_type     big_w33_buffer[12][16][16][3][3];
  
 
-void Thinker(	uint16 image_in_raw_pad[imagesize],
+void Thinker(	float image_in_raw_pad[imagesize],
 				uint256		w_port_3x3[170][3][3],
 				uint256     w_port_1x1[1000][16],
 				uint256     bias_port[500],
@@ -71,7 +71,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 #pragma HLS ALLOCATION instances=conv3x3_499			 		limit=1 function
 //////////////////////////////////////////////////////////////////////////////////////////////////layer 307-310//////////////////////////////////////////////////////////////////////////////////
 	//layer 307 310
-	/*load_weight_conv1x1(wt_buf_big[0], w_port_1x1[0]);   //load  weight for conv1x1 307  		,   	which is store at the index 0
+	load_weight_conv1x1(wt_buf_big[0], w_port_1x1[0]);   //load  weight for conv1x1 307  		,   	which is store at the index 0
 	load_dwweight_conv3x3(dwt_buf3_big[0], w_port_3x3[0]); //load  weight for dwconv3x3 310		,	    which is store at the index 0,1,2
 
 	load_bias_from_axi(big_bias[0], bias_port[0]);        //load  bias   for conv1x1 ,	    which is store at the index 0
@@ -5071,8 +5071,8 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 				clear_pad(fm_buf3,10,6);
 				clear_pad(fm_buf3,21,13);
 				clear_pad(fm_buf4,10,6);
-				clear_pad(fm_buf4,21,13);	*/
-
+				clear_pad(fm_buf4,21,13);	
+/*
 				std::ifstream ifs_param11("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/temp1.bin", std::ios::in | std::ios::binary);
 				ifs_param11.read((char*)(**fm_buf3), 16 * 50 * 82 * sizeof(fm_type));
 				ifs_param11.close();
@@ -5089,7 +5089,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 													ifs_param13321.close(); 	
 						std::ifstream ifs_param13331("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/ddrdebug_3.bin", std::ios::in | std::ios::binary);
 													ifs_param13331.read((char*)(*ddrdebug_3), ddrsize * 30 * sizeof(uint256));
-													ifs_param13331.close();																																				
+													ifs_param13331.close();			*/																																	
 //////////////////////////////////////////////////////////////////////////////	layer 502 523 526 523 525 ///////////////////////////////////////////////////////////////////////////////////////
 								//input : 32channel  size 0.5^5 of 2*imgsize  : 2*((320/32)+2)-1 2*((192/32)+2)-1
 				initial_ddr6(ddrdebug_4,
@@ -7532,7 +7532,7 @@ void Thinker(	uint16 image_in_raw_pad[imagesize],
 
 								float score_img[4];
 								int index_img[4];
-								int i=0;
+								i=0;
 								score_img[0]=buf1_imgscore[i];
 								score_img[1]=buf2_imgscore[i];
 								score_img[2]=buf3_imgscore[i];

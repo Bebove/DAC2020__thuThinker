@@ -32,7 +32,7 @@ inline fm_type relu_single( fm_type d ,int relu) {
 }
 
 
-void aload_img(fm_type img_buf[16][50][82], uint16 image_port[imagesize],
+void aload_img(fm_type img_buf[16][50][82], float image_port[imagesize],
 							int col, int row, int offset_h , int offset_w ,
 							int channel,int channel_offset,
 							int all_image_w=(160+2)*2,
@@ -40,7 +40,7 @@ void aload_img(fm_type img_buf[16][50][82], uint16 image_port[imagesize],
 							int buffer_w=40,
 							int buffer_h=24)
 {
-	uint16* port_pointer; //col: 192;	row: 320; 	offset_w: when row=4,do the offset;		offset_h: when col=4,do the offset
+	float* port_pointer; //col: 192;	row: 320; 	offset_w: when row=4,do the offset;		offset_h: when col=4,do the offset
 	int OFFSET_ALL=(col*(buffer_h-2) +2* offset_h) * (all_image_w) + row*(buffer_w-2) +2*offset_w;
 	//It's the offset of a block start address relative to the start address of the whole channel 
 
@@ -53,7 +53,7 @@ void aload_img(fm_type img_buf[16][50][82], uint16 image_port[imagesize],
 	{for(int j = 0; j < buffer_w; j++)
 		{
 #pragma HLS pipeline
-				 img_buf[c][i][j].range(fm_lenth, 0)=port_pointer[j].range(fm_lenth, 0);}
+				 img_buf[c][i][j].range(fm_lenth, 0)=((fm_type)(port_pointer[j])).range(fm_lenth, 0);}
 		port_pointer += all_image_w;
 		//locate pointer to next row
 		}
@@ -191,7 +191,7 @@ void findmax1(fm_type img_buf[16][50][82],
 			 int  hwc_img1[3],
 			 int  hwc_img2[3],
 			 int  hwc_img3[3],
-			 int  hwc_img4[3])//最小，一下找4张图
+			 int  hwc_img4[3])//�?小，�?下找4张图
 {
 	fm_type max=img_buf[0][1][1];
 	hwc_img1[0]=1;

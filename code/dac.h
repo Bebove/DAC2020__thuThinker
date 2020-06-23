@@ -38,7 +38,7 @@ typedef ap_fixed<14, 6, AP_RND, AP_SAT> fm_type;//feature map data type
 typedef ap_fixed<14, 6, AP_RND, AP_SAT> bs_type;//bias type
 
 
-void Thinker(	uint16 image_in_raw_pad[imagesize],
+void Thinker(	float image_in_raw_pad[imagesize],
 			    uint256	w_port_3x3[170][3][3],
 				uint256     w_port_1x1[1000][16],
 				uint256     bias_port[500],
@@ -91,7 +91,7 @@ void chear_pad(int x,int y, fm_type buff[80][50][82],int round);
 //global
 void load_bias_from_axi(bs_type dest[16], uint256 src);
 
-void aload_img(fm_type img_buf[16][50][82], uint16 image_port[imagesize],
+void aload_img(fm_type img_buf[16][50][82], float image_port[imagesize],
 							int col, int row, int offset_h , int offset_w ,
 							int channel,int channel_offset,
 							int all_image_w,
@@ -153,7 +153,7 @@ void findmax1(fm_type img_buf[16][50][82],
 			 int  hwc_img1[3],
 			 int  hwc_img2[3],
 			 int  hwc_img3[3],
-			 int  hwc_img4[3]);//�?小，�?下找4张图
+			 int  hwc_img4[3]);//�?小，�?下找4张图
 void findbox1(fm_type img_buf[16][50][82],
 			fm_type img_buf2[16][50][82],
 			int imgmax_index[3],

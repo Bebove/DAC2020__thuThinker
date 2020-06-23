@@ -5,7 +5,7 @@
 
 
 // Those are the ports which should not be changed unless the Thinker IO is changed
-uint16  IMG[imagesize];
+float  IMG[imagesize];
 uint256 ddrdebug [ddrsize][ddrsize_dp];
 uint256 ddrdebug_2 [ddrsize][ddrsize_dp];
 uint256 w3[170][3][3];   //170
@@ -36,7 +36,7 @@ uint16 check[imagesize];//correct data
 
 
 //Those are functions to fold data
-void fold_data(uint16 IMG[imagesize],const char *filepath,int fmsize=imagesize)
+void fold_data(float IMG[imagesize],const char *filepath,int fmsize=imagesize)
 {
 
 	int ip1;
@@ -48,7 +48,7 @@ void fold_data(uint16 IMG[imagesize],const char *filepath,int fmsize=imagesize)
 
 	while(i<ip1)
 	{
-		IMG[i].range(fm_lenth, 0)=((fm_type)temp_img[i]).range(fm_lenth, 0);
+		IMG[i]=temp_img[i];
 		i=i+1;
 	}
 
