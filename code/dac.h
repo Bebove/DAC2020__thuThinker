@@ -29,13 +29,13 @@ typedef ap_uint<512> uint512;
 typedef ap_uint<256> uint256;
 typedef ap_fixed<32, 1, AP_RND, AP_SAT> fix_32_1;
 
-#define wt_lenth 13//
-#define fm_lenth 13//
-#define bs_lenth 13//
+#define wt_lenth 8//
+#define fm_lenth 8//
+#define bs_lenth 8//
 
-typedef ap_fixed<14, 6, AP_RND, AP_SAT> wt_type;//weight type
-typedef ap_fixed<14, 6, AP_RND, AP_SAT> fm_type;//feature map data type
-typedef ap_fixed<14, 6, AP_RND, AP_SAT> bs_type;//bias type
+typedef ap_fixed<9, 4, AP_RND, AP_SAT> wt_type;//weight type
+typedef ap_fixed<9, 4, AP_RND, AP_SAT> fm_type;//feature map data type
+typedef ap_fixed<9, 4, AP_RND, AP_SAT> bs_type;//bias type
 
 
 void Thinker(	float image_in_raw_pad[imagesize],

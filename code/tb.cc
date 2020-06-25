@@ -2655,17 +2655,20 @@ int main()
 	fold_w1_toport(w1);
 	fold_w3_2_toport(w_port_3x3_2);
 			/////
-			//uint256 w3[500][3][3];
-			//uint256 w1[1000][16];
-			//uint256 bias_port[500];
-			//uint256		w_port_3x3_2[20][16][3][3];
-	/*
+/*
+ uint256 w3[170][3][3];   //170
+uint256 w1[1000][16];
+uint256 bias_port[500];   //420
+uint256		w_port_3x3_2[13*4][16][3][3];   //13*4
+
+ */
+
 			std::ofstream ifs_param133("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/w3.bin", std::ios::out | std::ios::binary);
-			ifs_param133.write((char*)(**w3), 170 * 9 * sizeof(uint256));
+			ifs_param133.write((char*)(w3), 170 * 9 * sizeof(uint256));
 			ifs_param133.close();
 
 			std::ofstream ifs_param1331("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/w1.bin", std::ios::out | std::ios::binary);
-			ifs_param1331.write((char*)(*w1), 1000 * 16 * sizeof(uint256));
+			ifs_param1331.write((char*)(w1), 1000 * 16 * sizeof(uint256));
 			ifs_param1331.close();
 
 			std::ofstream ifs_param13311("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/bs.bin", std::ios::out | std::ios::binary);
@@ -2673,10 +2676,11 @@ int main()
 			ifs_param13311.close();
 
 			std::ofstream ifs_param133111("C:/Users/f/Desktop/DAC2020__thuThinker/test_data/w_port_3x3_2.bin", std::ios::out | std::ios::binary);
-			ifs_param133111.write((char*)(***w_port_3x3_2), 13*4*16*3*3  * sizeof(uint256));
-			ifs_param133111.close();*/
+			ifs_param133111.write((char*)(w_port_3x3_2), 13*4*16*3*3  * sizeof(uint256));
+			ifs_param133111.close();
 			/////
 	float boxs[4][5];
+	return(0);
     Thinker(	 IMG ,w3,w1,bias_port,w_port_3x3_2,ddrdebug,ddrdebug_2,ddrdebug_3,ddrdebug_4,temp1,boxs);
     int n=2;
     int h=(192/n+2)*2;
